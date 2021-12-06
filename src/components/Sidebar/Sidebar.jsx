@@ -4,7 +4,8 @@ import { navConfig } from '../../data/navigation';
 const Sidebar = () => {
   return (
     <div>
-      Sidebar
+      <button aria-label="Toggle sidebar"></button>
+
       <Navigation navConfig={navConfig} />
     </div>
   );

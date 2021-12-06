@@ -1,17 +1,12 @@
 import PropTypes from 'prop-types';
 
-const BigButton = ({ text, icon, onClick }) => {
+const BigButton = ({ text, icon }) => {
   return (
     <button>
       {icon && <img src={icon} alt={text} />}
       <span>{text}</span>
     </button>
   );
-};
-
-BigButton.defaultProps = {
-  icon: null,
-  onClick: () => {},
 };
 
 BigButton.propTypes = {

@@ -1,47 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import univerBuilding from 'images/building.png';
+import univerBuildingImg from 'images/building.png';
 import { ReactComponent as EditIcon } from 'images/edit.svg';
 import { ReactComponent as DeleteIcon } from 'images/delete.svg';
 
 const Card = ({ name }) => {
-  const isAdmin = false;
   return (
     <div>
-      Card
       <div>
-        <img src={univerBuilding} alt="University" />
+        <img src={univerBuildingImg} alt="University" />
       </div>
       <p>университет</p>
       <h3>{name}</h3>
       <div>
-        {/* {isAdmin && (
-          <button>
-            <DeleteIcon />
-          </button>
-        )}
-
-        {!isAdmin && (
-          <button>
-            <EditIcon />
-          </button>
-        )}
-
-        {isAdmin ? (
-          <button>
-            <DeleteIcon />
-          </button>
-        ) : (
-          <button>
-            <EditIcon />
-          </button>
-        )} */}
-
-        <button>
+        <button aria-label="Edit">
           <DeleteIcon />
         </button>
-
-        <button>
+        <button aria-label="Delete">
           <EditIcon />
         </button>
       </div>

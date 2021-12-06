@@ -4,7 +4,7 @@ import Card from './Card';
 
 const UniversityBlock = ({ name, descr }) => {
   return (
-    <div>
+    <section>
       <Paper>
         <Card name={name} />
       </Paper>
@@ -12,7 +12,7 @@ const UniversityBlock = ({ name, descr }) => {
       <Paper>
         <p>{descr}</p>
       </Paper>
-    </div>
+    </section>
   );
 };
 

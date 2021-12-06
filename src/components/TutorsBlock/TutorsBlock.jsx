@@ -8,15 +8,16 @@ import plusImg from '../../images/add.svg';
 const TutorsBlock = ({ tutors = [] }) => {
   return (
     <div>
-      <ul onClick={e => console.log()}>
+      <ul>
         {tutors.map(tutor => (
           <li key={tutor.email}>
             <Paper>
-              <Tutor firstName={tutor.firstName} {...tutor} />
+              <Tutor {...tutor} />
             </Paper>
           </li>
         ))}
       </ul>
+
       <BigButton icon={plusImg} text="Добавить преподавателя" />
     </div>
   );

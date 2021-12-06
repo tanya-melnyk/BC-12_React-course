@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 
 const Section = ({ icon, title, children }) => {
   return (
-    <div>
-      Section
+    <section>
       <div>
         <div>
           <img src={icon} alt={title} />
@@ -12,7 +11,7 @@ const Section = ({ icon, title, children }) => {
         <h3>{title}</h3>
       </div>
       {children}
-    </div>
+    </section>
   );
 };
 
