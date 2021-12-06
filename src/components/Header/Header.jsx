@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
 
 const Header = ({ title }) => {
-  return <header>{title && <h2>{title}</h2>}</header>;
+  return (
+    <header className="">
+      {title && <h2 className="heading">{title}</h2>}
+    </header>
+  );
 };
 
 Header.propTypes = {

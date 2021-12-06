@@ -3,10 +3,10 @@ import Sidebar from '../Sidebar/Sidebar';
 
 const App = () => {
   return (
-    <>
+    <div className="main-container">
       <Sidebar />
       <Main />
-    </>
+    </div>
   );
 };
 
