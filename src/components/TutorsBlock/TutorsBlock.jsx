@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import BigButton from '../common/BigButton';
 import Paper from '../common/Paper';

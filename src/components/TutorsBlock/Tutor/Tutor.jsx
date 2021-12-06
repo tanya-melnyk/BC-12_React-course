@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { ReactComponent as PhoneIcon } from 'images/phone.svg';
 import { ReactComponent as MailIcon } from 'images/mail.svg';

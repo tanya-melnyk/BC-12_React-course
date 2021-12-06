@@ -1,6 +1,6 @@
 import Section from '../common/Section';
 import CitiesBlock from '../CitiesBlock';
-import DepartmentsBlock from 'components/DepartmentsBlock';
+import DepartmentsBlock from '../DepartmentsBlock';
 import Header from '../Header';
 import TutorsBlock from '../TutorsBlock';
 import UniversityBlock from '../UniversityBlock';
