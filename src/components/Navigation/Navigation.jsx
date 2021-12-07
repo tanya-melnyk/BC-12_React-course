@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import NavItem from './NavItem';
+import NavItem from './NavItem/NavItem';
 
 /**
  * Добавим в нав инлайновый стиль с верхним паддингом 12px

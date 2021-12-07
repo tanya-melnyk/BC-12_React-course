@@ -1,13 +1,19 @@
 import PropTypes from 'prop-types';
-import Paper from 'components/common/Paper';
+import Paper from 'components/common/Paper/Paper';
 import dots from 'images/dots.svg';
 
+/**
+ * Добавим коммент из документации
+ * Импортировать  listStyles и itemStyles из файла listStyles.js
+ * и подключить их в соответствующие элементы
+ */
+
 const CitiesList = ({ cities }) => (
-  <ul>
+  <ul className="cities-list">
     {cities.map((city, index) => (
       <li key={index}>
         <Paper>
-          <div>
+          <div className="city">
             <p>{city.name}</p>
             <button>
               <img src={dots} alt="Menu" />

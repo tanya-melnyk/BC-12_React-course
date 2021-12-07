@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import BigButton from '../common/BigButton';
-import DepartmentsList from './DepartmentsList';
+import BigButton from '../common/BigButton/BigButton';
+import DepartmentsList from './DepartmentsList/DepartmentsList';
 import addIcon from 'images/add.svg';
 
 const DepartmentsBlock = ({ departments }) => {

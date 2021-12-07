@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import s from './Paper.module.scss';
+// import s from './Paper.module.css';
 
 const Paper = ({ children }) => {
   return <div className="">{children}</div>;

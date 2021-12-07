@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import BigButton from '../common/BigButton';
-import CitiesList from './CitiesList';
+import BigButton from '../common/BigButton/BigButton';
+import CitiesList from './CitiesList/CitiesList';
 import addIcon from 'images/add.svg';
 
 const CitiesBlock = ({ cities }) => {

@@ -1,8 +1,16 @@
 import PropTypes from 'prop-types';
-import BigButton from '../common/BigButton';
-import Paper from '../common/Paper';
-import Tutor from './Tutor';
+import BigButton from '../common/BigButton/BigButton';
+import Paper from '../common/Paper/Paper';
+import Tutor from './Tutor/Tutor';
 import plusImg from '../../images/add.svg';
+
+/**
+ * Добавим коммент из документации
+ * В пропе css у верхнего дива пропишем два css правила:
+ * { position: relative; margin-bottom: 32px }
+ * в стиле объекта
+ * Также на каждую лишку { margin-bottom: 24px }
+ */
 
 const TutorsBlock = ({ tutors = [] }) => {
   return (

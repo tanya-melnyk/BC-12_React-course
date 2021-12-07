@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import Paper from '../common/Paper';
-import Card from './Card';
-import styles from './UniversityBlock.module.css';
+import Paper from '../common/Paper/Paper';
+import Card from './Card/Card';
+// import styles from './UniversityBlock.module.css';
 
 const UniversityBlock = ({ name, descr }) => {
   return (
