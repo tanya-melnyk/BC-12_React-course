@@ -19,12 +19,10 @@ const NavItem = ({ name, icon }) => {
   isActive && navItenStyles.push('NavItemActive');
 
   return (
-    <div className={navItenStyles.join(' ')}>
+    <a href="/" className={navItenStyles.join(' ')}>
       <span className="iconWrapper">{icon}</span>
-      <a className="itemName" href="/">
-        {name}
-      </a>
-    </div>
+      <span className="itemName">{name}</span>
+    </a>
   );
 };
 

@@ -15,6 +15,7 @@ const itemStyles = {
   padding: '9px 0 9px 14px',
   lineHeight: 1.5,
   '& button': {
+    flexShrink: 0,
     width: 32,
     height: 32,
     padding: 4,
