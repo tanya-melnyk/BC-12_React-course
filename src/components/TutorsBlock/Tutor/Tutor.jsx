@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import PropTypes from 'prop-types';
 import { ReactComponent as PhoneIcon } from 'images/phone.svg';
 import { ReactComponent as MailIcon } from 'images/mail.svg';
@@ -12,10 +14,10 @@ import { ReactComponent as LocationIcon } from 'images/location.svg';
  */
 
 // .block {
-//   display: flex;
-//   padding: 14px;
-//   font-size: 16px;
-//   line-height: 1.5;
+// display: flex;
+// padding: 14px;
+// font-size: 16px;
+// line-height: 1.5;
 // }
 // .name {
 //   padding-right: 24px;
@@ -26,33 +28,58 @@ import { ReactComponent as LocationIcon } from 'images/location.svg';
 //   flex-basis: 300px;
 // }
 // .dataText {
-//   display: flex;
-//   align-items: center;
-//   & .text {
-//     margin-left: 8px;
-//   }
+// display: flex;
+// align-items: center;
+// & .text {
+//   margin-left: 8px;
 // }
+// }
+
+const blockStyles = {
+  display: 'flex',
+  padding: 14,
+  fontSize: 16,
+  lineHeight: 1.5,
+};
+
+const nameStyles = {
+  paddingRight: 24,
+  flex: '0 0 200px',
+};
+
+const dataStyles = {
+  ...nameStyles,
+  flexBasis: 300,
+};
+
+const dataTextStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  '& .text': {
+    marginLeft: 8,
+  },
+};
 
 const Tutor = props => {
   const { firstName, lastName, patronymic, phone, email, city, options } =
     props;
   return (
-    <div className="block">
-      <div className="name">
+    <div css={blockStyles}>
+      <div css={nameStyles}>
         <p>{lastName}</p>
         <p>{firstName}</p>
         <p>{patronymic}</p>
       </div>
-      <div className="data">
-        <p className="dataText">
+      <div css={dataStyles}>
+        <p css={dataTextStyles}>
           <PhoneIcon />
           <span className="text">{phone}</span>
         </p>
-        <p className="dataText">
+        <p css={dataTextStyles}>
           <MailIcon />
           <span className="text">{email}</span>
         </p>
-        <p className="dataText">
+        <p css={dataTextStyles}>
           <LocationIcon />
           <span className="text">{city}</span>
         </p>

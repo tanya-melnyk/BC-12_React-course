@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import './NavItem.scss';
 
 /**
  * Импортируем стили NavItem
@@ -11,10 +12,15 @@ import PropTypes from 'prop-types';
  * Для определения классов верхнего дива - использовать переменную
  */
 
-const NavItem = ({ name }) => {
+const NavItem = ({ name, icon }) => {
+  const isActive = false;
+
+  const navItenStyles = ['NavItem'];
+  isActive && navItenStyles.push('NavItemActive');
+
   return (
-    <div>
-      <span className="iconWrapper"></span>
+    <div className={navItenStyles.join(' ')}>
+      <span className="iconWrapper">{icon}</span>
       <a className="itemName" href="/">
         {name}
       </a>
@@ -24,6 +30,7 @@ const NavItem = ({ name }) => {
 
 NavItem.propTypes = {
   name: PropTypes.string.isRequired,
+  icon: PropTypes.object.isRequired,
 };
 
 export default NavItem;

@@ -13,9 +13,9 @@ import PropTypes from 'prop-types';
 //   border: 'none',
 //   cursor: 'pointer',
 //   transition: 'all 200ms',
-//   '&:not(:disabled):hover': {
-//     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)',
-//   },
+// '&:not(:disabled):hover': {
+//   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)',
+// },
 //   '&:disabled': {
 //     backgroundColor: '#FFE0B2',
 //     cursor: 'not-allowed',

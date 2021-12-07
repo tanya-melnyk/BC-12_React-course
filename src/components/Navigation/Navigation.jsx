@@ -7,9 +7,9 @@ import NavItem from './NavItem/NavItem';
 
 const Navigation = ({ navConfig }) => {
   return (
-    <nav>
-      {navConfig.map(({ name }, index) => (
-        <NavItem key={index} name={name} />
+    <nav style={{ paddingTop: 12 }}>
+      {navConfig.map(({ name, icon }, index) => (
+        <NavItem key={index} name={name} icon={icon} />
       ))}
     </nav>
   );

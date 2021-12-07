@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import PropTypes from 'prop-types';
 
 /**
@@ -13,7 +15,7 @@ import PropTypes from 'prop-types';
 
 //   & .header {
 //     display: flex;
-//     align-items: 'center';
+//     align-items: center;
 //     margin-bottom: 32px;
 
 //     & .img-wrapper {
@@ -22,9 +24,24 @@ import PropTypes from 'prop-types';
 //   }
 // }
 
+const sectionStyle = {
+  position: 'relative',
+  marginBottom: 32,
+
+  '& .header': {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '32px',
+
+    '& .img-wrapper': {
+      marginRight: 8,
+    },
+  },
+};
+
 const Section = ({ icon, title, children }) => {
   return (
-    <section className="section">
+    <section css={sectionStyle}>
       <div className="header">
         <div className="img-wrapper">
           <img src={icon} alt={title} />

@@ -12,6 +12,8 @@ import s from './Card.module.css';
  */
 
 const Card = ({ name }) => {
+  const isAdmin = true;
+
   return (
     <div className={s.card}>
       <div className={s.imgWrapper}>
@@ -20,11 +22,15 @@ const Card = ({ name }) => {
       <p className={s.text}>университет</p>
       <h3 className={`heading ${s.wrapper}`}>{name}</h3>
       <div className={s.btn_container}>
-        <button aria-label="Edit">
-          <DeleteIcon />
-        </button>
-        <button aria-label="Delete">
+        <button className={s.active} aria-label="Edit">
           <EditIcon />
+        </button>
+        <button
+          disabled={!isAdmin}
+          className={isAdmin ? s.active : s.disabled}
+          aria-label="Delete"
+        >
+          <DeleteIcon />
         </button>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import Navigation from '../Navigation/Navigation';
 import { navConfig } from '../../data/navigation';
+import './Sidebar.css';
 
 /**
  * Импортируем стили сайдбара
@@ -13,9 +14,22 @@ import { navConfig } from '../../data/navigation';
  * Для определения классов верхнего дива - вызвать функцию
  */
 
+const defineStyles = isOpen => {
+  const finalSyles = ['Sidebar'];
+
+  if (!isOpen) {
+    finalSyles.push('Sidebar-closed');
+  }
+
+  return finalSyles.join(' ');
+};
+
 const Sidebar = () => {
+  const isOpen = true;
+
   return (
-    <div>
+    // <div className={`Sidebar${isOpen ? '' : ' Sidebar-closed'}`}>
+    <div className={defineStyles(isOpen)}>
       <div className="Sidebar-decor"></div>
 
       <button className="toggle-btn" aria-label="Toggle sidebar"></button>

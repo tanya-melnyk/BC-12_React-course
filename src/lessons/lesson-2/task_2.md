@@ -58,8 +58,8 @@ export const navConfig = [
 - создадим в папке styles файл `global.module.css`, в котором определим
   глобальный стиль `.heading` для всех заголовков на странице, и подключим его в
   `index.js`
-- в папке styles также создадим файлик `variables.module.css`, в который будем
-  добавлять переменные, например `@value main-gap: 32px;`
+- в папке styles также создадим файлик `variables.module.css`, в который добавим
+  переменную, например `@value main-gap: 32px;`
 - Добавим стили в Main, Header, UniversityBlock, Paper и Card
 
 ### Задача №4

@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App/App';
-import './index.css';
-
-// const span = React.createElement("span", null, "Hello world");
-// const title = React.createElement("h2", null, span);
-// console.log(title);
+import './styles/index.css';
+import './styles/global.module.css';
+import './styles/variables.module.css';
+// import 'modern-normalize/modern-normalize.css';
 
 ReactDOM.render(
   <React.StrictMode>

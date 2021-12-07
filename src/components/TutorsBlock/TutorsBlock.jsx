@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import PropTypes from 'prop-types';
 import BigButton from '../common/BigButton/BigButton';
 import Paper from '../common/Paper/Paper';
@@ -14,10 +16,10 @@ import plusImg from '../../images/add.svg';
 
 const TutorsBlock = ({ tutors = [] }) => {
   return (
-    <div>
+    <div css={{ position: 'relative', marginBottom: 32 }}>
       <ul>
         {tutors.map(tutor => (
-          <li key={tutor.email}>
+          <li key={tutor.email} css={{ marginBottom: 24 }}>
             <Paper>
               <Tutor {...tutor} />
             </Paper>
