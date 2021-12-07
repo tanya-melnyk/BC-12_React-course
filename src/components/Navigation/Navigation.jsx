@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
-import NavItem from './NavItem';
+import NavItem from './NavItem/NavItem';
+
+/**
+ * Добавим в нав инлайновый стиль с верхним паддингом 12px
+ */
 
 const Navigation = ({ navConfig }) => {
   return (
-    <nav>
-      {navConfig.map(({ name }, index) => (
-        <NavItem key={index} name={name} />
+    <nav style={{ paddingTop: 12 }}>
+      {navConfig.map(({ name, icon }, index) => (
+        <NavItem key={index} name={name} icon={icon} />
       ))}
     </nav>
   );

@@ -1,22 +1,32 @@
-import React from 'react';
+/** @jsxImportSource @emotion/react */
+
 import PropTypes from 'prop-types';
-import BigButton from '../common/BigButton';
-import Paper from '../common/Paper';
-import Tutor from './Tutor';
+import BigButton from '../common/BigButton/BigButton';
+import Paper from '../common/Paper/Paper';
+import Tutor from './Tutor/Tutor';
 import plusImg from '../../images/add.svg';
+
+/**
+ * Добавим коммент из документации
+ * В пропе css у верхнего дива пропишем два css правила:
+ * { position: relative; margin-bottom: 32px }
+ * в стиле объекта
+ * Также на каждую лишку { margin-bottom: 24px }
+ */
 
 const TutorsBlock = ({ tutors = [] }) => {
   return (
-    <div>
-      <ul onClick={e => console.log()}>
+    <div css={{ position: 'relative', marginBottom: 32 }}>
+      <ul>
         {tutors.map(tutor => (
-          <li key={tutor.email}>
+          <li key={tutor.email} css={{ marginBottom: 24 }}>
             <Paper>
-              <Tutor firstName={tutor.firstName} {...tutor} />
+              <Tutor {...tutor} />
             </Paper>
           </li>
         ))}
       </ul>
+
       <BigButton icon={plusImg} text="Добавить преподавателя" />
     </div>
   );
