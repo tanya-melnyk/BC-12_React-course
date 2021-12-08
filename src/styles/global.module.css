@@ -5,3 +5,14 @@
   letter-spacing: 1.25px;
   text-transform: uppercase;
 }
+
+input {
+  display: block;
+  width: 488px;
+  margin-bottom: 32px;
+  padding: 13px 16px;
+}
+
+input:last-of-type {
+  margin-bottom: 24px;
+}
