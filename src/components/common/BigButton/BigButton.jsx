@@ -32,14 +32,16 @@ const defineStyles = isGray => ({
   backgroundColor: isGray ? '#BDBDBD' : '#FF6B0A',
 });
 
-const BigButton = ({
-  text,
-  icon,
-  onClick = () => {},
-  type = 'button',
-  disabled = false,
-  isGray = false,
-}) => {
+const BigButton = props => {
+  const {
+    text,
+    icon,
+    onClick = () => {},
+    type = 'button',
+    disabled = false,
+    isGray = false,
+  } = props;
+
   const finalStyles = defineStyles(isGray);
 
   return (
