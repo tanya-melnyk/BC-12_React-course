@@ -2,10 +2,6 @@
 
 import PropTypes from 'prop-types';
 
-/**
- * Добавим коммент из документации
- */
-
 const btnStyles = {
   display: 'flex',
   alignItems: 'center',
@@ -31,9 +27,25 @@ const btnStyles = {
   },
 };
 
-const BigButton = ({ text, icon }) => {
+const defineStyles = isGray => ({
+  ...btnStyles,
+  backgroundColor: isGray ? '#BDBDBD' : '#FF6B0A',
+});
+
+const BigButton = props => {
+  const {
+    text,
+    icon,
+    onClick = () => {},
+    type = 'button',
+    disabled = false,
+    isGray = false,
+  } = props;
+
+  const finalStyles = defineStyles(isGray);
+
   return (
-    <button css={btnStyles}>
+    <button css={finalStyles} type={type} onClick={onClick} disabled={disabled}>
       {icon && <img className="image" src={icon} alt={text} />}
       <span className="heading">{text}</span>
     </button>
@@ -42,8 +54,11 @@ const BigButton = ({ text, icon }) => {
 
 BigButton.propTypes = {
   text: PropTypes.string.isRequired,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onClick: PropTypes.func,
-  icon: PropTypes.string,
+  type: PropTypes.string,
+  disabled: PropTypes.bool,
+  isGray: PropTypes.bool,
 };
 
 export default BigButton;
