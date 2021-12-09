@@ -12,8 +12,15 @@ import addIcon from 'images/add.svg';
 // import fingerIcon from 'images/finger.png';
 
 /**
+  Использовать модалку для удаление города, которая появляется при клике на "Удалить":
+  - в CitiesBlock добавляем состояние isDeleteModalOpen и actionCity
+  - пишем метод handleStartDeleting(actionCity), который устанавливает активный город и открывает модалку для удаления
+  - пишем метод deleteCity(), который удаляет из массива имя активного города и очищает поле actionCity, а также вызывает метод closeDeleteModal
+  - написать метод по закрытию модалки для удаления closeDeleteModal
+  - рендерим модальное окно по состоянию поля isDeleteModalOpen
+
   Использовать модалку для редактирования города, которая появляется при клике на "Редактировать":
-  - в CitiesBlock добавляем состояние isEditModalOpen и actionCity
+  - в CitiesBlock добавляем состояние isEditModalOpen
   - пишем метод handleStartEditting(actionCity), который устанавливает активный город и
     открывает модалку для редактирования
   - пишем метод saveEditedCity(editedCity), который изменяет в массиве имя активного
@@ -21,20 +28,14 @@ import addIcon from 'images/add.svg';
   - написать метод по закрытию модалки для редактирования closeEditModal
   - рендерим модальное окно по состоянию поля isEditModalOpen
 
-  Использовать модалку на удаление города, которая появляется при клике на "Удалить":
-  - в CitiesBlock добавляем состояние isDeleteModalOpen
-  - пишем метод handleStartDeleting(actionCity), который устанавливает активный город и открывает модалку для удаления
-  - пишем метод deleteCity(), который удаляет из массива имя активного города и очищает поле actionCity, а также вызывает метод closeDeleteModal
-  - написать метод по закрытию модалки для удаления closeDeleteModal
-  - рендерим модальное окно по состоянию поля isDeleteModalOpen
-
   Добавить фильтр для городов
   - используем универсальный компонет Filter, который ожидает значение инпута и метод для обработки его изменения
   - в CitiesBlock добавляем состояние filter
   - пишем метод handleFilterChange(value), который изменяет значение поля filter в стейте
   - пишем метод getFilteredCities, который возвращает массив отфильтрованных городов в зависимости от значения фильтра
   - именно отфильтрованный массив будем передавать в пропе items в ItemsList
- *
+  
+  Недопустить дублирование городов при добавлении или редактировании
  */
 
 class CitiesBlock extends Component {
@@ -134,6 +135,23 @@ CitiesBlock.propTypes = {
 
 export default CitiesBlock;
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -263,7 +281,7 @@ export default CitiesBlock;
 //         <Filter
 //           label="Поиск города:"
 //           value={filter}
-//           onChange={this.handleFilterChange}
+//           onFilterChange={this.handleFilterChange}
 //         />
 
 //         <ItemsList

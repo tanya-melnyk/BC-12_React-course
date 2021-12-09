@@ -63,18 +63,18 @@ class DepartmentsBlock extends Component {
     }));
   };
 
-  handleEditDepartment = department =>
+  handleStartEditting = department =>
     this.setState({
       actionDepartment: department,
       isEditModalOpen: true,
     });
 
-  editDepartment = changedDepartment => {
+  saveEditedDepartment = editedDepartment => {
     const { actionDepartment } = this.state;
     this.setState(prevState => ({
       departments: prevState.departments.map(department =>
         department.name === actionDepartment
-          ? { name: changedDepartment }
+          ? { name: editedDepartment }
           : department,
       ),
       actionDepartment: '',
@@ -87,7 +87,7 @@ class DepartmentsBlock extends Component {
       isEditModalOpen: false,
     });
 
-  handleDeleteDepartment = department =>
+  handleStartDeleting = department =>
     this.setState({
       actionDepartment: department,
       isDeleteModalOpen: true,
@@ -123,8 +123,8 @@ class DepartmentsBlock extends Component {
       <>
         <ItemsList
           items={departments}
-          onEditItem={this.handleEditDepartment}
-          onDeleteItem={this.handleDeleteDepartment}
+          onEditItem={this.handleStartEditting}
+          onDeleteItem={this.handleStartDeleting}
         />
 
         {isAddFormOpen && (
@@ -150,7 +150,7 @@ class DepartmentsBlock extends Component {
             <EditCard
               label="Факультет"
               inputValue={actionDepartment}
-              onSave={this.editDepartment}
+              onSave={this.saveEditedDepartment}
             />
           </Modal>
         )}

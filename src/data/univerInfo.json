@@ -5,20 +5,20 @@
     {
       "firstName": "Мария",
       "lastName": "Руденко",
-      "patronymic": "Александровна",
+      "gender": "женщина",
       "phone": "+38(097) 448 73 11",
       "email": "rudenko.mail@gmail.com",
       "city": "Полтава",
-      "options": "Создание групп"
+      "isFullTime": true
     },
     {
-      "firstName": "Елена",
-      "lastName": "Иванова",
-      "patronymic": "Александровна",
+      "firstName": "Вадим",
+      "lastName": "Гетьман",
+      "gender": "мужчина",
       "phone": "+38(093) 443 43 51",
-      "email": "ivanova.mail@gmail.com",
-      "city": "Берлин",
-      "options": "Создание групп, редактировани профилей преподавателей"
+      "email": "hetman.mail@gmail.com",
+      "city": "Киев",
+      "isFullTime": false
     }
   ],
   "cities": [{ "name": "Киев" }, { "name": "Лондон" }, { "name": "Берлин" }],
