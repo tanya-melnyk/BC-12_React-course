@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
 import DeleteCard from '../common/DeleteCard/DeleteCard';
@@ -52,13 +53,22 @@ class CitiesBlock extends Component {
 
   toggleAddForm = () =>
     this.setState(prevState => ({ isAddFormOpen: !prevState.isAddFormOpen }));
+
   addCity = city => {
+    const isDuplicate = this.checkIfDuplicate(city);
+    if (isDuplicate) {
+      toast.warn(`City "${city}" is already in list`);
+      return;
+    }
     const newCity = { name: city };
     this.setState(prevState => ({
       cities: [...prevState.cities, newCity],
       isAddFormOpen: false,
     }));
   };
+
+  checkIfDuplicate = city =>
+    this.state.cities.some(({ name }) => name === city);
 
   // EDIT CITY
 
@@ -67,6 +77,7 @@ class CitiesBlock extends Component {
       isEditModalOpen: true,
       activeCity,
     });
+
   saveEditedCity = editedCity => {
     this.setState(prevState => ({
       cities: prevState.cities.map(city => {
@@ -77,8 +88,8 @@ class CitiesBlock extends Component {
       }),
       activeCity: '',
     }));
-    this.closeEditModal();
   };
+
   closeEditModal = () =>
     this.setState({
       isEditModalOpen: false,
@@ -101,11 +112,13 @@ class CitiesBlock extends Component {
     }));
     this.closeDeleteModal();
   };
+
   closeDeleteModal = () => this.setState({ isDeleteModalOpen: false });
 
   // FILTER CITIES
 
   handleFilterChange = value => this.setState({ filter: value });
+
   getFilteredCities = () => {
     const { cities, filter } = this.state;
     const normalizedFilter = filter.toLowerCase();
