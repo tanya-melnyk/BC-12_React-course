@@ -5,36 +5,6 @@ import { ReactComponent as PhoneIcon } from 'images/phone.svg';
 import { ReactComponent as MailIcon } from 'images/mail.svg';
 import { ReactComponent as LocationIcon } from 'images/location.svg';
 
-/**
- * Добавим коммент из документации
- * Перепишем scss стили в переменные
- * blockStyles, nameStyles, dataStyles, dataTextStyles
- * в стиле объекта
- * Переменные используем в пропах css соответствующих элементов
- */
-
-// .block {
-// display: flex;
-// padding: 14px;
-// font-size: 16px;
-// line-height: 1.5;
-// }
-// .name {
-//   padding-right: 24px;
-//   flex: 0 0 200px;
-// }
-// .data {
-//   composes: name;
-//   flex-basis: 300px;
-// }
-// .dataText {
-// display: flex;
-// align-items: center;
-// & .text {
-//   margin-left: 8px;
-// }
-// }
-
 const blockStyles = {
   display: 'flex',
   padding: 14,
@@ -61,14 +31,13 @@ const dataTextStyles = {
 };
 
 const Tutor = props => {
-  const { firstName, lastName, patronymic, phone, email, city, options } =
-    props;
+  const { firstName, lastName, gender, phone, email, city, isFullTime } = props;
   return (
     <div css={blockStyles}>
       <div css={nameStyles}>
         <p>{lastName}</p>
         <p>{firstName}</p>
-        <p>{patronymic}</p>
+        <p>{gender}</p>
       </div>
       <div css={dataStyles}>
         <p css={dataTextStyles}>
@@ -85,7 +54,7 @@ const Tutor = props => {
         </p>
       </div>
       <div>
-        <p>{options}</p>
+        <p>На постоянной основе: {isFullTime ? 'Да' : 'Нет'}</p>
       </div>
     </div>
   );
@@ -94,11 +63,11 @@ const Tutor = props => {
 Tutor.propTypes = {
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
-  patronymic: PropTypes.string.isRequired,
+  gender: PropTypes.string.isRequired,
   phone: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   city: PropTypes.string.isRequired,
-  options: PropTypes.string.isRequired,
+  isFullTime: PropTypes.bool.isRequired,
 };
 
 export default Tutor;

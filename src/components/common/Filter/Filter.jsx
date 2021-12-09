@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const Filter = ({ label = '', value, onChange }) => {
+const Filter = ({ label = '', value, onFilterChange }) => {
   return (
     <div>
       <label>
@@ -8,7 +8,7 @@ const Filter = ({ label = '', value, onChange }) => {
         <input
           type="text"
           value={value}
-          onChange={e => onChange(e.target.value)}
+          onChange={e => onFilterChange(e.target.value)}
         ></input>
       </label>
     </div>
@@ -18,7 +18,7 @@ const Filter = ({ label = '', value, onChange }) => {
 Filter.propTypes = {
   value: PropTypes.string.isRequired,
   label: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
 };
 
 export default Filter;

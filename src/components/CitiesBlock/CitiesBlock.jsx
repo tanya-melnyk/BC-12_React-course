@@ -1,32 +1,33 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
-// import DeleteCard from '../common/DeleteCard/DeleteCard';
-// import EditCard from '../common/EditCard/EditCard';
-// import Filter from '../common/Filter/Filter';
+import DeleteCard from '../common/DeleteCard/DeleteCard';
+import EditCard from '../common/EditCard/EditCard';
+import Filter from '../common/Filter/Filter';
 import ItemsList from '../ItemsList/ItemsList';
-// import Modal from '../common/Modal/Modal';
+import Modal from '../common/Modal/Modal';
 import addIcon from 'images/add.svg';
-// import pencilIcon from 'images/pencil.png';
-// import fingerIcon from 'images/finger.png';
+import pencilIcon from 'images/pencil.png';
+import fingerIcon from 'images/finger.png';
 
 /**
-  Использовать модалку для редактирования города, которая появляется при клике на "Редактировать":
-  - в CitiesBlock добавляем состояние isEditModalOpen и actionCity
-  - пишем метод handleStartEditting(actionCity), который устанавливает активный город и
-    открывает модалку для редактирования
-  - пишем метод saveEditedCity(editedCity), который изменяет в массиве имя активного
-    города и очищает поле actionCity, а также вызывает метод closeEditModal
-  - написать метод по закрытию модалки для редактирования closeEditModal
-  - рендерим модальное окно по состоянию поля isEditModalOpen
-
-  Использовать модалку на удаление города, которая появляется при клике на "Удалить":
-  - в CitiesBlock добавляем состояние isDeleteModalOpen
-  - пишем метод handleStartDeleting(actionCity), который устанавливает активный город и открывает модалку для удаления
-  - пишем метод deleteCity(), который удаляет из массива имя активного города и очищает поле actionCity, а также вызывает метод closeDeleteModal
+  Использовать модалку для удаление города, которая появляется при клике на "Удалить":
+  - в CitiesBlock добавляем состояние isDeleteModalOpen и activeCity
+  - пишем метод handleStartDeleting(activeCity), который устанавливает активный город и открывает модалку для удаления
+  - пишем метод deleteCity(), который удаляет из массива имя активного города и очищает поле activeCity, а также вызывает метод closeDeleteModal
   - написать метод по закрытию модалки для удаления closeDeleteModal
   - рендерим модальное окно по состоянию поля isDeleteModalOpen
+
+  Использовать модалку для редактирования города, которая появляется при клике на "Редактировать":
+  - в CitiesBlock добавляем состояние isEditModalOpen
+  - пишем метод handleStartEditting(activeCity), который устанавливает активный город и
+    открывает модалку для редактирования
+  - пишем метод saveEditedCity(editedCity), который изменяет в массиве имя активного
+    города и очищает поле activeCity, а также вызывает метод closeEditModal
+  - написать метод по закрытию модалки для редактирования closeEditModal
+  - рендерим модальное окно по состоянию поля isEditModalOpen
 
   Добавить фильтр для городов
   - используем универсальный компонет Filter, который ожидает значение инпута и метод для обработки его изменения
@@ -34,19 +35,31 @@ import addIcon from 'images/add.svg';
   - пишем метод handleFilterChange(value), который изменяет значение поля filter в стейте
   - пишем метод getFilteredCities, который возвращает массив отфильтрованных городов в зависимости от значения фильтра
   - именно отфильтрованный массив будем передавать в пропе items в ItemsList
- *
+  
+  Недопустить дублирование городов при добавлении или редактировании
  */
 
 class CitiesBlock extends Component {
   state = {
     cities: this.props.cities,
     isAddFormOpen: false,
+    isEditModalOpen: false,
+    isDeleteModalOpen: false,
+    activeCity: '',
+    filter: '',
   };
+
+  // ADD CITY
 
   toggleAddForm = () =>
     this.setState(prevState => ({ isAddFormOpen: !prevState.isAddFormOpen }));
 
   addCity = city => {
+    const isDuplicate = this.checkIfDuplicate(city);
+    if (isDuplicate) {
+      toast.warn(`City "${city}" is already in list`);
+      return;
+    }
     const newCity = { name: city };
     this.setState(prevState => ({
       cities: [...prevState.cities, newCity],
@@ -54,30 +67,88 @@ class CitiesBlock extends Component {
     }));
   };
 
-  handleStartEditting = actionCity => {};
-  saveEditedCity = editedCity => {};
-  closeEditModal = () => {};
+  checkIfDuplicate = city =>
+    this.state.cities.some(({ name }) => name === city);
 
-  handleStartDeleting = actionCity => {};
-  deleteCity = () => {};
-  closeDeleteModal = () => {};
+  // EDIT CITY
 
-  handleFilterChange = value => {};
-  getFilteredCities = () => {};
+  handleStartEditting = activeCity =>
+    this.setState({
+      isEditModalOpen: true,
+      activeCity,
+    });
+
+  saveEditedCity = editedCity => {
+    this.setState(prevState => ({
+      cities: prevState.cities.map(city => {
+        if (city.name === prevState.activeCity) {
+          return { ...city, name: editedCity };
+        }
+        return city;
+      }),
+      activeCity: '',
+    }));
+  };
+
+  closeEditModal = () =>
+    this.setState({
+      isEditModalOpen: false,
+    });
+
+  // DELETE CITY
+
+  handleStartDeleting = activeCity =>
+    this.setState({
+      isDeleteModalOpen: true,
+      activeCity,
+    });
+
+  deleteCity = () => {
+    this.setState(prevState => ({
+      cities: prevState.cities.filter(
+        ({ name }) => name !== prevState.activeCity,
+      ),
+      activeCity: '',
+    }));
+    this.closeDeleteModal();
+  };
+
+  closeDeleteModal = () => this.setState({ isDeleteModalOpen: false });
+
+  // FILTER CITIES
+
+  handleFilterChange = value => this.setState({ filter: value });
+
+  getFilteredCities = () => {
+    const { cities, filter } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+    return cities.filter(city =>
+      city.name.toLowerCase().includes(normalizedFilter),
+    );
+  };
 
   render() {
-    const { cities, isAddFormOpen } = this.state;
+    const {
+      isAddFormOpen,
+      isDeleteModalOpen,
+      isEditModalOpen,
+      activeCity,
+      filter,
+    } = this.state;
+
+    const filteredCities = this.getFilteredCities();
 
     return (
       <>
-        {/* <Filter
+        <Filter
           label="Поиск города:"
           value={filter}
-          onChange={this.handleFilterChange}
-        /> */}
+          onFilterChange={this.handleFilterChange}
+        />
 
         <ItemsList
-          items={cities}
+          items={filteredCities}
+          // items={this.getFilteredCities()}
           onEditItem={this.handleStartEditting}
           onDeleteItem={this.handleStartDeleting}
         />
@@ -96,7 +167,7 @@ class CitiesBlock extends Component {
           onClick={this.toggleAddForm}
         />
 
-        {/* {isEditModalOpen && (
+        {isEditModalOpen && (
           <Modal
             title="Редактировать информацию о городе"
             onClose={this.closeEditModal}
@@ -104,7 +175,7 @@ class CitiesBlock extends Component {
           >
             <EditCard
               label="Город"
-              inputValue={actionCity}
+              inputValue={activeCity}
               onSave={this.saveEditedCity}
             />
           </Modal>
@@ -122,7 +193,7 @@ class CitiesBlock extends Component {
               onClose={this.closeDeleteModal}
             />
           </Modal>
-        )} */}
+        )}
       </>
     );
   }
@@ -161,6 +232,23 @@ export default CitiesBlock;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 // class CitiesBlock extends Component {
 //   // constructor(props) {
@@ -170,7 +258,7 @@ export default CitiesBlock;
 //   //     cities: this.props.cities,
 //   //     filter: '',
 //   //     isAddFormOpen: false,
-//   //     actionCity: '',
+//   //     activeCity: '',
 //   //     isEditModalOpen: false,
 //   //     isDeleteModalOpen: false,
 //   //   };
@@ -180,7 +268,7 @@ export default CitiesBlock;
 //     cities: this.props.cities,
 //     filter: '',
 //     isAddFormOpen: false,
-//     actionCity: '',
+//     activeCity: '',
 //     isEditModalOpen: false,
 //     isDeleteModalOpen: false,
 //   };
@@ -198,18 +286,18 @@ export default CitiesBlock;
 //     }));
 //   };
 
-//   handleEditCity = actionCity =>
+//   handleEditCity = activeCity =>
 //     this.setState({
-//       actionCity,
+//       activeCity,
 //       isEditModalOpen: true,
 //     });
 
 //   editCity = changedCity => {
-//     const { actionCity } = this.state;
+//     const { activeCity } = this.state;
 //     this.setState(prevState => ({
-//       actionCity: '',
+//       activeCity: '',
 //       cities: prevState.cities.map(city =>
-//         city.name === actionCity ? { name: changedCity } : city,
+//         city.name === activeCity ? { name: changedCity } : city,
 //       ),
 //     }));
 //     this.closeEditModal();
@@ -220,18 +308,18 @@ export default CitiesBlock;
 //       isEditModalOpen: false,
 //     });
 
-//   handleDeleteCity = actionCity =>
+//   handleDeleteCity = activeCity =>
 //     this.setState({
-//       actionCity,
+//       activeCity,
 //       isDeleteModalOpen: true,
 //     });
 
 //   deleteCity = () => {
-//     const { actionCity } = this.state;
+//     const { activeCity } = this.state;
 
 //     this.setState(prevState => ({
-//       actionCity: '',
-//       cities: prevState.cities.filter(city => city.name !== actionCity),
+//       activeCity: '',
+//       cities: prevState.cities.filter(city => city.name !== activeCity),
 //     }));
 //     this.closeDeleteModal();
 //   };
@@ -253,7 +341,7 @@ export default CitiesBlock;
 //     const {
 //       filter,
 //       isAddFormOpen,
-//       actionCity,
+//       activeCity,
 //       isEditModalOpen,
 //       isDeleteModalOpen,
 //     } = this.state;
@@ -263,7 +351,7 @@ export default CitiesBlock;
 //         <Filter
 //           label="Поиск города:"
 //           value={filter}
-//           onChange={this.handleFilterChange}
+//           onFilterChange={this.handleFilterChange}
 //         />
 
 //         <ItemsList
@@ -294,7 +382,7 @@ export default CitiesBlock;
 //           >
 //             <EditCard
 //               label="Город"
-//               inputValue={actionCity}
+//               inputValue={activeCity}
 //               onSave={this.editCity}
 //             />
 //           </Modal>

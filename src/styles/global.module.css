@@ -6,7 +6,9 @@
   text-transform: uppercase;
 }
 
-input {
+input[type='text'],
+input[type='email'],
+input[type='tel'] {
   display: block;
   width: 488px;
   margin-bottom: 32px;
