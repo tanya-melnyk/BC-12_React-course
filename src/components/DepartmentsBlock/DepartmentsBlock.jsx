@@ -1,23 +1,3 @@
-// import PropTypes from 'prop-types';
-// import BigButton from '../common/BigButton/BigButton';
-// import DepartmentsList from './DepartmentsList/DepartmentsList';
-// import addIcon from 'images/add.svg';
-
-// const DepartmentsBlock = ({ departments }) => {
-//   return (
-//     <div>
-//       <DepartmentsList departments={departments} />
-//       <BigButton text="Добавить город" icon={addIcon} />
-//     </div>
-//   );
-// };
-
-// DepartmentsBlock.propTypes = {
-//   departments: PropTypes.array.isRequired,
-// };
-
-// export default DepartmentsBlock;
-
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import AddForm from '../common/AddForm/AddForm';
@@ -31,19 +11,6 @@ import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
 
 class DepartmentsBlock extends Component {
-  // constructor(props) {
-  //   super(props);
-
-  //   this.state = {
-  //     departments: this.props.departments,
-  //     filter: '',
-  //     isAddFormOpen: false,
-  //     actionDepartment: '',
-  //     isEditModalOpen: false,
-  //     isDeleteModalOpen: false,
-  //   };
-  // }
-
   state = {
     departments: this.props.departments,
     isAddFormOpen: false,
