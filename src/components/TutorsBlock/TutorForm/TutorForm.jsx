@@ -34,35 +34,70 @@ const GENDER = {
   FEMALE: 'female',
 };
 
-// const INITIAL_STATE = {
-//   lastName: '',
-//   firstName: '',
-//   phone: '',
-//   email: '',
-//   isFullTime: false, // checkbox
-//   city: '', // select
-//   gender: '', // radio
-// };
+const INITIAL_STATE = {
+  lastName: '',
+  firstName: '',
+  phone: '',
+  email: '',
+  isFullTime: false, // checkbox
+  city: '', // select
+  gender: '', // radio
+};
 
 class TutorForm extends Component {
-  handleChange = e => {};
+  state = { ...INITIAL_STATE };
 
-  handleSubmit = e => {};
+  handleChange = e => {
+    const { name, value, type, checked } = e.target;
+    const isCheckbox = type === 'checkbox';
+    this.setState({
+      [name]: isCheckbox ? checked : value,
+    });
+  };
 
-  reset = () => {};
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.onSubmit({ ...this.state });
+    this.reset();
+  };
+
+  reset = () => this.setState({ ...INITIAL_STATE });
 
   render() {
-    const isAddBtnDisabled = false;
+    const { lastName, firstName, phone, email, isFullTime, city, gender } =
+      this.state;
+
+    // const isSubmitBtnDisabled = Object.keys(this.state).some(
+    //   inputName => inputName !== 'isFullTime' && !this.state[inputName],
+    // );
+
+    // const isSubmitBtnDisabled = Object.keys(this.state).some(inputName => {
+    //   if (inputName === 'isFullTime') {
+    //     return false;
+    //   }
+    //   return !this.state[inputName];
+    // });
+
+    // const isSubmitBtnDisabled = Object.values(this.state).some(
+    //   value => typeof value !== 'boolean' && !value,
+    // );
+
+    const isSubmitBtnDisabled = Object.values(this.state).some(value => {
+      if (typeof value === 'boolean') {
+        return false;
+      }
+      return value === '';
+    });
 
     return (
       <div className={s.container}>
         <Paper>
           <div className={s.inner}>
             <h4 className={s.formName}>Добавление преподавателя</h4>
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <input
                 name="lastName"
-                // value={}
+                value={lastName}
                 type="text"
                 placeholder="Фамилия*"
                 required
@@ -70,7 +105,7 @@ class TutorForm extends Component {
               />
               <input
                 name="firstName"
-                // value={}
+                value={firstName}
                 type="text"
                 placeholder="Имя*"
                 required
@@ -78,7 +113,7 @@ class TutorForm extends Component {
               />
               <input
                 name="phone"
-                // value={}
+                value={phone}
                 type="tel"
                 placeholder="Телефон*"
                 required
@@ -86,7 +121,7 @@ class TutorForm extends Component {
               />
               <input
                 name="email"
-                // value={}
+                value={email}
                 type="email"
                 placeholder="Email*"
                 required
@@ -95,13 +130,13 @@ class TutorForm extends Component {
 
               <select
                 name="city"
-                // value={}
+                value={city}
                 onChange={this.handleChange}
                 className={s.inner}
               >
-                {citiesOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+                {citiesOptions.map(({ value, label }) => (
+                  <option key={value} value={value}>
+                    {label}
                   </option>
                 ))}
               </select>
@@ -111,7 +146,7 @@ class TutorForm extends Component {
                 <label className={s.inner}>Мужчина</label>
                 <input
                   type="radio"
-                  // checked={}
+                  checked={gender === GENDER.MALE}
                   name="gender"
                   value={GENDER.MALE}
                   onChange={this.handleChange}
@@ -119,7 +154,7 @@ class TutorForm extends Component {
                 <label className={s.inner}>Женщина</label>
                 <input
                   type="radio"
-                  // checked={}
+                  checked={gender === GENDER.FEMALE}
                   name="gender"
                   value={GENDER.FEMALE}
                   onChange={this.handleChange}
@@ -130,14 +165,14 @@ class TutorForm extends Component {
               <input
                 name="isFullTime"
                 type="checkbox"
-                // checked={}
+                checked={isFullTime}
                 onChange={this.handleChange}
               />
 
               <BigButton
                 type="submit"
                 text="Пригласить"
-                disabled={isAddBtnDisabled}
+                disabled={isSubmitBtnDisabled}
               />
             </form>
           </div>
