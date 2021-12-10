@@ -1,8 +1,26 @@
 import { Component } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import styles from './Modal.module.css';
 
+const modalRootRef = document.querySelector('#modal-root');
+
 class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.onEscPress);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onEscPress);
+  }
+
+  onEscPress = e => {
+    if (e.code === 'Escape') {
+      console.log('Escape');
+      this.props.onClose();
+    }
+  };
+
   handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
       this.props.onClose();
@@ -12,7 +30,7 @@ class Modal extends Component {
   render() {
     const { onClose, icon, title, children } = this.props;
 
-    return (
+    return createPortal(
       <div className={styles.backdrop} onClick={this.handleBackdropClick}>
         <div className={styles.modal}>
           <header className={styles.header}>
@@ -37,7 +55,8 @@ class Modal extends Component {
             {children}
           </div>
         </div>
-      </div>
+      </div>,
+      modalRootRef,
     );
   }
 }
