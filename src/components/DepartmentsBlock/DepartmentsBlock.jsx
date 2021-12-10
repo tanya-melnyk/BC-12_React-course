@@ -6,18 +6,42 @@ import DeleteCard from '../common/DeleteCard/DeleteCard';
 import EditCard from '../common/EditCard/EditCard';
 import ItemsList from '../ItemsList/ItemsList';
 import Modal from '../common/Modal/Modal';
+import * as storage from '../../services/localStorage';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
+
+const MODAL = {
+  NONE: 'none',
+  EDIT: 'edit',
+  DELETE: 'delete',
+};
+
+const STORAGE_KEY = 'departments';
 
 class DepartmentsBlock extends Component {
   state = {
     departments: this.props.departments,
     isAddFormOpen: false,
     actionDepartment: '',
-    isEditModalOpen: false,
-    isDeleteModalOpen: false,
+    openedModal: MODAL.NONE,
   };
+
+  componentDidMount() {
+    const savedDepartments = storage.get(STORAGE_KEY);
+    if (savedDepartments) {
+      this.setState({ departments: savedDepartments });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { departments } = this.state;
+    if (prevState.departments !== departments) {
+      storage.save(STORAGE_KEY, departments);
+    }
+  }
+
+  // ADD DEPARTMENT
 
   toggleAddForm = () =>
     this.setState(prevState => ({ isAddFormOpen: !prevState.isAddFormOpen }));
@@ -30,10 +54,12 @@ class DepartmentsBlock extends Component {
     }));
   };
 
+  // EDIT DEPARTMENT
+
   handleStartEditting = department =>
     this.setState({
       actionDepartment: department,
-      isEditModalOpen: true,
+      openedModal: MODAL.EDIT,
     });
 
   saveEditedDepartment = editedDepartment => {
@@ -46,18 +72,15 @@ class DepartmentsBlock extends Component {
       ),
       actionDepartment: '',
     }));
-    this.closeEditModal();
+    this.closeModal();
   };
 
-  closeEditModal = () =>
-    this.setState({
-      isEditModalOpen: false,
-    });
+  // DELETE DEPARTMENT
 
   handleStartDeleting = department =>
     this.setState({
       actionDepartment: department,
-      isDeleteModalOpen: true,
+      openedModal: MODAL.DELETE,
     });
 
   deleteDepartment = () => {
@@ -69,30 +92,27 @@ class DepartmentsBlock extends Component {
         department => department.name !== actionDepartment,
       ),
     }));
-    this.closeDeleteModal();
+    this.closeModal();
   };
 
-  closeDeleteModal = () =>
+  closeModal = () =>
     this.setState({
-      isDeleteModalOpen: false,
+      openedModal: MODAL.NONE,
     });
 
   render() {
-    const {
-      departments,
-      isAddFormOpen,
-      actionDepartment,
-      isEditModalOpen,
-      isDeleteModalOpen,
-    } = this.state;
+    const { departments, isAddFormOpen, actionDepartment, openedModal } =
+      this.state;
 
     return (
       <>
-        <ItemsList
-          items={departments}
-          onEditItem={this.handleStartEditting}
-          onDeleteItem={this.handleStartDeleting}
-        />
+        {!!departments.length && (
+          <ItemsList
+            items={departments}
+            onEditItem={this.handleStartEditting}
+            onDeleteItem={this.handleStartDeleting}
+          />
+        )}
 
         {isAddFormOpen && (
           <AddForm
@@ -108,10 +128,10 @@ class DepartmentsBlock extends Component {
           onClick={this.toggleAddForm}
         />
 
-        {isEditModalOpen && (
+        {openedModal === MODAL.EDIT && (
           <Modal
             title="Редактировать информацию о факультете"
-            onClose={this.closeEditModal}
+            onClose={this.closeModal}
             icon={pencilIcon}
           >
             <EditCard
@@ -122,16 +142,16 @@ class DepartmentsBlock extends Component {
           </Modal>
         )}
 
-        {isDeleteModalOpen && (
+        {openedModal === MODAL.DELETE && (
           <Modal
             title="Удаление факультета"
-            onClose={this.closeDeleteModal}
+            onClose={this.closeModal}
             icon={fingerIcon}
           >
             <DeleteCard
               text="Будут удалены все материалы и информация о факультете."
               onDelete={this.deleteDepartment}
-              onClose={this.closeDeleteModal}
+              onClose={this.closeModal}
             />
           </Modal>
         )}

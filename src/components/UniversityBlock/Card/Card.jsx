@@ -22,10 +22,11 @@ const Card = ({ name }) => {
       <p className={s.text}>университет</p>
       <h3 className={`heading ${s.wrapper}`}>{name}</h3>
       <div className={s.btn_container}>
-        <button className={s.active} aria-label="Edit">
+        <button type="button" className={s.active} aria-label="Edit">
           <EditIcon />
         </button>
         <button
+          type="button"
           disabled={!isAdmin}
           className={isAdmin ? s.active : s.disabled}
           aria-label="Delete"
