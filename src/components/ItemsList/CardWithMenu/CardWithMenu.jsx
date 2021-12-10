@@ -32,7 +32,7 @@ class CardWithMenu extends Component {
     return (
       <div css={cardStyles}>
         <p>{text}</p>
-        <button onClick={this.toggleMenu} aria-label="Menu">
+        <button type="button" onClick={this.toggleMenu} aria-label="Menu">
           <DotsIcon />
         </button>
 

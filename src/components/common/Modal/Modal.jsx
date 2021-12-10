@@ -17,6 +17,7 @@ class Modal extends Component {
         <div className={styles.modal}>
           <header className={styles.header}>
             <button
+              type="button"
               className={styles.closeBtn}
               onClick={onClose}
               aria-label="Close"

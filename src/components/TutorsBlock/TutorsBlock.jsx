@@ -6,20 +6,30 @@ import BigButton from '../common/BigButton/BigButton';
 import Paper from '../common/Paper/Paper';
 import Tutor from './Tutor/Tutor';
 import TutorForm from './TutorForm/TutorForm';
+import * as storage from '../../services/localStorage';
 import plusImg from '../../images/add.svg';
 
-/**
-  Использовать форму добавления преподавателя и при клике на "Пригласить" прятать форму и добавлять преподавателя в колекцию:
-  - в состояние `TutorsBlock` добавляем поле `tutors`, которое инициализируется из пропа `tutors`
-  - пишем метод `addTutor(newTutor)`, который получает объект с новым преподавателем, добавляет его в массив `tutors` и прячет форму
-  - передаем этот метод пропсом `onSubmit` в `TutorForm`
- */
+const STORAGE_KEY = 'tutors';
 
 class TutorsBlock extends Component {
   state = {
     tutors: this.props.tutors,
     isFormOpen: false,
   };
+
+  componentDidMount() {
+    const savedTutors = storage.get(STORAGE_KEY);
+    if (savedTutors) {
+      this.setState({ tutors: savedTutors });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { tutors } = this.state;
+    if (prevState.tutors !== tutors) {
+      storage.save(STORAGE_KEY, tutors);
+    }
+  }
 
   toggleForm = () =>
     this.setState(prevState => ({
@@ -34,19 +44,20 @@ class TutorsBlock extends Component {
 
   render() {
     const { tutors, isFormOpen } = this.state;
-    // const tutorsCount = tutors.length;
 
     return (
       <div css={{ position: 'relative', marginBottom: 32 }}>
-        <ul>
-          {tutors.map(tutor => (
-            <li key={tutor.email} css={{ marginBottom: 24 }}>
-              <Paper>
-                <Tutor {...tutor} />
-              </Paper>
-            </li>
-          ))}
-        </ul>
+        {!!tutors.length && (
+          <ul>
+            {tutors.map(tutor => (
+              <li key={tutor.email} css={{ marginBottom: 24 }}>
+                <Paper>
+                  <Tutor {...tutor} />
+                </Paper>
+              </li>
+            ))}
+          </ul>
+        )}
 
         {isFormOpen && <TutorForm onSubmit={this.addTutor} />}
 

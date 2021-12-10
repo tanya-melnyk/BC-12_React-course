@@ -25,6 +25,7 @@ class Sidebar extends Component {
         <div className="Sidebar-decor"></div>
 
         <button
+          type="button"
           className="toggle-btn"
           aria-label="Toggle sidebar"
           onClick={this.toggleSidebar}
