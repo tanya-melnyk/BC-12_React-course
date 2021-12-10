@@ -23,7 +23,7 @@ class DepartmentsBlock extends Component {
   state = {
     departments: this.props.departments,
     isAddFormOpen: false,
-    actionDepartment: '',
+    activeDepartment: '',
     openedModal: MODAL.NONE,
   };
 
@@ -58,19 +58,18 @@ class DepartmentsBlock extends Component {
 
   handleStartEditting = department =>
     this.setState({
-      actionDepartment: department,
+      activeDepartment: department,
       openedModal: MODAL.EDIT,
     });
 
   saveEditedDepartment = editedDepartment => {
-    const { actionDepartment } = this.state;
+    const { activeDepartment } = this.state;
     this.setState(prevState => ({
       departments: prevState.departments.map(department =>
-        department.name === actionDepartment
+        department.name === activeDepartment
           ? { name: editedDepartment }
           : department,
       ),
-      actionDepartment: '',
     }));
     this.closeModal();
   };
@@ -79,17 +78,15 @@ class DepartmentsBlock extends Component {
 
   handleStartDeleting = department =>
     this.setState({
-      actionDepartment: department,
+      activeDepartment: department,
       openedModal: MODAL.DELETE,
     });
 
   deleteDepartment = () => {
-    const { actionDepartment } = this.state;
-
+    const { activeDepartment } = this.state;
     this.setState(prevState => ({
-      actionDepartment: '',
       departments: prevState.departments.filter(
-        department => department.name !== actionDepartment,
+        department => department.name !== activeDepartment,
       ),
     }));
     this.closeModal();
@@ -98,10 +95,11 @@ class DepartmentsBlock extends Component {
   closeModal = () =>
     this.setState({
       openedModal: MODAL.NONE,
+      activeDepartment: '',
     });
 
   render() {
-    const { departments, isAddFormOpen, actionDepartment, openedModal } =
+    const { departments, isAddFormOpen, activeDepartment, openedModal } =
       this.state;
 
     return (
@@ -112,6 +110,10 @@ class DepartmentsBlock extends Component {
             onEditItem={this.handleStartEditting}
             onDeleteItem={this.handleStartDeleting}
           />
+        )}
+
+        {!departments.length && (
+          <h4 className="absence-msg">No departments yet</h4>
         )}
 
         {isAddFormOpen && (
@@ -136,7 +138,7 @@ class DepartmentsBlock extends Component {
           >
             <EditCard
               label="Факультет"
-              inputValue={actionDepartment}
+              inputValue={activeDepartment}
               onSave={this.saveEditedDepartment}
             />
           </Modal>

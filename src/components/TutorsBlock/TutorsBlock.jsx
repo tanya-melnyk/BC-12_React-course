@@ -59,6 +59,8 @@ class TutorsBlock extends Component {
           </ul>
         )}
 
+        {!tutors.length && <h4 className="absence-msg">No tutors yet</h4>}
+
         {isFormOpen && <TutorForm onSubmit={this.addTutor} />}
 
         <BigButton

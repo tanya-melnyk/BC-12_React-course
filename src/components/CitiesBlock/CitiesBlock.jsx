@@ -25,11 +25,7 @@ class CitiesBlock extends Component {
   state = {
     cities: this.props.cities,
     isAddFormOpen: false,
-
     openedModal: MODAL.NONE,
-    // isEditModalOpen: false,
-    // isDeleteModalOpen: false,
-
     activeCity: '',
     filter: '',
   };
@@ -73,7 +69,6 @@ class CitiesBlock extends Component {
 
   handleStartEditting = activeCity =>
     this.setState({
-      // isEditModalOpen: true,
       openedModal: MODAL.EDIT,
       activeCity,
     });
@@ -86,23 +81,15 @@ class CitiesBlock extends Component {
         }
         return city;
       }),
-      // activeCity: '',
     }));
     this.closeModal();
-    // this.closeEditModal();
   };
-
-  // closeEditModal = () =>
-  //   this.setState({
-  //     isEditModalOpen: false,
-  //   });
 
   // DELETE CITY
 
   handleStartDeleting = activeCity =>
     this.setState({
       openedModal: MODAL.DELETE,
-      // isDeleteModalOpen: true,
       activeCity,
     });
 
@@ -111,13 +98,9 @@ class CitiesBlock extends Component {
       cities: prevState.cities.filter(
         ({ name }) => name !== prevState.activeCity,
       ),
-      // activeCity: '',
     }));
     this.closeModal();
-    // this.closeDeleteModal();
   };
-
-  // closeDeleteModal = () => this.setState({ isDeleteModalOpen: false });
 
   closeModal = () =>
     this.setState({
@@ -138,15 +121,8 @@ class CitiesBlock extends Component {
   };
 
   render() {
-    const {
-      cities,
-      isAddFormOpen,
-      // isDeleteModalOpen,
-      // isEditModalOpen,
-      openedModal,
-      activeCity,
-      filter,
-    } = this.state;
+    const { cities, isAddFormOpen, openedModal, activeCity, filter } =
+      this.state;
 
     const filteredCities = this.getFilteredCities();
 
@@ -160,7 +136,7 @@ class CitiesBlock extends Component {
           />
         )}
 
-        {!cities.length && <strong>No cities yet</strong>}
+        {!cities.length && <h4 className="absence-msg">No cities yet</h4>}
 
         {!!filteredCities.length && (
           <ItemsList
