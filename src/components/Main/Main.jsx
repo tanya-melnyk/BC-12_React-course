@@ -10,7 +10,7 @@ import citiesIcon from 'images/pin.png';
 import departmentsIcon from 'images/robot.png';
 import styles from './Main.module.css';
 
-const { name, description, tutors, cities, departments } = univerInfo;
+const { name, description, tutors, cities } = univerInfo;
 
 const Main = () => {
   return (
@@ -28,7 +28,7 @@ const Main = () => {
       </Section>
 
       <Section icon={departmentsIcon} title="Факультеты">
-        <DepartmentsBlock departments={departments} />
+        <DepartmentsBlock />
       </Section>
     </main>
   );

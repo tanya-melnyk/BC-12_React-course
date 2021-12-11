@@ -12,8 +12,10 @@ const ItemsList = ({ items, onEditItem, onDeleteItem }) => (
         <Paper>
           <CardWithMenu
             text={item.name}
-            onEdit={() => onEditItem(item.name)}
-            onDelete={() => onDeleteItem(item.name)}
+            onEdit={() => onEditItem(item)}
+            onDelete={() => onDeleteItem(item)}
+            // onEdit={() => onEditItem(item.name)}
+            // onDelete={() => onDeleteItem(item.name)}
           />
         </Paper>
       </li>
