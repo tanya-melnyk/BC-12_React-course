@@ -107,14 +107,18 @@ class DepartmentsBlock extends Component {
       openedModal: ACTION.EDIT,
     });
 
-  confirmEdit = editedDepartmentName =>
+  confirmEdit = editedDepartmentName => {
+    const { activeDepartment } = this.state;
+    if (editedDepartmentName === activeDepartment.name) {
+      this.setState({ activeDepartment: null });
+      this.closeModal();
+      return;
+    }
     this.setState({
       action: ACTION.EDIT,
-      activeDepartment: {
-        ...this.state.activeDepartment,
-        name: editedDepartmentName,
-      },
+      activeDepartment: { ...activeDepartment, name: editedDepartmentName },
     });
+  };
 
   editDepartment = async () => {
     this.setState({ loading: true, error: null });

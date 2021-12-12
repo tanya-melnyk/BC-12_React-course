@@ -12,10 +12,7 @@ class AddForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.onSubmit(this.state.input);
-    this.reset();
   };
-
-  reset = () => this.setState({ input: '' });
 
   render() {
     const { input } = this.state;

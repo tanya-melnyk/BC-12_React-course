@@ -89,18 +89,19 @@ class CitiesBlock extends Component {
     });
   };
 
+  checkIfDuplicate = cityName =>
+    this.state.cities.some(({ name }) => name === cityName);
+
   addCity = async () => {
     this.setState({ loading: true, error: null });
     const { activeCity } = this.state;
     try {
       const newCity = await api.saveItem(API_ENDPOINT, activeCity);
-      this.setState(prevState => ({
-        cities: [...prevState.cities, newCity],
-      }));
+      this.setState(prevState => ({ cities: [...prevState.cities, newCity] }));
+      this.toggleAddForm();
     } catch (error) {
       this.setState({ error: error.message });
     } finally {
-      this.toggleAddForm();
       this.setState({
         activeCity: null,
         action: ACTION.NONE,
@@ -108,9 +109,6 @@ class CitiesBlock extends Component {
       });
     }
   };
-
-  checkIfDuplicate = cityName =>
-    this.state.cities.some(({ name }) => name === cityName);
 
   // EDIT CITY
 
@@ -123,10 +121,7 @@ class CitiesBlock extends Component {
   confirmEdit = editedCityName =>
     this.setState({
       action: ACTION.EDIT,
-      activeCity: {
-        ...this.state.activeCity,
-        name: editedCityName,
-      },
+      activeCity: { ...this.state.activeCity, name: editedCityName },
     });
 
   editCity = async () => {
@@ -144,8 +139,8 @@ class CitiesBlock extends Component {
     } finally {
       this.closeModal();
       this.setState({
-        action: ACTION.NONE,
         activeCity: null,
+        action: ACTION.NONE,
         loading: false,
       });
     }
@@ -174,18 +169,15 @@ class CitiesBlock extends Component {
     } finally {
       this.closeModal();
       this.setState({
-        action: ACTION.NONE,
         activeCity: null,
+        action: ACTION.NONE,
         loading: false,
       });
     }
   };
 
   closeModal = () =>
-    this.setState({
-      openedModal: ACTION.NONE,
-      activeCity: '',
-    });
+    this.setState({ openedModal: ACTION.NONE, activeCity: '' });
 
   // FILTER CITIES
 
