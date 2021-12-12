@@ -6,105 +6,184 @@ import BigButton from '../common/BigButton/BigButton';
 import DeleteCard from '../common/DeleteCard/DeleteCard';
 import EditCard from '../common/EditCard/EditCard';
 import Filter from '../common/Filter/Filter';
+import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
-import * as storage from 'services/localStorage';
+import * as api from 'services/api';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
 
-const STORAGE_KEY = 'cities';
+const API_ENDPOINT = 'cities';
 
-const MODAL = {
+const ACTION = {
   NONE: 'none',
+  ADD: 'add',
   EDIT: 'edit',
   DELETE: 'delete',
 };
 
 class CitiesBlock extends Component {
   state = {
-    cities: this.props.cities,
-    isAddFormOpen: false,
-    openedModal: MODAL.NONE,
-    activeCity: '',
+    cities: [],
     filter: '',
+    isAddFormOpen: false,
+    openedModal: ACTION.NONE,
+    action: ACTION.NONE,
+    activeCity: null,
+    loading: false,
+    error: null,
   };
 
   componentDidMount() {
-    const savedCities = storage.get(STORAGE_KEY);
-    if (savedCities) {
-      this.setState({ cities: savedCities });
-    }
+    this.fetchCities();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { cities } = this.state;
-    if (prevState.cities !== cities) {
-      storage.save(STORAGE_KEY, cities);
+    const { action } = this.state;
+    if (prevState.action !== action) {
+      switch (action) {
+        case ACTION.ADD:
+          this.addCity();
+          break;
+        case ACTION.EDIT:
+          this.editCity();
+          break;
+        case ACTION.DELETE:
+          this.deleteCity();
+          break;
+        default:
+          return;
+      }
     }
   }
+
+  // GET CITIES
+
+  fetchCities = async () => {
+    this.setState({ loading: true, error: null });
+    try {
+      const cities = await api.getData(API_ENDPOINT);
+      this.setState({ cities });
+    } catch (error) {
+      this.setState({ error: error.message });
+    } finally {
+      this.setState({ loading: false });
+    }
+  };
 
   // ADD CITY
 
   toggleAddForm = () =>
     this.setState(prevState => ({ isAddFormOpen: !prevState.isAddFormOpen }));
 
-  addCity = city => {
-    const isDuplicate = this.checkIfDuplicate(city);
+  confirmAdd = cityName => {
+    const isDuplicate = this.checkIfDuplicate(cityName);
     if (isDuplicate) {
-      toast.warn(`City "${city}" is already in list`);
+      toast.warn(`City "${cityName}" is already in list`);
       return;
     }
-    const newCity = { name: city };
-    this.setState(prevState => ({
-      cities: [...prevState.cities, newCity],
-      isAddFormOpen: false,
-    }));
+    this.setState({
+      action: ACTION.ADD,
+      activeCity: { name: cityName },
+    });
   };
 
-  checkIfDuplicate = city =>
-    this.state.cities.some(({ name }) => name === city);
+  addCity = async () => {
+    this.setState({ loading: true, error: null });
+    const { activeCity } = this.state;
+    try {
+      const newCity = await api.saveItem(API_ENDPOINT, activeCity);
+      this.setState(prevState => ({
+        cities: [...prevState.cities, newCity],
+      }));
+    } catch (error) {
+      this.setState({ error: error.message });
+    } finally {
+      this.toggleAddForm();
+      this.setState({
+        activeCity: null,
+        action: ACTION.NONE,
+        loading: false,
+      });
+    }
+  };
+
+  checkIfDuplicate = cityName =>
+    this.state.cities.some(({ name }) => name === cityName);
 
   // EDIT CITY
 
-  handleStartEditting = activeCity =>
+  handleStartEdit = activeCity =>
     this.setState({
-      openedModal: MODAL.EDIT,
+      openedModal: ACTION.EDIT,
       activeCity,
     });
 
-  saveEditedCity = editedCity => {
-    this.setState(prevState => ({
-      cities: prevState.cities.map(city => {
-        if (city.name === prevState.activeCity) {
-          return { ...city, name: editedCity };
-        }
-        return city;
-      }),
-    }));
-    this.closeModal();
+  confirmEdit = editedCityName =>
+    this.setState({
+      action: ACTION.EDIT,
+      activeCity: {
+        ...this.state.activeCity,
+        name: editedCityName,
+      },
+    });
+
+  editCity = async () => {
+    this.setState({ loading: true, error: null });
+    const { activeCity } = this.state;
+    try {
+      const updatedCity = await api.editItem(API_ENDPOINT, activeCity);
+      this.setState(prevState => ({
+        cities: prevState.cities.map(city =>
+          city.id === updatedCity.id ? updatedCity : city,
+        ),
+      }));
+    } catch (error) {
+      this.setState({ error: error.message });
+    } finally {
+      this.closeModal();
+      this.setState({
+        action: ACTION.NONE,
+        activeCity: null,
+        loading: false,
+      });
+    }
   };
 
   // DELETE CITY
 
-  handleStartDeleting = activeCity =>
+  handleStartDelete = activeCity =>
     this.setState({
-      openedModal: MODAL.DELETE,
+      openedModal: ACTION.DELETE,
       activeCity,
     });
 
-  deleteCity = () => {
-    this.setState(prevState => ({
-      cities: prevState.cities.filter(
-        ({ name }) => name !== prevState.activeCity,
-      ),
-    }));
-    this.closeModal();
+  confirmDelete = () => this.setState({ action: ACTION.DELETE });
+
+  deleteCity = async () => {
+    this.setState({ loading: true, error: null });
+    const { activeCity } = this.state;
+    try {
+      const deletedCity = await api.deleteItem(API_ENDPOINT, activeCity.id);
+      this.setState(prevState => ({
+        cities: prevState.cities.filter(city => city.id !== deletedCity.id),
+      }));
+    } catch (error) {
+      this.setState({ error: error.message });
+    } finally {
+      this.closeModal();
+      this.setState({
+        action: ACTION.NONE,
+        activeCity: null,
+        loading: false,
+      });
+    }
   };
 
   closeModal = () =>
     this.setState({
-      openedModal: MODAL.NONE,
+      openedModal: ACTION.NONE,
       activeCity: '',
     });
 
@@ -121,13 +200,16 @@ class CitiesBlock extends Component {
   };
 
   render() {
-    const { cities, isAddFormOpen, openedModal, activeCity, filter } =
+    const { cities, isAddFormOpen, openedModal, activeCity, filter, loading } =
       this.state;
 
     const filteredCities = this.getFilteredCities();
+    const noCities = !loading && !cities.length;
 
     return (
       <>
+        {loading && <Loader />}
+
         {cities.length > 1 && (
           <Filter
             label="Поиск города:"
@@ -136,19 +218,19 @@ class CitiesBlock extends Component {
           />
         )}
 
-        {!cities.length && <h4 className="absence-msg">No cities yet</h4>}
-
         {!!filteredCities.length && (
           <ItemsList
             items={filteredCities}
-            onEditItem={this.handleStartEditting}
-            onDeleteItem={this.handleStartDeleting}
+            onEditItem={this.handleStartEdit}
+            onDeleteItem={this.handleStartDelete}
           />
         )}
 
+        {noCities && <h4 className="absence-msg">No cities yet</h4>}
+
         {isAddFormOpen && (
           <AddForm
-            onSubmit={this.addCity}
+            onSubmit={this.confirmAdd}
             formName="Добавление города"
             placeholder="Город"
           />
@@ -160,7 +242,7 @@ class CitiesBlock extends Component {
           onClick={this.toggleAddForm}
         />
 
-        {openedModal === MODAL.EDIT && (
+        {openedModal === ACTION.EDIT && (
           <Modal
             title="Редактировать информацию о городе"
             onClose={this.closeModal}
@@ -168,13 +250,13 @@ class CitiesBlock extends Component {
           >
             <EditCard
               label="Город"
-              inputValue={activeCity}
-              onSave={this.saveEditedCity}
+              inputValue={activeCity.name}
+              onSave={this.confirmEdit}
             />
           </Modal>
         )}
 
-        {openedModal === MODAL.DELETE && (
+        {openedModal === ACTION.DELETE && (
           <Modal
             title="Удаление города"
             onClose={this.closeModal}
@@ -182,7 +264,7 @@ class CitiesBlock extends Component {
           >
             <DeleteCard
               text="Будут удалены все материалы и информация о городе."
-              onDelete={this.deleteCity}
+              onDelete={this.confirmDelete}
               onClose={this.closeModal}
             />
           </Modal>

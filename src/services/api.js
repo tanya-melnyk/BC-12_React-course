@@ -10,6 +10,7 @@ const getData = (endpoint, options) => fetchData(endpoint, options);
 const saveItem = (endpoint, item, options) => {
   const finalOptions = {
     method: 'POST',
+    // body: item,
     body: JSON.stringify(item),
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',

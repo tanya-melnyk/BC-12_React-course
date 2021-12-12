@@ -17,6 +17,10 @@ const citiesOptions = [
     label: 'Киев',
     value: 'Киев',
   },
+  {
+    label: 'Львов',
+    value: 'Львов',
+  },
 ];
 
 const GENDER = {
@@ -25,10 +29,10 @@ const GENDER = {
 };
 
 const INITIAL_STATE = {
-  lastName: '',
-  firstName: '',
-  phone: '',
-  email: '',
+  // lastName: '',
+  // firstName: '',
+  // phone: '',
+  // email: '',
   isFullTime: false, // checkbox
   city: '', // select
   gender: '', // radio
@@ -54,8 +58,9 @@ class TutorForm extends Component {
   reset = () => this.setState({ ...INITIAL_STATE });
 
   render() {
-    const { lastName, firstName, phone, email, isFullTime, city, gender } =
-      this.state;
+    const { isFullTime, city, gender } = this.state;
+    // const { lastName, firstName, phone, email, isFullTime, city, gender } =
+    //   this.state;
 
     const isSubmitBtnDisabled = Object.values(this.state).some(
       value => typeof value !== 'boolean' && !value,
@@ -67,7 +72,7 @@ class TutorForm extends Component {
           <div className={s.inner}>
             <h4 className={s.formName}>Добавление преподавателя</h4>
             <form onSubmit={this.handleSubmit}>
-              <input
+              {/* <input
                 name="lastName"
                 value={lastName}
                 type="text"
@@ -98,7 +103,7 @@ class TutorForm extends Component {
                 placeholder="Email*"
                 required
                 onChange={this.handleChange}
-              />
+              /> */}
 
               <select
                 name="city"

@@ -54,6 +54,8 @@ class DepartmentsBlock extends Component {
     }
   }
 
+  // GET DEPARTMENTS
+
   fetchDepartments = async () => {
     this.setState({ loading: true, error: null });
     try {
@@ -191,6 +193,8 @@ class DepartmentsBlock extends Component {
       loading,
     } = this.state;
 
+    const noDepartments = !loading && !departments.length;
+
     return (
       <>
         {loading && <Loader />}
@@ -203,9 +207,7 @@ class DepartmentsBlock extends Component {
           />
         )}
 
-        {!departments.length && !loading && (
-          <h4 className="absence-msg">No departments yet</h4>
-        )}
+        {noDepartments && <h4 className="absence-msg">No departments yet</h4>}
 
         {isAddFormOpen && (
           <AddForm
@@ -253,7 +255,11 @@ class DepartmentsBlock extends Component {
   }
 }
 
+export default DepartmentsBlock;
+
 /////////////////////////////////////////////////////
+
+//  USUSAL WAY WITH NO STATE MACHINE
 
 // class DepartmentsBlock extends Component {
 //   state = {
@@ -326,6 +332,8 @@ class DepartmentsBlock extends Component {
 //       });
 //   };
 
+//   FETCING AS AN EVENT HANDLER
+
 //   // addDepartment = departmentName => {
 //   //   const newDepartment = { name: departmentName };
 //   //   this.setState({ loading: true, error: null });
@@ -375,6 +383,8 @@ class DepartmentsBlock extends Component {
 //       });
 //   };
 
+//   // FETCING AS AN EVENT HANDLER
+
 //   // saveEditedDepartment = editedDepartmentName => {
 //   //   this.setState({ loading: true, error: null });
 //   //   const { activeDepartment } = this.state;
@@ -397,7 +407,7 @@ class DepartmentsBlock extends Component {
 //   //     });
 //   // };
 
-//   // DELETE DEPARTMENT
+//   // FETCING AS AN EVENT HANDLER
 
 //   handleStartDeleting = activeDepartment =>
 //     this.setState({
@@ -426,6 +436,8 @@ class DepartmentsBlock extends Component {
 //         this.setState({ departmentToDelete: null, loading: false });
 //       });
 //   };
+
+//   // FETCING AS AN EVENT HANDLER
 
 //   // deleteDepartment = () => {
 //   //   this.setState({ loading: true, error: null });
@@ -523,4 +535,4 @@ class DepartmentsBlock extends Component {
 //   }
 // }
 
-export default DepartmentsBlock;
+// export default DepartmentsBlock;
