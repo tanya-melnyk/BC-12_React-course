@@ -5,11 +5,9 @@ import './Sidebar.css';
 
 const defineStyles = isOpen => {
   const finalSyles = ['Sidebar'];
-
   if (!isOpen) {
     finalSyles.push('Sidebar-closed');
   }
-
   return finalSyles.join(' ');
 };
 
