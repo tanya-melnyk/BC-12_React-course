@@ -7,13 +7,13 @@ import { listStyles } from './ItemsListStyles';
 
 const ItemsList = ({ items, onEditItem, onDeleteItem }) => (
   <ul css={listStyles}>
-    {items.map((item, index) => (
-      <li key={index}>
+    {items.map(item => (
+      <li key={item.id}>
         <Paper>
           <CardWithMenu
             text={item.name}
-            onEdit={() => onEditItem(item.name)}
-            onDelete={() => onDeleteItem(item.name)}
+            onEdit={() => onEditItem(item)}
+            onDelete={() => onDeleteItem(item)}
           />
         </Paper>
       </li>
