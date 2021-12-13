@@ -10,6 +10,9 @@
   - Состояние и компонент для обработки ошибки
   - [Утечка памяти при размонтировании компонента с активным HTTP-запросом](https://habr.com/ru/post/588799/)
   - Паттерн «State machine»
+  - библиотеки - всплывающие уведомления:
+    [react-toastify](https://www.npmjs.com/package/react-toastify),
+    [react-hot-toast](https://www.npmjs.com/package/react-hot-toast)
 
 ### Задача № 1
 

@@ -5,7 +5,7 @@ import PulseLoader from 'react-spinners/PulseLoader';
 const wrapperStyles = {
   position: 'absolute',
   top: 0,
-  left: '20%',
+  left: '30%',
 };
 
 const Loader = () => {

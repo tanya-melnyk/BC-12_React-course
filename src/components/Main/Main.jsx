@@ -11,16 +11,17 @@ import citiesIcon from 'images/pin.png';
 import departmentsIcon from 'images/robot.png';
 import styles from './Main.module.css';
 
-const { name, description, tutors, cities } = univerInfo;
+const { name, description } = univerInfo;
 
 const Main = () => {
-  const [showTutots, setShowTutots] = useState(true);
+  const [showTutots, setShowTutots] = useState(true); // TEMPORARY
   return (
     <main className={styles.main}>
       <Header title="Информация о университете" />
 
       <UniversityBlock name={name} descr={description} />
 
+      {/* TEMPORARY BUTTON */}
       <button
         style={{ padding: 10, display: 'none' }}
         onClick={() => setShowTutots(!showTutots)}
@@ -30,12 +31,12 @@ const Main = () => {
 
       {showTutots && (
         <Section icon={tutorsIcon} title="Преподаватели">
-          <TutorsBlock tutors={tutors} />
+          <TutorsBlock />
         </Section>
       )}
 
       <Section icon={citiesIcon} title="Города">
-        <CitiesBlock cities={cities} />
+        <CitiesBlock />
       </Section>
 
       <Section icon={departmentsIcon} title="Факультеты">

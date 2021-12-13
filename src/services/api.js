@@ -1,4 +1,4 @@
-const BASE_URL = 'https://6137592feac1410017c182b7.mockapi.io';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const fetchData = async (path, options = {}) => {
   const res = await fetch(`${BASE_URL}/${path}`, options);
@@ -7,7 +7,7 @@ const fetchData = async (path, options = {}) => {
 
 const getData = (endpoint, options) => fetchData(endpoint, options);
 
-const saveItem = (endpoint, item, options) => {
+const saveItem = (endpoint, item, options = {}) => {
   const finalOptions = {
     method: 'POST',
     // body: item,
@@ -20,7 +20,7 @@ const saveItem = (endpoint, item, options) => {
   return fetchData(endpoint, finalOptions);
 };
 
-const editItem = (endpoint, item, options) => {
+const editItem = (endpoint, item, options = {}) => {
   const finalOptions = {
     method: 'PUT',
     body: JSON.stringify(item),
@@ -32,7 +32,7 @@ const editItem = (endpoint, item, options) => {
   return fetchData(`${endpoint}/${item.id}`, finalOptions);
 };
 
-const deleteItem = (endpoint, id, options) =>
+const deleteItem = (endpoint, id, options = {}) =>
   fetchData(`${endpoint}/${id}`, { method: 'DELETE', ...options });
 
 export { getData, saveItem, editItem, deleteItem };

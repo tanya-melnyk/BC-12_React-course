@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { toast } from 'react-toastify';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
 import DeleteCard from '../common/DeleteCard/DeleteCard';
@@ -87,8 +88,10 @@ class DepartmentsBlock extends Component {
       this.setState(prevState => ({
         departments: [...prevState.departments, newDepartment],
       }));
+      toast.success(`Факультет ${newDepartment.name} успешно добавлен!`);
     } catch (error) {
       this.setState({ error: error.message });
+      toast.error('Что-то пошло не так :(');
     } finally {
       this.toggleAddForm();
       this.setState({

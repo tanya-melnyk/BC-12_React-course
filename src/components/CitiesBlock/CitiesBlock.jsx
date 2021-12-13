@@ -27,10 +27,13 @@ class CitiesBlock extends Component {
   state = {
     cities: [],
     filter: '',
+
     isAddFormOpen: false,
     openedModal: ACTION.NONE,
+
     action: ACTION.NONE,
     activeCity: null,
+
     loading: false,
     error: null,
   };
@@ -118,11 +121,17 @@ class CitiesBlock extends Component {
       activeCity,
     });
 
-  confirmEdit = editedCityName =>
+  confirmEdit = editedCityName => {
+    const { activeCity } = this.state;
+    if (editedCityName === activeCity.name) {
+      this.setState({ openedModal: ACTION.NONE, activeCity: null });
+      return;
+    }
     this.setState({
       action: ACTION.EDIT,
-      activeCity: { ...this.state.activeCity, name: editedCityName },
+      activeCity: { ...activeCity, name: editedCityName },
     });
+  };
 
   editCity = async () => {
     this.setState({ loading: true, error: null });
@@ -232,6 +241,7 @@ class CitiesBlock extends Component {
           text={isAddFormOpen ? 'Отменить добавление' : 'Добавить город'}
           icon={!isAddFormOpen && addIcon}
           onClick={this.toggleAddForm}
+          disabled={loading}
         />
 
         {openedModal === ACTION.EDIT && (
