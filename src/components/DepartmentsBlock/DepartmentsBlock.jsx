@@ -1,9 +1,10 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
 import DeleteCard from '../common/DeleteCard/DeleteCard';
 import EditCard from '../common/EditCard/EditCard';
+import ErrorMsg from '../common/ErrorMsg/ErrorMsg';
 import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
@@ -12,6 +13,8 @@ import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
 
+const API_ENDPOINT = 'departments';
+
 const ACTION = {
   NONE: 'none',
   ADD: 'add',
@@ -19,527 +22,223 @@ const ACTION = {
   DELETE: 'delete',
 };
 
-const API_ENDPOINT = 'departments';
-
-class DepartmentsBlock extends Component {
-  state = {
-    departments: [],
-    isAddFormOpen: false,
-    openedModal: ACTION.NONE,
-    action: ACTION.NONE,
-    activeDepartment: null,
-    loading: false,
-    error: null,
-  };
-
-  componentDidMount() {
-    this.fetchDepartments();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { action } = this.state;
-    if (prevState.action !== action) {
-      switch (action) {
-        case ACTION.ADD:
-          this.addDepartment();
-          break;
-        case ACTION.EDIT:
-          this.editDepartment();
-          break;
-        case ACTION.DELETE:
-          this.deleteDepartment();
-          break;
-        default:
-          return;
-      }
-    }
-  }
+const DepartmentsBlock = () => {
+  const [departments, setDepartments] = useState([]);
+  // form / modal
+  const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+  const [openedModal, setOpenedModal] = useState(ACTION.NONE);
+  // actions
+  const [action, setAction] = useState(ACTION.NONE);
+  const [activeDepartment, setActiveDepartment] = useState(null);
+  // api request status
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // GET DEPARTMENTS
 
-  fetchDepartments = async () => {
-    this.setState({ loading: true, error: null });
-    try {
-      const departments = await api.getData(API_ENDPOINT);
-      this.setState({ departments });
-    } catch (error) {
-      this.setState({ error: error.message });
-    } finally {
-      this.setState({ loading: false });
-    }
-  };
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const departments = await api.getData(API_ENDPOINT);
+        setDepartments(departments);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDepartments();
+  }, []);
 
   // ADD DEPARTMENT
 
-  toggleAddForm = () =>
-    this.setState(prevState => ({ isAddFormOpen: !prevState.isAddFormOpen }));
+  const toggleAddForm = () => setIsAddFormOpen(prevState => !prevState);
 
-  confirmAdd = departmentName =>
-    this.setState({
-      action: ACTION.ADD,
-      activeDepartment: { name: departmentName },
-    });
-
-  addDepartment = async () => {
-    this.setState({ loading: true, error: null });
-    const { activeDepartment } = this.state;
-    try {
-      const newDepartment = await api.saveItem(API_ENDPOINT, activeDepartment);
-      this.setState(prevState => ({
-        departments: [...prevState.departments, newDepartment],
-      }));
-      toast.success(`Факультет ${newDepartment.name} успешно добавлен!`);
-    } catch (error) {
-      this.setState({ error: error.message });
-      toast.error('Что-то пошло не так :(');
-    } finally {
-      this.toggleAddForm();
-      this.setState({
-        activeDepartment: null,
-        action: ACTION.NONE,
-        loading: false,
-      });
-    }
+  const confirmAdd = departmentName => {
+    setActiveDepartment({ name: departmentName });
+    setAction(ACTION.ADD);
   };
+
+  useEffect(() => {
+    if (action !== ACTION.ADD) return;
+
+    const addDepartment = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const newDepartment = await api.saveItem(
+          API_ENDPOINT,
+          activeDepartment,
+        );
+        setDepartments(prevDepartments => [...prevDepartments, newDepartment]);
+        toggleAddForm();
+        toast.success(`Факультет ${newDepartment.name} успешно добавлен!`);
+      } catch (error) {
+        setError(error.message);
+        toast.error('Что-то пошло не так :(');
+      } finally {
+        setAction(ACTION.NONE);
+        setLoading(false);
+        setActiveDepartment(null);
+      }
+    };
+    addDepartment();
+  }, [action, activeDepartment]);
 
   // EDIT DEPARTMENT
 
-  handleStartEdit = activeDepartment =>
-    this.setState({
-      activeDepartment,
-      openedModal: ACTION.EDIT,
-    });
+  const handleStartEdit = activeDepartment => {
+    setActiveDepartment(activeDepartment);
+    setOpenedModal(ACTION.EDIT);
+  };
 
-  confirmEdit = editedDepartmentName => {
-    const { activeDepartment } = this.state;
+  const confirmEdit = editedDepartmentName => {
     if (editedDepartmentName === activeDepartment.name) {
-      this.setState({ activeDepartment: null });
-      this.closeModal();
+      closeModal();
       return;
     }
-    this.setState({
-      action: ACTION.EDIT,
-      activeDepartment: { ...activeDepartment, name: editedDepartmentName },
-    });
+    setAction(ACTION.EDIT);
+    setActiveDepartment({ ...activeDepartment, name: editedDepartmentName });
   };
 
-  editDepartment = async () => {
-    this.setState({ loading: true, error: null });
-    const { activeDepartment } = this.state;
-    try {
-      const updatedDepartment = await api.editItem(
-        API_ENDPOINT,
-        activeDepartment,
-      );
-      this.setState(prevState => ({
-        departments: prevState.departments.map(department =>
-          department.id === updatedDepartment.id
-            ? updatedDepartment
-            : department,
-        ),
-      }));
-    } catch (error) {
-      this.setState({ error: error.message });
-    } finally {
-      this.closeModal();
-      this.setState({
-        action: ACTION.NONE,
-        activeDepartment: null,
-        loading: false,
-      });
-    }
-  };
+  useEffect(() => {
+    if (action !== ACTION.EDIT) return;
+
+    const editDepartment = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const updatedDepartment = await api.editItem(
+          API_ENDPOINT,
+          activeDepartment,
+        );
+        setDepartments(prevDepartments =>
+          prevDepartments.map(department =>
+            department.id === updatedDepartment.id
+              ? updatedDepartment
+              : department,
+          ),
+        );
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setAction(ACTION.NONE);
+        closeModal();
+        setLoading(false);
+        setActiveDepartment(null);
+      }
+    };
+    editDepartment();
+  }, [action, activeDepartment]);
 
   // DELETE DEPARTMENT
 
-  handleStartDelete = activeDepartment =>
-    this.setState({
-      activeDepartment,
-      openedModal: ACTION.DELETE,
-    });
-
-  confirmDelete = () => this.setState({ action: ACTION.DELETE });
-
-  deleteDepartment = async () => {
-    this.setState({ loading: true, error: null });
-    const { activeDepartment } = this.state;
-    try {
-      const deletedDepartment = await api.deleteItem(
-        API_ENDPOINT,
-        activeDepartment.id,
-      );
-      this.setState(prevState => ({
-        departments: prevState.departments.filter(
-          department => department.id !== deletedDepartment.id,
-        ),
-      }));
-    } catch (error) {
-      this.setState({ error: error.message });
-    } finally {
-      this.closeModal();
-      this.setState({
-        action: ACTION.NONE,
-        activeDepartment: null,
-        loading: false,
-      });
-    }
+  const handleStartDelete = activeDepartment => {
+    setActiveDepartment(activeDepartment);
+    setOpenedModal(ACTION.DELETE);
   };
 
-  closeModal = () =>
-    this.setState({
-      openedModal: ACTION.NONE,
-      activeDepartment: null,
-    });
+  const confirmDelete = () => setAction(ACTION.DELETE);
 
-  render() {
-    const {
-      departments,
-      isAddFormOpen,
-      activeDepartment,
-      openedModal,
-      loading,
-    } = this.state;
+  useEffect(() => {
+    if (action !== ACTION.DELETE) return;
 
-    const noDepartments = !loading && !departments.length;
+    const deleteDepartment = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const deletedDepartment = await api.deleteItem(
+          API_ENDPOINT,
+          activeDepartment.id,
+        );
+        setDepartments(prevDepartments =>
+          prevDepartments.filter(
+            department => department.id !== deletedDepartment.id,
+          ),
+        );
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setAction(ACTION.NONE);
+        closeModal();
+        setLoading(false);
+        setActiveDepartment(null);
+      }
+    };
+    deleteDepartment();
+  }, [action, activeDepartment]);
 
-    return (
-      <>
-        {loading && <Loader />}
+  const closeModal = () => {
+    setOpenedModal(ACTION.NONE);
+    setActiveDepartment(null);
+  };
 
-        {!!departments.length && (
-          <ItemsList
-            items={departments}
-            onEditItem={this.handleStartEdit}
-            onDeleteItem={this.handleStartDelete}
-          />
-        )}
+  // RENDER
 
-        {noDepartments && <h4 className="absence-msg">No departments yet</h4>}
+  const noDepartments = !loading && !departments.length;
 
-        {isAddFormOpen && (
-          <AddForm
-            onSubmit={this.confirmAdd}
-            formName="Добавление филиала"
-            placeholder="Филиал"
-          />
-        )}
+  return (
+    <>
+      {loading && <Loader />}
 
-        <BigButton
-          text={isAddFormOpen ? 'Отменить добавление' : 'Добавить факультет'}
-          icon={!isAddFormOpen && addIcon}
-          onClick={this.toggleAddForm}
+      {!!departments.length && (
+        <ItemsList
+          items={departments}
+          onEditItem={handleStartEdit}
+          onDeleteItem={handleStartDelete}
         />
+      )}
 
-        {openedModal === ACTION.EDIT && (
-          <Modal
-            title="Редактировать информацию о факультете"
-            onClose={this.closeModal}
-            icon={pencilIcon}
-          >
-            <EditCard
-              label="Факультет"
-              inputValue={activeDepartment.name}
-              onSave={this.confirmEdit}
-            />
-          </Modal>
-        )}
+      {noDepartments && <h4 className="absence-msg">No departments yet</h4>}
 
-        {openedModal === ACTION.DELETE && (
-          <Modal
-            title="Удаление факультета"
-            onClose={this.closeModal}
-            icon={fingerIcon}
-          >
-            <DeleteCard
-              text="Будут удалены все материалы и информация о факультете."
-              onDelete={this.confirmDelete}
-              onClose={this.closeModal}
-            />
-          </Modal>
-        )}
-      </>
-    );
-  }
-}
+      {isAddFormOpen && (
+        <AddForm
+          onSubmit={confirmAdd}
+          formName="Добавление филиала"
+          placeholder="Филиал"
+        />
+      )}
+
+      {error && <ErrorMsg message={error} />}
+
+      <BigButton
+        text={isAddFormOpen ? 'Отменить добавление' : 'Добавить факультет'}
+        icon={!isAddFormOpen && addIcon}
+        onClick={toggleAddForm}
+        disabled={loading}
+      />
+
+      {openedModal === ACTION.EDIT && (
+        <Modal
+          title="Редактировать информацию о факультете"
+          onClose={closeModal}
+          icon={pencilIcon}
+        >
+          <EditCard
+            label="Факультет"
+            inputValue={activeDepartment.name}
+            onSave={confirmEdit}
+          />
+        </Modal>
+      )}
+
+      {openedModal === ACTION.DELETE && (
+        <Modal
+          title="Удаление факультета"
+          onClose={closeModal}
+          icon={fingerIcon}
+        >
+          <DeleteCard
+            text="Будут удалены все материалы и информация о факультете."
+            onDelete={confirmDelete}
+            onClose={closeModal}
+          />
+        </Modal>
+      )}
+    </>
+  );
+};
 
 export default DepartmentsBlock;
-
-/////////////////////////////////////////////////////
-
-//  USUSAL WAY WITH NO STATE MACHINE
-
-// class DepartmentsBlock extends Component {
-//   state = {
-//     departments: [],
-
-//     departmentToAdd: null,
-//     departmentToEdit: null,
-//     departmentToDelete: null,
-
-//     isAddFormOpen: false,
-//     openedModal: MODAL.NONE,
-//     activeDepartment: null,
-
-//     loading: false,
-//     error: null,
-//   };
-
-//   componentDidMount() {
-//     this.fetchDepartments();
-//   }
-
-//   componentDidUpdate(prevProps, prevState) {
-//     const { departmentToAdd, departmentToEdit, departmentToDelete } =
-//       this.state;
-//     if (departmentToAdd && prevState.departmentToAdd !== departmentToAdd) {
-//       this.addDepartment();
-//     }
-//     if (departmentToEdit && prevState.departmentToEdit !== departmentToEdit) {
-//       this.editDepartment();
-//     }
-//     if (
-//       departmentToDelete &&
-//       prevState.departmentToDelete !== departmentToDelete
-//     ) {
-//       this.deleteDepartment();
-//     }
-//   }
-
-//   fetchDepartments = () => {
-//     this.setState({ loading: true, error: null });
-//     api
-//       .getData(API_ENDPOINT)
-//       .then(departments => this.setState({ departments }))
-//       .catch(err => this.setState({ error: err.message }))
-//       .finally(() => this.setState({ loading: false }));
-//   };
-
-//   // ADD DEPARTMENT
-
-//   toggleAddForm = () =>
-//     this.setState(prevState => ({ isAddFormOpen: !prevState.isAddFormOpen }));
-
-//   setDepartmentToAdd = departmentName =>
-//     this.setState({ departmentToAdd: { name: departmentName } });
-
-//   addDepartment = () => {
-//     this.setState({ loading: true, error: null });
-//     const { departmentToAdd } = this.state;
-//     api
-//       .saveItem(API_ENDPOINT, departmentToAdd)
-//       .then(department =>
-//         this.setState(prevState => ({
-//           departments: [...prevState.departments, department],
-//         })),
-//       )
-//       .catch(err => this.setState({ error: err.message }))
-//       .finally(() => {
-//         this.toggleAddForm();
-//         this.setState({ departmentToAdd: null, loading: false });
-//       });
-//   };
-
-//   FETCING AS AN EVENT HANDLER
-
-//   // addDepartment = departmentName => {
-//   //   const newDepartment = { name: departmentName };
-//   //   this.setState({ loading: true, error: null });
-//   //   api
-//   //     .saveItem(API_ENDPOINT, newDepartment)
-//   //     .then(department =>
-//   //       this.setState(prevState => ({
-//   //         departments: [...prevState.departments, department],
-//   //       })),
-//   //     )
-//   //     .catch(err => this.setState({ error: err.message }))
-//   //     .finally(() => {
-//   //       this.toggleAddForm();
-//   //       this.setState({ loading: false });
-//   //     });
-//   // };
-
-//   // EDIT DEPARTMENT
-
-//   handleStartEditting = activeDepartment =>
-//     this.setState({
-//       activeDepartment,
-//       openedModal: MODAL.EDIT,
-//     });
-
-//   setDepartmentToEdit = editedDepartmentName =>
-//     this.setState({ departmentToEdit: { name: editedDepartmentName } });
-
-//   editDepartment = () => {
-//     this.setState({ loading: true, error: null });
-//     const { activeDepartment, departmentToEdit } = this.state;
-//     api
-//       .editItem(API_ENDPOINT, activeDepartment.id, departmentToEdit)
-//       .then(updatedDepartment =>
-//         this.setState(prevState => ({
-//           departments: prevState.departments.map(department =>
-//             department.id === updatedDepartment.id
-//               ? updatedDepartment
-//               : department,
-//           ),
-//         })),
-//       )
-//       .catch(err => this.setState({ error: err.message }))
-//       .finally(() => {
-//         this.closeModal();
-//         this.setState({ departmentToEdit: null, loading: false });
-//       });
-//   };
-
-//   // FETCING AS AN EVENT HANDLER
-
-//   // saveEditedDepartment = editedDepartmentName => {
-//   //   this.setState({ loading: true, error: null });
-//   //   const { activeDepartment } = this.state;
-//   //   const update = { name: editedDepartmentName };
-//   //   api
-//   //     .editItem(API_ENDPOINT, activeDepartment.id, update)
-//   //     .then(updatedDepartment =>
-//   //       this.setState(prevState => ({
-//   //         departments: prevState.departments.map(department =>
-//   //           department.id === updatedDepartment.id
-//   //             ? updatedDepartment
-//   //             : department,
-//   //         ),
-//   //       })),
-//   //     )
-//   //     .catch(err => this.setState({ error: err.message }))
-//   //     .finally(() => {
-//   //       this.closeModal();
-//   //       this.setState({ loading: false });
-//   //     });
-//   // };
-
-//   // FETCING AS AN EVENT HANDLER
-
-//   handleStartDeleting = activeDepartment =>
-//     this.setState({
-//       activeDepartment,
-//       openedModal: MODAL.DELETE,
-//     });
-
-//   setDepartmentToDelete = () =>
-//     this.setState({ departmentToDelete: this.state.activeDepartment });
-
-//   deleteDepartment = () => {
-//     this.setState({ loading: true, error: null });
-//     const { departmentToDelete } = this.state;
-//     api
-//       .deleteItem(API_ENDPOINT, departmentToDelete.id)
-//       .then(deletedDepartment =>
-//         this.setState(prevState => ({
-//           departments: prevState.departments.filter(
-//             department => department.id !== deletedDepartment.id,
-//           ),
-//         })),
-//       )
-//       .catch(err => this.setState({ error: err.message }))
-//       .finally(() => {
-//         this.closeModal();
-//         this.setState({ departmentToDelete: null, loading: false });
-//       });
-//   };
-
-//   // FETCING AS AN EVENT HANDLER
-
-//   // deleteDepartment = () => {
-//   //   this.setState({ loading: true, error: null });
-//   //   const { activeDepartment } = this.state;
-//   //   api
-//   //     .deleteItem(API_ENDPOINT, activeDepartment.id)
-//   //     .then(deletedDepartment =>
-//   //       this.setState(prevState => ({
-//   //         departments: prevState.departments.filter(
-//   //           department => department.id !== deletedDepartment.id,
-//   //         ),
-//   //       })),
-//   //     )
-//   //     .catch(err => this.setState({ error: err.message }))
-//   //     .finally(() => {
-//   //       this.closeModal();
-//   //       this.setState({ loading: false });
-//   //     });
-//   // };
-
-//   closeModal = () =>
-//     this.setState({
-//       openedModal: MODAL.NONE,
-//       activeDepartment: null,
-//     });
-
-//   render() {
-//     const {
-//       departments,
-//       isAddFormOpen,
-//       activeDepartment,
-//       openedModal,
-//       loading,
-//     } = this.state;
-
-//     return (
-//       <>
-//         {loading && <Loader />}
-
-//         {!!departments.length && (
-//           <ItemsList
-//             items={departments}
-//             onEditItem={this.handleStartEditting}
-//             onDeleteItem={this.handleStartDeleting}
-//           />
-//         )}
-
-//         {!departments.length && (
-//           <h4 className="absence-msg">No departments yet</h4>
-//         )}
-
-//         {isAddFormOpen && (
-//           <AddForm
-//             onSubmit={this.setDepartmentToAdd}
-//             formName="Добавление филиала"
-//             placeholder="Филиал"
-//           />
-//         )}
-
-//         <BigButton
-//           text={isAddFormOpen ? 'Отменить добавление' : 'Добавить факультет'}
-//           icon={!isAddFormOpen && addIcon}
-//           onClick={this.toggleAddForm}
-//         />
-
-//         {openedModal === MODAL.EDIT && (
-//           <Modal
-//             title="Редактировать информацию о факультете"
-//             onClose={this.closeModal}
-//             icon={pencilIcon}
-//           >
-//             <EditCard
-//               label="Факультет"
-//               inputValue={activeDepartment.name}
-//               onSave={this.setDepartmentToEdit}
-//             />
-//           </Modal>
-//         )}
-
-//         {openedModal === MODAL.DELETE && (
-//           <Modal
-//             title="Удаление факультета"
-//             onClose={this.closeModal}
-//             icon={fingerIcon}
-//           >
-//             <DeleteCard
-//               text="Будут удалены все материалы и информация о факультете."
-//               onDelete={this.setDepartmentToDelete}
-//               onClose={this.closeModal}
-//             />
-//           </Modal>
-//         )}
-//       </>
-//     );
-//   }
-// }
-
-// export default DepartmentsBlock;
