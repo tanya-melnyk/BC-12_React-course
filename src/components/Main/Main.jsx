@@ -16,14 +16,14 @@ const { name, description } = univerInfo;
 const Main = () => {
   const [showTutots, setShowTutots] = useState(true); // TEMPORARY
   return (
-    <main className={styles.main}>
+    <main className={styles.lightTheme}>
       <Header title="Информация о университете" />
 
       <UniversityBlock name={name} descr={description} />
 
       {/* TEMPORARY BUTTON */}
       <button
-        style={{ padding: 10 }}
+        style={{ padding: 10, marginBottom: 20 }}
         onClick={() => setShowTutots(!showTutots)}
       >
         Toggle tutors

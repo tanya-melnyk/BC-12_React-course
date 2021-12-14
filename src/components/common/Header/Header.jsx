@@ -3,7 +3,7 @@ import s from './Header.module.css';
 
 const Header = ({ title }) => {
   return (
-    <header className={s.mainHeader}>
+    <header className={s.lightTheme}>
       {title && <h2 className="heading">{title}</h2>}
     </header>
   );

@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
 import { useState } from 'react';
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { cardStyles, menuStyles } from './CardWithMenuStyles';
 import { ReactComponent as DotsIcon } from 'images/dots.svg';
@@ -50,6 +49,16 @@ const CardWithMenu = ({ text, onEdit, onDelete }) => {
   );
 };
 
+CardWithMenu.propTypes = {
+  text: PropTypes.string.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+
+export default CardWithMenu;
+
+///////////////////// CLASS
+
 // class CardWithMenu extends Component {
 //   state = { isMenuOpen: false };
 
@@ -97,11 +106,3 @@ const CardWithMenu = ({ text, onEdit, onDelete }) => {
 //     );
 //   }
 // }
-
-CardWithMenu.propTypes = {
-  text: PropTypes.string.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-};
-
-export default CardWithMenu;

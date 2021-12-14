@@ -1,88 +1,49 @@
-import { useState, useEffect, useRef } from 'react';
-
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import BigButton from '../BigButton/BigButton';
 import styles from './EditCard.module.scss';
 
-const EditCard = ({ onSave, label, inputValue }) => {
-  const [input, setInput] = useState(inputValue);
-  const inputRef = useRef(null);
-  const { current: inputId } = useRef(nanoid());
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    onSave(input);
-    reset();
+class EditCard extends Component {
+  state = {
+    input: this.props.inputValue,
   };
 
-  const reset = () => setInput('');
+  handleChange = e => this.setState({ input: e.target.value });
 
-  return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <label htmlFor={inputId}>
-        {label}
-        <span className={styles.red}>*</span>
-        <input
-          ref={inputRef}
-          id={inputId}
-          type="text"
-          value={input}
-          onChange={e => setInput(e.target.value)}
-        />
-      </label>
-      <div className={styles.btnWrapper}>
-        <BigButton type="submit" text="Сохранить" disabled={!input} />
-      </div>
-    </form>
-  );
-};
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.onSave(this.state.input);
+    this.reset();
+  };
 
-// class EditCard extends Component {
-//   state = {
-//     input: this.props.inputValue,
-//   };
+  reset = () => this.setState({ input: '' });
 
-//   handleChange = e => this.setState({ input: e.target.value });
+  inputId = nanoid();
 
-//   handleSubmit = e => {
-//     e.preventDefault();
-//     this.props.onSave(this.state.input);
-//     this.reset();
-//   };
+  render() {
+    const { input } = this.state;
+    const { label } = this.props;
 
-//   reset = () => this.setState({ input: '' });
-
-//   inputId = nanoid();
-
-//   render() {
-//     const { input } = this.state;
-//     const { label } = this.props;
-
-//     return (
-//       <form onSubmit={this.handleSubmit} className={styles.form}>
-//         <label htmlFor={this.inputId}>
-//           {label}
-//           <span className={styles.red}>*</span>
-//           <input
-//             id={this.inputId}
-//             type="text"
-//             value={input}
-//             onChange={this.handleChange}
-//           />
-//         </label>
-//         <div className={styles.btnWrapper}>
-//           <BigButton type="submit" text="Сохранить" disabled={!input} />
-//         </div>
-//       </form>
-//     );
-//   }
-// }
+    return (
+      <form onSubmit={this.handleSubmit} className={styles.form}>
+        <label htmlFor={this.inputId}>
+          {label}
+          <span className={styles.red}>*</span>
+          <input
+            id={this.inputId}
+            type="text"
+            value={input}
+            onChange={this.handleChange}
+          />
+        </label>
+        <div className={styles.btnWrapper}>
+          <BigButton type="submit" text="Сохранить" disabled={!input} />
+        </div>
+      </form>
+    );
+  }
+}
 
 EditCard.dpropTypes = {
   onSave: PropTypes.func.isRequired,

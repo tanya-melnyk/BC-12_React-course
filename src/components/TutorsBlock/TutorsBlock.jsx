@@ -18,7 +18,7 @@ class TutorsBlock extends Component {
     tutors: [],
     isFormOpen: false,
     newTutor: null,
-    // api request status
+    // api request statuses
     firstLoading: false,
     loading: false,
     error: null,
