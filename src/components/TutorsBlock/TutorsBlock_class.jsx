@@ -55,7 +55,7 @@ class TutorsBlock extends Component {
   fetchTutors = async () => {
     this.createSignalAndController();
     const signal = { signal: this.signal };
-    this.setState({ loading: true, error: null });
+    this.setState({ loading: true });
     try {
       const tutors = await api.getData(API_ENDPOINT, signal);
       this.setState({ tutors });

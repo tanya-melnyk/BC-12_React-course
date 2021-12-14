@@ -10,7 +10,7 @@ import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
 import * as api from 'services/api';
-// import * as storage from 'services/localStorage';
+import * as storage from 'services/localStorage';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
@@ -24,9 +24,11 @@ const ACTION = {
   DELETE: 'delete',
 };
 
+const FILTER_KEY = 'filter';
+
 const CitiesBlock = () => {
   const [cities, setCities] = useState([]);
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState(() => storage.get(FILTER_KEY) ?? '');
   // form / modal
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
   const [openedModal, setOpenedModal] = useState(ACTION.NONE);
@@ -73,7 +75,7 @@ const CitiesBlock = () => {
     cities.some(({ name }) => name === cityName);
 
   useEffect(() => {
-    if (action !== ACTION.ADD) return;
+    if (action !== ACTION.ADD || !activeCity) return;
 
     const addCity = async () => {
       setLoading(true);
@@ -86,8 +88,8 @@ const CitiesBlock = () => {
         setError(error.message);
       } finally {
         setAction(ACTION.NONE);
-        setLoading(false);
         setActiveCity(null);
+        setLoading(false);
       }
     };
     addCity();
@@ -173,7 +175,9 @@ const CitiesBlock = () => {
 
   // FILTER CITIES
 
-  const handleFilterChange = value => setFilter(value);
+  useEffect(() => {
+    storage.save(FILTER_KEY, filter);
+  }, [filter]);
 
   const getFilteredCities = () => {
     const normalizedFilter = filter.toLowerCase();
@@ -195,7 +199,7 @@ const CitiesBlock = () => {
         <Filter
           label="Поиск города:"
           value={filter}
-          onFilterChange={handleFilterChange}
+          onFilterChange={setFilter}
         />
       )}
 
