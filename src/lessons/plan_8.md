@@ -85,28 +85,28 @@ useContext:
 
 useMemo, React.memo и useCallback:
 
-- в компоненте ItemsList ставим консоль-лог и наблюдаем, как он перерендерится
+- в компоненте `ItemsList` ставим консоль-лог и наблюдаем, как он перерендерится
   каждый раз, как мы открываем и закрываем форму добавления
-- пробуем обернуть ItemsList в React.memo и смотрим на результат
+- пробуем обернуть `ItemsList` в `React.memo` и смотрим на результат
 - расставляем консоль-логи для каждого изменившегося пропа и проверяем, какие
   пропы меняются
 - для того, чтобы избавиться от пересоздания пропов-функций, оборачиваем их при
-  создании в useCallback в родителе CitiesBlock
+  создании в `useCallback` в родителе `CitiesBlock`
 - для того, чтобы отфильтрованные города не вычислялись каждый раз, оборачиваем
-  их расчет в useMemo
-- в браузере в Profiler сравнивам рендер ItemsList при открытии и закрытии формы
-  добавления с и без React.memo
+  их расчет в `useMemo`
+- в браузере в `Profiler` сравнивам рендер `ItemsList` при открытии и закрытии
+  формы добавления с и без `React.memo`
 
 ### Задача № 4
 
 useReducer:
 
-- в DepartmentsBlock перепишем useState для departments на useReducer:
+- в `DepartmentsBlock` перепишем `useState` для `departments` на `useReducer`:
   ```
   const [departments, dispatch] = useReducer(departmentsReducer, []);
   ```
-- теперь везде вместо вызова setDepartments, будем использовать вызов dispatch,
-  передавая ему объект с action, например:
+- теперь везде вместо вызова setDepartments, будем использовать вызов
+  `dispatch`, передавая ему объект с `action`, например:
   ```
   dispatch({ type: 'delete', payload: deletedDepartment.id });
   ```
@@ -115,14 +115,15 @@ useReducer:
 
 Кастомные хуки:
 
-- написать свой toggle хук и использовать его для тоггла Sidebar
-- разобрать кастомный хук useOutsideClickDetector и применить его в CardWithMenu
+- написать свой `toggle` хук и использовать его для тоггла `Sidebar`
+- разобрать кастомный хук `useOutsideClickDetector` и применить его в
+  `CardWithMenu`
 
 ### Задача № 7
 
-Библиотека react-use:
+Библиотека `react-use`:
 
-- для фильтра в CitiesBlock использовать хук
+- для фильтра в `CitiesBlock` использовать хук
   [useLocalStorage](https://github.com/streamich/react-use/blob/master/docs/useLocalStorage.md)
-- в Modal используем хук
+- в `Modal` используем хук
   [useLockBodyScroll](https://github.com/streamich/react-use/blob/master/docs/useLockBodyScroll.md)
