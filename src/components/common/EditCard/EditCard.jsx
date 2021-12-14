@@ -44,6 +44,14 @@ const EditCard = ({ label, onSave, inputValue }) => {
   );
 };
 
+EditCard.dpropTypes = {
+  onSave: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  inputValue: PropTypes.string.isRequired,
+};
+
+export default EditCard;
+
 ////////////////// CLASS
 
 // class EditCard extends Component {
@@ -86,11 +94,3 @@ const EditCard = ({ label, onSave, inputValue }) => {
 //     );
 //   }
 // }
-
-EditCard.dpropTypes = {
-  onSave: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
-  inputValue: PropTypes.string.isRequired,
-};
-
-export default EditCard;

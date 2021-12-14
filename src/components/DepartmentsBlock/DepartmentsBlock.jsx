@@ -22,6 +22,23 @@ const ACTION = {
   DELETE: 'delete',
 };
 
+// function departmentsReducer(departments, action) {
+//   switch (action.type) {
+//     case 'get':
+//       return action.payload;
+//     case 'add':
+//       return [...departments, action.payload];
+//     case 'edit':
+//       return departments.map(department =>
+//         department.id === action.payload.id ? action.payload : department,
+//       );
+//     case 'delete':
+//       return departments.filter(department => department.id !== action.payload);
+//     default:
+//       throw new Error();
+//   }
+// }
+
 const DepartmentsBlock = () => {
   const [departments, setDepartments] = useState([]);
   // form / modal

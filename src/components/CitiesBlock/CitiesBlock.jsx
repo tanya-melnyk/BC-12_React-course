@@ -179,6 +179,8 @@ const CitiesBlock = () => {
     storage.save(FILTER_KEY, filter);
   }, [filter]);
 
+  // RENDER
+
   const getFilteredCities = () => {
     const normalizedFilter = filter.toLowerCase();
     return cities.filter(city =>
@@ -186,9 +188,8 @@ const CitiesBlock = () => {
     );
   };
 
-  // RENDER
-
   const filteredCities = getFilteredCities();
+
   const noCities = !loading && !cities.length;
 
   return (

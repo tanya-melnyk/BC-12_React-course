@@ -7,12 +7,17 @@
 - Ответы на вопросы
 - Кахут
 - Теория:
-  - [Рефы и useRef](https://reactjs.org/docs/hooks-reference.html#useref)
+  - [Рефы и useRef](https://blog.logrocket.com/a-guide-to-react-refs/)
   - [Контекст](https://reactjs.org/docs/context.html) и
     [useContext](https://reactjs.org/docs/hooks-reference.html#usecontext)
-  - https://github.com/streamich/react-use/blob/master/docs/useLockBodyScroll.md
+  - [useMemo](https://dev.to/afozbek/react-hooks-usememo-4n23) и
+    [React.memo](https://dmitripavlutin.com/use-react-memo-wisely/)
+  - [useCallback](https://habr.com/ru/post/529950/)
+  - [useReducer](https://webtricks-master.ru/react-hooks/uchim-usereducer-na-primerah-react-hooks/)
+  - Кастомные хуки
+  - Библиотека [react-use](https://github.com/streamich/react-use)
 
-### Задача № 3
+### Задача № 1
 
 useRef:
 
@@ -21,7 +26,7 @@ useRef:
 - для хранения `inputId` использовать `useRef` с начальным значением `nanoid()`
 - рассказать про аналог `componentDidMount`
 
-### Задача № 4
+### Задача № 2
 
 useContext:
 
@@ -75,3 +80,49 @@ useContext:
   - импортируем `useContext`, а также `ThemeContext` и `themes` из контекста
   - с помощью `useContext` получаем доступ к текущей теме, которую используем
     для определения классов
+
+### Задача № 3
+
+useMemo, React.memo и useCallback:
+
+- в компоненте ItemsList ставим консоль-лог и наблюдаем, как он перерендерится
+  каждый раз, как мы открываем и закрываем форму добавления
+- пробуем обернуть ItemsList в React.memo и смотрим на результат
+- расставляем консоль-логи для каждого изменившегося пропа и проверяем, какие
+  пропы меняются
+- для того, чтобы избавиться от пересоздания пропов-функций, оборачиваем их при
+  создании в useCallback в родителе CitiesBlock
+- для того, чтобы отфильтрованные города не вычислялись каждый раз, оборачиваем
+  их расчет в useMemo
+- в браузере в Profiler сравнивам рендер ItemsList при открытии и закрытии формы
+  добавления с и без React.memo
+
+### Задача № 4
+
+useReducer:
+
+- в DepartmentsBlock перепишем useState для departments на useReducer:
+  ```
+  const [departments, dispatch] = useReducer(departmentsReducer, []);
+  ```
+- теперь везде вместо вызова setDepartments, будем использовать вызов dispatch,
+  передавая ему объект с action, например:
+  ```
+  dispatch({ type: 'delete', payload: deletedDepartment.id });
+  ```
+
+### Задача № 6
+
+Кастомные хуки:
+
+- написать свой toggle хук и использовать его для тоггла Sidebar
+- разобрать кастомный хук useOutsideClickDetector и применить его в CardWithMenu
+
+### Задача № 7
+
+Библиотека react-use:
+
+- для фильтра в CitiesBlock использовать хук
+  [useLocalStorage](https://github.com/streamich/react-use/blob/master/docs/useLocalStorage.md)
+- в Modal используем хук
+  [useLockBodyScroll](https://github.com/streamich/react-use/blob/master/docs/useLockBodyScroll.md)
