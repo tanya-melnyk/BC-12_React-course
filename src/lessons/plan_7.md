@@ -10,15 +10,13 @@
   - [useState](https://reactjs.org/docs/hooks-state.html)
   - [useEffect](https://reactjs.org/docs/hooks-effect.html)
   - [Рефы и useRef](https://reactjs.org/docs/hooks-reference.html#useref)
-  - [Контекст](https://reactjs.org/docs/context.html) и
-    [useContext](https://reactjs.org/docs/hooks-reference.html#usecontext)
 
 ### Задача № 1
 
 useState - переписать весь стейт на хуки:
 
 1. Sidebar (CardWithMenu)
-2. AddForm (TutorForm)
+2. AddForm (EditCard, TutorForm)
 
 ### Задача № 2
 
@@ -73,3 +71,5 @@ useRef:
 - вешаем реф на инпут с привязкой к `inputRef`
 - при маунте (в `useEffect` с пустым массивом зависимостей) вызываем метод
   `focus` на полученном элементе - `inputRef.current.focus()`
+- для хранения `inputId` использовать `useRef` с начальным значением `nanoid()`
+- рассказать про аналог `componentDidMount`

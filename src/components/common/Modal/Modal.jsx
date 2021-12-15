@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useLockBodyScroll } from 'react-use';
 import PropTypes from 'prop-types';
 import styles from './Modal.module.css';
 
 const modalRootRef = document.querySelector('#modal-root');
 
 const Modal = ({ onClose, icon, title, children }) => {
+  useLockBodyScroll(true);
+
   useEffect(() => {
     const onEscPress = e => {
       if (e.code === 'Escape') {

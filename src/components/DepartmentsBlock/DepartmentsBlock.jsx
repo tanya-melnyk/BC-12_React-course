@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
@@ -22,8 +22,31 @@ const ACTION = {
   DELETE: 'delete',
 };
 
+const departmentsReducer = (state = [], action) => {
+  switch (action.type) {
+    case 'set':
+      return action.payload;
+
+    case 'add':
+      return [...state, action.payload];
+
+    case 'edit':
+      return state.map(department =>
+        department.id === action.payload.id ? action.payload : department,
+      );
+
+    case 'delete':
+      return state.filter(department => department.id !== action.payload);
+
+    default:
+      console.log('Type is not wright!');
+      break;
+  }
+};
+
 const DepartmentsBlock = () => {
-  const [departments, setDepartments] = useState([]);
+  const [departments, dispatch] = useReducer(departmentsReducer, []);
+  // const [departments, setDepartments] = useState([]);
   // form / modal
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
   const [openedModal, setOpenedModal] = useState(ACTION.NONE);
@@ -42,7 +65,8 @@ const DepartmentsBlock = () => {
       setError(null);
       try {
         const departments = await api.getData(API_ENDPOINT);
-        setDepartments(departments);
+        dispatch({ type: 'set', payload: departments });
+        // setDepartments(departments);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -72,7 +96,8 @@ const DepartmentsBlock = () => {
           API_ENDPOINT,
           activeDepartment,
         );
-        setDepartments(prevDepartments => [...prevDepartments, newDepartment]);
+        dispatch({ type: 'add', payload: newDepartment });
+        // setDepartments(prevDepartments => [...prevDepartments, newDepartment]);
         toggleAddForm();
         toast.success(`Факультет ${newDepartment.name} успешно добавлен!`);
       } catch (error) {
@@ -114,13 +139,14 @@ const DepartmentsBlock = () => {
           API_ENDPOINT,
           activeDepartment,
         );
-        setDepartments(prevDepartments =>
-          prevDepartments.map(department =>
-            department.id === updatedDepartment.id
-              ? updatedDepartment
-              : department,
-          ),
-        );
+        dispatch({ type: 'edit', payload: updatedDepartment });
+        // setDepartments(prevDepartments =>
+        //   prevDepartments.map(department =>
+        //     department.id === updatedDepartment.id
+        //       ? updatedDepartment
+        //       : department,
+        //   ),
+        // );
       } catch (error) {
         setError(error.message);
       } finally {
@@ -153,11 +179,12 @@ const DepartmentsBlock = () => {
           API_ENDPOINT,
           activeDepartment.id,
         );
-        setDepartments(prevDepartments =>
-          prevDepartments.filter(
-            department => department.id !== deletedDepartment.id,
-          ),
-        );
+        dispatch({ type: 'delete', payload: deletedDepartment.id });
+        // setDepartments(prevDepartments =>
+        //   prevDepartments.filter(
+        //     department => department.id !== deletedDepartment.id,
+        //   ),
+        // );
       } catch (error) {
         setError(error.message);
       } finally {
