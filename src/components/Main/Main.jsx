@@ -1,8 +1,12 @@
 import { useState, useContext } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import DepartmentPage from 'pages/DepartmentPage/DepartmentPage';
+import DepartmentsListPage from 'pages/DepartmentsListPage/DepartmentsListPage';
+import UniversityPage from 'pages/UniversityPage/UniversityPage';
 import Section from '../common/Section/Section';
+import Header from '../common/Header/Header';
 import CitiesBlock from '../CitiesBlock/CitiesBlock';
 import DepartmentsBlock from '../DepartmentsBlock/DepartmentsBlock';
-import Header from '../common/Header/Header';
 import TutorsBlock from '../TutorsBlock/TutorsBlock';
 import UniversityBlock from '../UniversityBlock/UniversityBlock';
 import { ThemeContext, themes } from 'context/themeContext';
@@ -22,31 +26,46 @@ const Main = () => {
     <main
       className={theme === themes.light ? styles.lightTheme : styles.darkTheme}
     >
-      <Header title="Информация о университете" />
+      <Switch>
+        <Route exact path="/" render={() => <Redirect to="/departments" />} />
 
-      <UniversityBlock name={name} descr={description} />
+        <Route path="/departments/:id">
+          <DepartmentPage />
+        </Route>
 
-      {/* TEMPORARY BUTTON */}
-      <button
-        style={{ padding: 10, marginBottom: 20, display: 'none' }}
-        onClick={() => setShowTutots(!showTutots)}
-      >
-        Toggle tutors
-      </button>
+        <Route path="/departments">
+          <DepartmentsListPage />
+        </Route>
 
-      {showTutots && (
-        <Section icon={tutorsIcon} title="Преподаватели">
-          <TutorsBlock />
-        </Section>
-      )}
+        <Route path="/university">
+          <UniversityPage />
+          {/* <Header title="Информация о университете" />
 
-      <Section icon={citiesIcon} title="Города">
-        <CitiesBlock />
-      </Section>
+          <UniversityBlock name={name} descr={description} /> */}
 
-      <Section icon={departmentsIcon} title="Факультеты">
-        <DepartmentsBlock />
-      </Section>
+          {/* TEMPORARY BUTTON */}
+          {/* <button
+            style={{ padding: 10, marginBottom: 20, display: 'none' }}
+            onClick={() => setShowTutots(!showTutots)}
+          >
+            Toggle tutors
+          </button>
+
+          {showTutots && (
+            <Section icon={tutorsIcon} title="Преподаватели">
+              <TutorsBlock />
+            </Section>
+          )}
+
+          <Section icon={citiesIcon} title="Города">
+            <CitiesBlock />
+          </Section>
+
+          <Section icon={departmentsIcon} title="Факультеты">
+            <DepartmentsBlock />
+          </Section> */}
+        </Route>
+      </Switch>
     </main>
   );
 };

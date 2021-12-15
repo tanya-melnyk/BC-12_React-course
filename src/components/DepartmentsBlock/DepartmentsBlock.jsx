@@ -1,5 +1,6 @@
 import { useState, useEffect, useReducer } from 'react';
 import { toast } from 'react-toastify';
+import AbsenceMsg from 'components/common/AbsenceMsg/AbsenceMsg';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
 import DeleteCard from '../common/DeleteCard/DeleteCard';
@@ -218,7 +219,7 @@ const DepartmentsBlock = () => {
         />
       )}
 
-      {noDepartments && <h4 className="absence-msg">No departments yet</h4>}
+      {noDepartments && <AbsenceMsg absentEntity="departments" />}
 
       {isAddFormOpen && (
         <AddForm

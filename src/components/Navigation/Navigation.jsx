@@ -1,18 +1,23 @@
-import PropTypes from 'prop-types';
+import { NavLink, Link } from 'react-router-dom';
+import { HiBookOpen, HiAcademicCap } from 'react-icons/hi';
 import NavItem from './NavItem/NavItem';
 
-const Navigation = ({ navConfig }) => {
+const Navigation = () => {
   return (
     <nav style={{ paddingTop: 12 }}>
-      {navConfig.map(({ name, icon }, index) => (
-        <NavItem key={index} name={name} icon={icon} />
-      ))}
+      <NavItem
+        path="/departments"
+        name="Факультеты"
+        icon={<HiBookOpen color="#ff6b0a" size="24" />}
+      />
+
+      <NavItem
+        path="/university"
+        name="Университет"
+        icon={<HiAcademicCap color="#ff6b0a" size="24" />}
+      />
     </nav>
   );
-};
-
-Navigation.propTypes = {
-  navConfig: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Navigation;
