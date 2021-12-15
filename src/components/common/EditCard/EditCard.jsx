@@ -24,6 +24,8 @@ const EditCard = ({ label, onSave, inputValue }) => {
 
   const inputId = nanoid();
 
+  // console.log(inputId);
+
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <label htmlFor={inputId}>

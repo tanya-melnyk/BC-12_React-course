@@ -19,7 +19,7 @@
 
 ### Задача № 1
 
-useRef:
+[useRef](https://reactjs.org/docs/hooks-reference.html#useref):
 
 1. EditCard
 
@@ -28,7 +28,8 @@ useRef:
 
 ### Задача № 2
 
-useContext:
+[Контекст](https://reactjs.org/docs/context.html) и
+[useContext](https://reactjs.org/docs/hooks-reference.html#usecontext):
 
 1. Реализуем смену темы
 
@@ -61,7 +62,7 @@ useContext:
     ```
     const { theme, toggleTheme } = useContext(ThemeContext);
     ```
-  - функцию используем как обработчик события в onChange инпута
+  - функцию используем как обработчик события в `onChange` инпута
   - а тему для определения состояния чекбокса:
     ```
     checked={theme === themes.light}
@@ -83,7 +84,9 @@ useContext:
 
 ### Задача № 3
 
-useMemo, React.memo и useCallback:
+[useMemo](https://reactjs.org/docs/hooks-reference.html#usememo),
+[React.memo](https://reactjs.org/docs/react-api.html#reactmemo) и
+[useCallback](https://reactjs.org/docs/hooks-reference.html#usecallback):
 
 - в компоненте `ItemsList` ставим консоль-лог и наблюдаем, как он перерендерится
   каждый раз, как мы открываем и закрываем форму добавления
@@ -99,7 +102,7 @@ useMemo, React.memo и useCallback:
 
 ### Задача № 4
 
-useReducer:
+[useReducer](https://reactjs.org/docs/hooks-reference.html#usereducer):
 
 - в `DepartmentsBlock` перепишем `useState` для `departments` на `useReducer`:
   ```
@@ -121,7 +124,7 @@ useReducer:
 
 ### Задача № 7
 
-Библиотека `react-use`:
+Библиотека [react-use](https://github.com/streamich/react-use):
 
 - для фильтра в `CitiesBlock` использовать хук
   [useLocalStorage](https://github.com/streamich/react-use/blob/master/docs/useLocalStorage.md)

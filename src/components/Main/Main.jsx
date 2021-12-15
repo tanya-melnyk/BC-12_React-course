@@ -23,7 +23,7 @@ const Main = () => {
 
       {/* TEMPORARY BUTTON */}
       <button
-        style={{ padding: 10, marginBottom: 20 }}
+        style={{ padding: 10, marginBottom: 20, display: 'none' }}
         onClick={() => setShowTutots(!showTutots)}
       >
         Toggle tutors
