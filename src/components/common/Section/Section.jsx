@@ -1,10 +1,13 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { ThemeContext, themes } from 'context/themeContext';
 import s from './Section.module.css';
 
 const Section = ({ icon, title, children }) => {
+  const { theme } = useContext(ThemeContext);
   return (
     <section className={s.section}>
-      <div className={s.lightTheme}>
+      <div className={theme === themes.light ? s.lightTheme : s.darkTheme}>
         <div className={s.imgWrapper}>
           <img src={icon} alt={title} />
         </div>

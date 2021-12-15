@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 
-// import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import Paper from 'components/common/Paper/Paper';
 import CardWithMenu from './CardWithMenu/CardWithMenu';
 import { listStyles } from './ItemsListStyles';
 
 const ItemsList = ({ items, onEditItem, onDeleteItem }) => {
-  // вызов при любом перерендере
+  // // вызов при любом перерендере
   // console.log('ItemsList');
 
-  // вызовы при рендерах в зависимости от изменившихся пропов
+  // // вызовы при рендерах в зависимости от изменившихся пропов
   // useEffect(() => {
   //   console.log('items');
   // }, [items]);
@@ -50,4 +50,5 @@ ItemsList.propTypes = {
   onDeleteItem: PropTypes.func.isRequired,
 };
 
-export default ItemsList;
+// export default ItemsList;
+export default memo(ItemsList);

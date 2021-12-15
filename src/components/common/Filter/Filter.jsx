@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import { ThemeContext, themes } from 'context/themeContext';
 
 const Filter = ({ label = '', value, onFilterChange }) => {
+  const { theme } = useContext(ThemeContext);
   return (
     <div>
-      <label>
+      <label style={{ color: theme === themes.dark ? 'white' : 'black' }}>
         {label}
         <input
           type="text"

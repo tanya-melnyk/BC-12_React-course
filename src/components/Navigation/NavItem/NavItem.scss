@@ -13,6 +13,10 @@
     background-color: rgb(236, 239, 241);
   }
 
+  &.NavItem-dark:hover {
+    background-color: #666;
+  }
+
   & .iconWrapper {
     height: 24px;
   }
@@ -26,6 +30,10 @@
     text-transform: uppercase;
     text-decoration: none;
     color: var(--text-color);
+  }
+
+  &.NavItem-dark .itemName {
+    color: #fff;
   }
 
   &.NavItemActive > .itemName {

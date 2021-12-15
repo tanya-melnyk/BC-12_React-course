@@ -18,6 +18,10 @@
   width: 72px;
 }
 
+.Sidebar-dark {
+  background-color: #555;
+}
+
 .Sidebar-decor {
   display: flex;
   align-items: center;

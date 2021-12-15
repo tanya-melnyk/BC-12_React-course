@@ -14,7 +14,8 @@
     [React.memo](https://dmitripavlutin.com/use-react-memo-wisely/)
   - [useCallback](https://habr.com/ru/post/529950/)
   - [useReducer](https://webtricks-master.ru/react-hooks/uchim-usereducer-na-primerah-react-hooks/)
-  - Кастомные хуки
+  - [Кастомные хуки](https://reactjs.org/docs/hooks-custom.html) и
+    [useDebugValue](https://reactjs.org/docs/hooks-reference.html#usedebugvalue)
   - Библиотека [react-use](https://github.com/streamich/react-use)
 
 ### Задача № 1
@@ -24,7 +25,7 @@
 1. EditCard
 
 - для хранения `inputId` использовать `useRef` с начальным значением `nanoid()`
-- рассказать про аналог `componentDidMount`
+- рассказать про аналог `componentDidUpdate`
 
 ### Задача № 2
 
@@ -116,9 +117,11 @@
 
 ### Задача № 6
 
-Кастомные хуки:
+[Кастомные хуки](https://reactjs.org/docs/hooks-custom.html) с
+[useDebugValue](https://reactjs.org/docs/hooks-reference.html#usedebugvalue):
 
 - написать свой `toggle` хук и использовать его для тоггла `Sidebar`
+  (useDebugValue)
 - разобрать кастомный хук `useOutsideClickDetector` и применить его в
   `CardWithMenu`
 

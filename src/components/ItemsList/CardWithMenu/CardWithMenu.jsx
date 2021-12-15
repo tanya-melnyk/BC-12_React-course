@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
+import useOutsideClickDetector from 'hooks/useOutsideClickDetector';
 import { cardStyles, menuStyles } from './CardWithMenuStyles';
 import { ReactComponent as DotsIcon } from 'images/dots.svg';
 import editIcon from 'images/edit.svg';
@@ -10,7 +11,11 @@ import deleteIcon from 'images/delete.svg';
 const CardWithMenu = ({ text, onEdit, onDelete }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const cardRef = useRef(null);
+
   const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
+
+  useOutsideClickDetector(cardRef, toggleMenu, isMenuOpen);
 
   const handleEdit = () => {
     onEdit();
@@ -23,7 +28,7 @@ const CardWithMenu = ({ text, onEdit, onDelete }) => {
   };
 
   return (
-    <div css={cardStyles}>
+    <div ref={cardRef} css={cardStyles}>
       <p>{text}</p>
       <button type="button" onClick={toggleMenu} aria-label="Menu">
         <DotsIcon />

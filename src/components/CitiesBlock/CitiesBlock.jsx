@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useLocalStorage } from 'react-use';
 import { toast } from 'react-toastify';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
@@ -28,7 +29,8 @@ const FILTER_KEY = 'filter';
 
 const CitiesBlock = () => {
   const [cities, setCities] = useState([]);
-  const [filter, setFilter] = useState(() => storage.get(FILTER_KEY) ?? '');
+  const [filter, setFilter] = useLocalStorage(FILTER_KEY, '');
+  // const [filter, setFilter] = useState(() => storage.get(FILTER_KEY) ?? '');
   // form / modal
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
   const [openedModal, setOpenedModal] = useState(ACTION.NONE);
@@ -97,10 +99,10 @@ const CitiesBlock = () => {
 
   // EDIT CITY
 
-  const handleStartEdit = activeCity => {
+  const handleStartEdit = useCallback(activeCity => {
     setActiveCity(activeCity);
     setOpenedModal(ACTION.EDIT);
-  };
+  }, []);
 
   const confirmEdit = editedCityName => {
     if (editedCityName === activeCity.name) {
@@ -138,10 +140,10 @@ const CitiesBlock = () => {
 
   // DELETE CITY
 
-  const handleStartDelete = activeCity => {
+  const handleStartDelete = useCallback(activeCity => {
     setActiveCity(activeCity);
     setOpenedModal(ACTION.DELETE);
-  };
+  }, []);
 
   const confirmDelete = () => setAction(ACTION.DELETE);
 
@@ -175,20 +177,26 @@ const CitiesBlock = () => {
 
   // FILTER CITIES
 
-  useEffect(() => {
-    storage.save(FILTER_KEY, filter);
-  }, [filter]);
+  // useEffect(() => {
+  //   storage.save(FILTER_KEY, filter);
+  // }, [filter]);
 
   // RENDER
 
-  const getFilteredCities = () => {
+  const filteredCities = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
     return cities.filter(city =>
       city.name.toLowerCase().includes(normalizedFilter),
     );
-  };
+  }, [cities, filter]);
 
-  const filteredCities = getFilteredCities();
+  // const getFilteredCities = () => {
+  //   const normalizedFilter = filter.toLowerCase();
+  //   return cities.filter(city =>
+  //     city.name.toLowerCase().includes(normalizedFilter),
+  //   );
+  // };
+  // const filteredCities = getFilteredCities();
 
   const noCities = !loading && !cities.length;
 
