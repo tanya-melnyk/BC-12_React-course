@@ -11,7 +11,7 @@ import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
 import * as api from 'services/api';
-import * as storage from 'services/localStorage';
+// import * as storage from 'services/localStorage';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';

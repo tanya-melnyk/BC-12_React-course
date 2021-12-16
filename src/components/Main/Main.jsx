@@ -1,8 +1,4 @@
 import { useState, useContext } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import DepartmentPage from 'pages/DepartmentPage/DepartmentPage';
-import DepartmentsListPage from 'pages/DepartmentsListPage/DepartmentsListPage';
-import UniversityPage from 'pages/UniversityPage/UniversityPage';
 import Section from '../common/Section/Section';
 import Header from '../common/Header/Header';
 import CitiesBlock from '../CitiesBlock/CitiesBlock';
@@ -26,46 +22,31 @@ const Main = () => {
     <main
       className={theme === themes.light ? styles.lightTheme : styles.darkTheme}
     >
-      <Switch>
-        <Route exact path="/" render={() => <Redirect to="/departments" />} />
+      <Header title="Информация о университете" />
 
-        <Route path="/departments/:id">
-          <DepartmentPage />
-        </Route>
+      <UniversityBlock name={name} descr={description} />
 
-        <Route path="/departments">
-          <DepartmentsListPage />
-        </Route>
+      {/* TEMPORARY BUTTON */}
+      <button
+        style={{ padding: 10, marginBottom: 20, display: 'none' }}
+        onClick={() => setShowTutots(!showTutots)}
+      >
+        Toggle tutors
+      </button>
 
-        <Route path="/university">
-          <UniversityPage />
-          {/* <Header title="Информация о университете" />
+      {showTutots && (
+        <Section icon={tutorsIcon} title="Преподаватели">
+          <TutorsBlock />
+        </Section>
+      )}
 
-          <UniversityBlock name={name} descr={description} /> */}
+      <Section icon={citiesIcon} title="Города">
+        <CitiesBlock />
+      </Section>
 
-          {/* TEMPORARY BUTTON */}
-          {/* <button
-            style={{ padding: 10, marginBottom: 20, display: 'none' }}
-            onClick={() => setShowTutots(!showTutots)}
-          >
-            Toggle tutors
-          </button>
-
-          {showTutots && (
-            <Section icon={tutorsIcon} title="Преподаватели">
-              <TutorsBlock />
-            </Section>
-          )}
-
-          <Section icon={citiesIcon} title="Города">
-            <CitiesBlock />
-          </Section>
-
-          <Section icon={departmentsIcon} title="Факультеты">
-            <DepartmentsBlock />
-          </Section> */}
-        </Route>
-      </Switch>
+      <Section icon={departmentsIcon} title="Факультеты">
+        <DepartmentsBlock />
+      </Section>
     </main>
   );
 };
