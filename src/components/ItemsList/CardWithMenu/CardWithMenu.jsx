@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { useState, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useOutsideClickDetector from 'hooks/useOutsideClickDetector';
 import { cardStyles, menuStyles } from './CardWithMenuStyles';
@@ -8,13 +9,12 @@ import { ReactComponent as DotsIcon } from 'images/dots.svg';
 import editIcon from 'images/edit.svg';
 import deleteIcon from 'images/delete.svg';
 
-const CardWithMenu = ({ text, onEdit, onDelete }) => {
+const CardWithMenu = ({ item, onEdit, onDelete, link }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const cardRef = useRef(null);
-
   const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
-
   useOutsideClickDetector(cardRef, toggleMenu, isMenuOpen);
 
   const handleEdit = () => {
@@ -29,7 +29,21 @@ const CardWithMenu = ({ text, onEdit, onDelete }) => {
 
   return (
     <div ref={cardRef} css={cardStyles}>
-      <p>{text}</p>
+      {link && (
+        <Link
+          to={{
+            pathname: `/${link}/${item.id}`,
+            state: {
+              from: location,
+              label: 'Назад к университету',
+            },
+          }}
+        >
+          <p>{item.name}</p>
+        </Link>
+      )}
+      {!link && <p>{item.name}</p>}
+
       <button type="button" onClick={toggleMenu} aria-label="Menu">
         <DotsIcon />
       </button>
@@ -55,9 +69,13 @@ const CardWithMenu = ({ text, onEdit, onDelete }) => {
 };
 
 CardWithMenu.propTypes = {
-  text: PropTypes.string.isRequired,
+  item: PropTypes.exact({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  link: PropTypes.string,
 };
 
 export default CardWithMenu;
