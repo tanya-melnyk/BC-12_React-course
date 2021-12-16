@@ -13,7 +13,6 @@
     [BrowserRouter](https://v5.reactrouter.com/web/api/BrowserRouter),
     [Route](https://v5.reactrouter.com/web/api/Route),
     [Switch](https://v5.reactrouter.com/web/api/Switch)
-  - Обработка 404 c Redirect
   - Компоненты [Link](https://v5.reactrouter.com/web/api/Link) и
     [NavLink](https://v5.reactrouter.com/web/api/NavLink)
   - [Хуки](https://v5.reactrouter.com/web/api/Hooks) useParams, useLocation,
@@ -22,11 +21,12 @@
   - Динамические URL-параметры
   - Параметры адресной строки c useLocation
   - Программная навигация с useHistory
+  - Обработка 404 c Redirect
   - [Инструкция по переходу на v6 в react-router-dom](https://reactrouter.com/docs/en/v6/upgrading/v5)
 
 ### Задача № 1
 
-Добавить роутинг в сайдбар и возможность переключения на страницу `Факультетов`
+Добавить routing в сайдбар и возможность переключения на страницу `Факультетов`
 
 1. Подключаем [BrowserRouter](https://v5.reactrouter.com/web/api/BrowserRouter):
 
@@ -34,7 +34,7 @@
   [react-router-dom@5](https://reactrouter.com/docs/en/v6/getting-started/installation#basic-installation)
 - из него в `index.js` импортируем `BrowserRouter` и оборачиваем им наш `Арр`
 
-2. Определяем место для `Routes`, а также, какие адреса и странички нам
+2. Выбираем место для `Routes`, а также, какие адреса и странички нам
    понадобятся:
 
 - определяем `Main`, как место, где у нас будет реализован `routing`
@@ -68,7 +68,7 @@
 Добавить индивидуальный роутинг - при клике на название факультета переводить на
 страницу одного факультета
 
-1. Создаем вложженные ссылки:
+1. Создаем ссылки на каждый факультет:
 
 - в `DepartmentsListPage` при рендере массива факультетов оборачиваем каждую
   `Paper` в `Link`, чтобы теперь нажимая на название факультета, мы могли
@@ -87,7 +87,7 @@
   ```
 - а в `Route`, который рендерил `DepartmentsListPage` поставим путь
   `"/departments"`
-- также и в Navigation изменим проп первой NavItem на `"/departments"`
+- также и в `Navigation` изменим проп первой `NavItem` на `"/departments"`
 - тогда в `DepartmentsListPage` будем создавать вложенные пути сразу красиво:
   `/departments/${id}`
 
@@ -97,7 +97,7 @@
 
 - импортируем хук, вызываем его, записывам полученный объект в переменную
 - теперь свойство `url` этого объекта будем использовать в `Link` для
-  подстановки пути: `to={`${match.url}/${id}`}`
+  подстановки пути: `to={${match.url}/${id}}`
 
 4. Отрисовываем страничку одного факультета
 
@@ -121,7 +121,7 @@
     <p className={s.text}>lorem50</p>
   </Paper>
   ```
-- второй будет вести на `'/departments/:id/history'` и также рендерить историю
+- второй будет вести на `'/departments/:id/history'` и так же рендерить историю
 
 2. Тут же создаем навигацию по вложенным роутам:
 

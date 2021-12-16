@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, useRouteMatch, useLocation } from 'react-router-dom';
 import Paper from 'components/common/Paper/Paper';
 import Header from 'components/common/Header/Header';
 import * as api from 'services/api';
@@ -8,6 +9,9 @@ const API_ENDPOINT = 'departments';
 
 const DepartmentsListPage = () => {
   const [departments, setDepartments] = useState([]);
+  const match = useRouteMatch();
+  const location = useLocation();
+  // console.log(location);
 
   useEffect(() => {
     const fetchDepartments = () => {
@@ -27,11 +31,19 @@ const DepartmentsListPage = () => {
         <ul>
           {departments.map(({ id, name }) => (
             <li key={id} className={s.listElem}>
-              <a href="/">
+              {/* <Link to={`/departments/${id}`}> */}
+              <Link
+                to={{
+                  pathname: `${match.url}/${id}`,
+                  state: {
+                    from: location,
+                  },
+                }}
+              >
                 <Paper>
                   <p className={s.text}>{name}</p>
                 </Paper>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

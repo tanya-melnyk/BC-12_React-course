@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { useState, useRef } from 'react';
-// import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useOutsideClickDetector from 'hooks/useOutsideClickDetector';
 import { cardStyles, menuStyles } from './CardWithMenuStyles';
@@ -11,7 +11,7 @@ import deleteIcon from 'images/delete.svg';
 
 const CardWithMenu = ({ item, onEdit, onDelete, link }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const location = useLocation();
+  const location = useLocation();
 
   const cardRef = useRef(null);
   const toggleMenu = () => setIsMenuOpen(prevState => !prevState);
@@ -30,17 +30,17 @@ const CardWithMenu = ({ item, onEdit, onDelete, link }) => {
   return (
     <div ref={cardRef} css={cardStyles}>
       {link && (
-        // <Link
-        //   to={{
-        //     pathname: `/${link}/${item.id}`,
-        //     state: {
-        //       from: location,
-        //       label: 'Назад к университету',
-        //     },
-        //   }}
-        // >
-        <p>{item.name}</p>
-        // </Link>
+        <Link
+          to={{
+            pathname: `/${link}/${item.id}`,
+            state: {
+              from: location,
+              label: 'Назад к университету',
+            },
+          }}
+        >
+          <p>{item.name}</p>
+        </Link>
       )}
       {!link && <p>{item.name}</p>}
 

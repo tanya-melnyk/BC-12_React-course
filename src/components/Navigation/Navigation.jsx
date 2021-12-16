@@ -7,11 +7,13 @@ const Navigation = () => {
       <NavItem
         name="Факультеты"
         icon={<HiBookOpen color="#ff6b0a" size="24" />}
+        path="/departments"
       />
 
       <NavItem
         name="Университет"
         icon={<HiAcademicCap color="#ff6b0a" size="24" />}
+        path="/university"
       />
     </nav>
   );
