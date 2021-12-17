@@ -15,7 +15,6 @@ const NavItem = ({ name, icon, path }) => {
       to={path}
       className={navItenStyles.join(' ')}
       activeClassName="NavItemActive"
-      exact
     >
       <span className="iconWrapper">{icon}</span>
       <span className="itemName">{name}</span>
