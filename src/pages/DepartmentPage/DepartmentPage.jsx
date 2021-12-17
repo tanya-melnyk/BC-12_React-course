@@ -8,6 +8,7 @@ import {
   useRouteMatch,
   useHistory,
   useLocation,
+  Redirect,
 } from 'react-router-dom';
 import BigButton from 'components/common/BigButton/BigButton';
 import Paper from 'components/common/Paper/Paper';
@@ -31,21 +32,26 @@ const DepartmentPage = () => {
         .then(setDepartment)
         .catch(err => {
           toast.error('Факультет не найден');
+          history.replace('/departments');
         });
     };
     fetchDepartment();
-  }, [params.id]);
+  }, [history, params.id]);
 
   const handleGoBack = () => {
     // history.goBack();
-    history.push(location.state.from);
+    history.push(location.state?.from ?? '/departments');
   };
 
   return (
     <>
       <Header title={department.name ?? 'Факультет'} />
       <div className={s.wrapper}>
-        <BigButton text="Назад" onClick={handleGoBack} isGray />
+        <BigButton
+          text={location.state?.label ?? 'Назад ко всем факультетам'}
+          onClick={handleGoBack}
+          isGray
+        />
       </div>
 
       <nav className={s.nav}>
@@ -55,11 +61,15 @@ const DepartmentPage = () => {
             to={{
               pathname: `${match.url}/description`,
               state: {
-                from: location.state.from,
+                from: location.state?.from,
+                label: location.state?.label,
               },
             }}
             className={s.link}
             activeClassName={s.activeLink}
+            isActive={(matchRoute, location) =>
+              matchRoute?.isExact || location.pathname === match.url
+            }
           >
             Описание
           </NavLink>
@@ -70,7 +80,8 @@ const DepartmentPage = () => {
             to={{
               pathname: `${match.url}/history`,
               state: {
-                from: location.state.from,
+                from: location.state?.from,
+                label: location.state?.label,
               },
             }}
             className={s.link}
@@ -82,7 +93,7 @@ const DepartmentPage = () => {
       </nav>
 
       <Switch>
-        <Route path={`${match.path}/description`}>
+        <Route exact path={[match.path, `${match.path}/description`]}>
           <Paper>
             <p className={s.text}>
               Description Lorem ipsum dolor sit amet consectetur adipisicing
@@ -96,7 +107,7 @@ const DepartmentPage = () => {
           </Paper>
         </Route>
 
-        <Route path={`${match.path}/history`}>
+        <Route exact path={`${match.path}/history`}>
           <Paper>
             <p className={s.text}>
               History Lorem ipsum dolor sit amet consectetur adipisicing elit. A
@@ -106,6 +117,8 @@ const DepartmentPage = () => {
             </p>
           </Paper>
         </Route>
+
+        <Route render={() => <Redirect to={match.url} />} />
       </Switch>
     </>
   );

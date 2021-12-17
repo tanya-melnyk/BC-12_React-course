@@ -37,6 +37,7 @@ const DepartmentsListPage = () => {
                   pathname: `${match.url}/${id}`,
                   state: {
                     from: location,
+                    label: 'Назад ко всем факультетам',
                   },
                 }}
               >
