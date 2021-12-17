@@ -181,15 +181,6 @@ const CitiesBlock = () => {
   //   storage.save(FILTER_KEY, filter);
   // }, [filter]);
 
-  // RENDER
-
-  const filteredCities = useMemo(() => {
-    const normalizedFilter = filter.toLowerCase();
-    return cities.filter(city =>
-      city.name.toLowerCase().includes(normalizedFilter),
-    );
-  }, [cities, filter]);
-
   // const getFilteredCities = () => {
   //   const normalizedFilter = filter.toLowerCase();
   //   return cities.filter(city =>
@@ -197,6 +188,13 @@ const CitiesBlock = () => {
   //   );
   // };
   // const filteredCities = getFilteredCities();
+
+  const filteredCities = useMemo(() => {
+    const normalizedFilter = filter.toLowerCase();
+    return cities.filter(city =>
+      city.name.toLowerCase().includes(normalizedFilter),
+    );
+  }, [cities, filter]);
 
   const noCities = !loading && !cities.length;
 
