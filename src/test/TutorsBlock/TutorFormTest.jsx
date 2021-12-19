@@ -1,8 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import BigButton from 'components/common/BigButton/BigButton';
 import Paper from 'components/common/Paper/Paper';
 import s from './TutorForm.module.css';
+
+import { connect } from 'react-redux';
+import ErrorMsg from 'components/common/ErrorMsg/ErrorMsg';
+import Loader from 'components/common/Loader/Loader';
+import { addTutor } from 'redux/tutors/tutorsActions';
+import * as api from 'services/api';
+
+const API_ENDPOINT = 'tutors';
 
 const citiesOptions = [
   {
@@ -38,8 +46,12 @@ const INITIAL_STATE = {
   gender: '', // radio
 };
 
-const TutorForm = ({ onSubmit }) => {
+const TutorForm = ({ onAddTutor, closeForm }) => {
   const [formData, setFormData] = useState({ ...INITIAL_STATE });
+  const [newTutor, setNewTutor] = useState(null);
+  // api request status
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -52,11 +64,44 @@ const TutorForm = ({ onSubmit }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit({ ...formData });
-    reset();
+    setNewTutor({ ...formData });
   };
 
   const reset = () => setFormData({ ...INITIAL_STATE });
+
+  // ADD TUTOR
+
+  useEffect(() => {
+    if (!newTutor) return;
+
+    let isTutorsMounted = true;
+    const addTutor = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const savedTutor = await api.saveItem(API_ENDPOINT, newTutor);
+        if (isTutorsMounted) {
+          onAddTutor(savedTutor);
+        }
+      } catch (error) {
+        if (isTutorsMounted) {
+          setError(error.message);
+        }
+      } finally {
+        if (isTutorsMounted) {
+          setNewTutor(null);
+          setLoading(false);
+          reset();
+          closeForm();
+        }
+      }
+    };
+    addTutor();
+
+    return () => {
+      isTutorsMounted = false;
+    };
+  }, [closeForm, newTutor, onAddTutor]);
 
   const { lastName, firstName, phone, email, city, gender, isFullTime } =
     formData;
@@ -66,6 +111,8 @@ const TutorForm = ({ onSubmit }) => {
 
   return (
     <div className={s.container}>
+      {loading && <Loader />}
+
       <Paper>
         <div className={s.inner}>
           <h4 className={s.formName}>Добавление преподавателя</h4>
@@ -152,12 +199,18 @@ const TutorForm = ({ onSubmit }) => {
           </form>
         </div>
       </Paper>
+
+      {error && <ErrorMsg message={error} />}
     </div>
   );
 };
 
 TutorForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  closeForm: PropTypes.func.isRequired,
 };
 
-export default TutorForm;
+const mapDispatchToProps = dispatch => ({
+  onAddTutor: tutor => dispatch(addTutor(tutor)),
+});
+
+export default connect(null, mapDispatchToProps)(TutorForm);

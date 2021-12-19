@@ -8,8 +8,8 @@
 - Кахут
 - Теория:
   - [Рефы и useRef](https://blog.logrocket.com/a-guide-to-react-refs/)
-  - [Контекст](https://reactjs.org/docs/context.html) и
-    [useContext](https://reactjs.org/docs/hooks-reference.html#usecontext)
+  - [Контекст](https://medium.com/@mohamedelayadi/react-context-all-you-need-to-know-40de6662b074)
+    и [useContext](https://reactjs.org/docs/hooks-reference.html#usecontext)
   - [useMemo](https://dev.to/afozbek/react-hooks-usememo-4n23) и
     [React.memo](https://dmitripavlutin.com/use-react-memo-wisely/)
   - [useCallback](https://habr.com/ru/post/529950/)
@@ -100,6 +100,7 @@
   их расчет в `useMemo`
 - в браузере в `Profiler` сравнивам рендер `ItemsList` при открытии и закрытии
   формы добавления с и без `React.memo`
+- - в Арр обернем в `useCallback` функцию смены темы
 
 ### Задача № 4
 

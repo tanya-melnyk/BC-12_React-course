@@ -5,7 +5,7 @@ import BigButton from '../common/BigButton/BigButton';
 import DeleteCard from '../common/DeleteCard/DeleteCard';
 import EditCard from '../common/EditCard/EditCard';
 import ErrorMsg from '../common/ErrorMsg/ErrorMsg';
-import Filter from '../common/Filter/Filter';
+import Filter from './Filter/Filter';
 import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';

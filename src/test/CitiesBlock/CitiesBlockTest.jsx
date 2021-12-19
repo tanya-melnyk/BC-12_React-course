@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useLocalStorage } from 'react-use';
 import { toast } from 'react-toastify';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
 import DeleteCard from '../common/DeleteCard/DeleteCard';
 import EditCard from '../common/EditCard/EditCard';
 import ErrorMsg from '../common/ErrorMsg/ErrorMsg';
-import Filter from './Filter/Filter';
+import Filter from './FilterTest';
 import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
@@ -15,6 +14,9 @@ import * as api from 'services/api';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
+
+import { useSelector, useDispatch } from 'react-redux';
+import * as citiesActions from 'redux/cities/citiesActions';
 
 const API_ENDPOINT = 'cities';
 
@@ -28,8 +30,12 @@ const ACTION = {
 const FILTER_KEY = 'filter';
 
 const CitiesBlock = () => {
-  const [cities, setCities] = useState([]);
-  const [filter, setFilter] = useLocalStorage(FILTER_KEY, '');
+  // const [cities, setCities] = useState([]);
+  const cities = useSelector(state => state.cities.items);
+  const filter = useSelector(state => state.cities.filter);
+  const dispatch = useDispatch();
+
+  // const [filter, setFilter] = useLocalStorage(FILTER_KEY, '');
   // const [filter, setFilter] = useState(() => storage.get(FILTER_KEY) ?? '');
   // form / modal
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
@@ -49,7 +55,8 @@ const CitiesBlock = () => {
       setError(null);
       try {
         const cities = await api.getData(API_ENDPOINT);
-        setCities(cities);
+        // setCities(cities);
+        dispatch(citiesActions.setCities(cities));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -57,7 +64,7 @@ const CitiesBlock = () => {
       }
     };
     fetchCities();
-  }, []);
+  }, [dispatch]);
 
   // ADD CITY
 
@@ -84,7 +91,8 @@ const CitiesBlock = () => {
       setError(null);
       try {
         const newCity = await api.saveItem(API_ENDPOINT, activeCity);
-        setCities(prevCities => [...prevCities, newCity]);
+        // setCities(prevCities => [...prevCities, newCity]);
+        dispatch(citiesActions.addCity(newCity));
         toggleAddForm();
       } catch (error) {
         setError(error.message);
@@ -95,7 +103,7 @@ const CitiesBlock = () => {
       }
     };
     addCity();
-  }, [action, activeCity]);
+  }, [action, activeCity, dispatch]);
 
   // EDIT CITY
 
@@ -121,11 +129,12 @@ const CitiesBlock = () => {
       setError(null);
       try {
         const updatedCity = await api.editItem(API_ENDPOINT, activeCity);
-        setCities(prevCities =>
-          prevCities.map(city =>
-            city.id === updatedCity.id ? updatedCity : city,
-          ),
-        );
+        dispatch(citiesActions.editCity(updatedCity));
+        // setCities(prevCities =>
+        //   prevCities.map(city =>
+        //     city.id === updatedCity.id ? updatedCity : city,
+        //   ),
+        // );
       } catch (error) {
         setError(error.message);
       } finally {
@@ -136,7 +145,7 @@ const CitiesBlock = () => {
       }
     };
     editCity();
-  }, [action, activeCity]);
+  }, [action, activeCity, dispatch]);
 
   // DELETE CITY
 
@@ -155,9 +164,10 @@ const CitiesBlock = () => {
       setError(null);
       try {
         const deletedCity = await api.deleteItem(API_ENDPOINT, activeCity.id);
-        setCities(prevCities =>
-          prevCities.filter(city => city.id !== deletedCity.id),
-        );
+        dispatch(citiesActions.removeCity(deletedCity.id));
+        // setCities(prevCities =>
+        //   prevCities.filter(city => city.id !== deletedCity.id),
+        // );
       } catch (error) {
         setError(error.message);
       } finally {
@@ -168,7 +178,7 @@ const CitiesBlock = () => {
       }
     };
     deleteCity();
-  }, [action, activeCity]);
+  }, [action, activeCity, dispatch]);
 
   const closeModal = () => {
     setOpenedModal(ACTION.NONE);
@@ -180,6 +190,14 @@ const CitiesBlock = () => {
   // useEffect(() => {
   //   storage.save(FILTER_KEY, filter);
   // }, [filter]);
+
+  // const getFilteredCities = () => {
+  //   const normalizedFilter = filter.toLowerCase();
+  //   return cities.filter(city =>
+  //     city.name.toLowerCase().includes(normalizedFilter),
+  //   );
+  // };
+  // const filteredCities = getFilteredCities();
 
   const filteredCities = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
@@ -193,9 +211,9 @@ const CitiesBlock = () => {
   // FIX FILTER BUG
   useEffect(() => {
     if (cities.length === 1) {
-      setFilter('');
+      dispatch(citiesActions.changeFilter(''));
     }
-  }, [cities.length, setFilter]);
+  }, [cities.length, dispatch]);
 
   return (
     <>
@@ -204,8 +222,8 @@ const CitiesBlock = () => {
       {cities.length > 1 && (
         <Filter
           label="Поиск города:"
-          value={filter}
-          onFilterChange={setFilter}
+          // value={filter}
+          // onFilterChange={setFilter}
         />
       )}
 
