@@ -258,11 +258,20 @@ case types.REMOVE:
 
 - в `filterReducer` также заменим тип в `case` на переменную
 
-4. Свяжем `CitiesBlock` с `redux`
+4. Свяжем `Filter` с `redux`
 
 - импортируем хуки
   [useDispatch](https://react-redux.js.org/api/hooks#usedispatch) и
   [useSelector](https://react-redux.js.org/api/hooks#useselector)
+- импортируем `changeFilter` из `citiesActions`
+- получаем доступ к `filter` из редакс стейта с помощью `useSelector`
+- получаем функцию `dispatch` из `useDispatch`
+- заменяем логику `onChange` на `dispatch`
+- в `value` инпута передадим `filter` из стейта редакса
+
+5. Свяжем `CitiesBlock` с `redux`
+
+- импортируем хуки `useDispatch` и `useSelector`
 - импортируем все `actions` из `citiesActions` (`* as citiesActions`)
 - получаем доступ к `cities` и `filter` из редакс стейта с помощью `useSelector`
 - получаем функцию `dispatch` из `useDispatch`
@@ -270,15 +279,6 @@ case types.REMOVE:
 - логику по работе с фильтром, кроме фикса бага, переносим в сам `Filter`
   (фильтру будем передавать теперь только `label`)
 - в `useEffect` для сброса фильтра используем `dispatch`
-
-5. Свяжем `Filter` с `redux`
-
-- импортируем хуки `useDispatch` и `useSelector`
-- импортируем `changeFilter` из `citiesActions`
-- получаем доступ к `filter` из редакс стейта с помощью `useSelector`
-- получаем функцию `dispatch` из `useDispatch`
-- заменяем логику `onChange` на `dispatch`
-- в `value` инпута передадим `filter` из стейта редакса
 
 ### Задача № 4
 
