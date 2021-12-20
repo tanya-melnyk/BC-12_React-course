@@ -2,26 +2,28 @@ import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { ThemeContext, themes } from 'context/themeContext';
 
-const Filter = ({ label = '', value, onFilterChange }) => {
+import { useSelector, useDispatch } from 'react-redux';
+import { changeFilter } from 'redux/cities/citiesActions';
+
+const Filter = ({ label = '' }) => {
   const { theme } = useContext(ThemeContext);
+  const filter = useSelector(state => state.cities.filter);
+  const dispatch = useDispatch();
+
+  const onChange = e => dispatch(changeFilter(e.target.value));
+
   return (
     <div>
       <label style={{ color: theme === themes.dark ? 'white' : 'black' }}>
         {label}
-        <input
-          type="text"
-          value={value}
-          onChange={e => onFilterChange(e.target.value)}
-        ></input>
+        <input type="text" value={filter} onChange={onChange}></input>
       </label>
     </div>
   );
 };
 
 Filter.propTypes = {
-  value: PropTypes.string.isRequired,
   label: PropTypes.string,
-  onFilterChange: PropTypes.func.isRequired,
 };
 
 export default Filter;

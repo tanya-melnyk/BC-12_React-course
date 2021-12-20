@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import BigButton from 'components/common/BigButton/BigButton';
 import Paper from 'components/common/Paper/Paper';
+import s from './TutorForm.module.css';
+
+import { connect } from 'react-redux';
+import ErrorMsg from 'components/common/ErrorMsg/ErrorMsg';
+import Loader from 'components/common/Loader/Loader';
 import { addTutor } from 'redux/tutors/tutorsActions';
 import * as api from 'services/api';
-import s from './TutorForm.module.css';
+
+const API_ENDPOINT = 'tutors';
 
 const citiesOptions = [
   {
@@ -41,9 +46,7 @@ const INITIAL_STATE = {
   gender: '', // radio
 };
 
-const API_ENDPOINT = 'tutors';
-
-const TutorForm = ({ closeForm, onAddTutor }) => {
+const TutorForm = ({ onAddTutor, closeForm }) => {
   const [formData, setFormData] = useState({ ...INITIAL_STATE });
   const [newTutor, setNewTutor] = useState(null);
   // api request status
@@ -62,8 +65,6 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
   const handleSubmit = e => {
     e.preventDefault();
     setNewTutor({ ...formData });
-    // onSubmit({ ...formData });
-    reset();
   };
 
   const reset = () => setFormData({ ...INITIAL_STATE });
@@ -81,7 +82,6 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
         const savedTutor = await api.saveItem(API_ENDPOINT, newTutor);
         if (isTutorsMounted) {
           onAddTutor(savedTutor);
-          // setTutors(prevTutors => [...prevTutors, savedTutor]);
         }
       } catch (error) {
         if (isTutorsMounted) {
@@ -89,8 +89,9 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
         }
       } finally {
         if (isTutorsMounted) {
-          setLoading(false);
           setNewTutor(null);
+          setLoading(false);
+          reset();
           closeForm();
         }
       }
@@ -110,6 +111,8 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
 
   return (
     <div className={s.container}>
+      {loading && <Loader />}
+
       <Paper>
         <div className={s.inner}>
           <h4 className={s.formName}>Добавление преподавателя</h4>
@@ -196,6 +199,8 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
           </form>
         </div>
       </Paper>
+
+      {error && <ErrorMsg message={error} />}
     </div>
   );
 };

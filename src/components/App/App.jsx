@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { ThemeContext, themes } from 'context/themeContext';
 import Main from '../Main/Main';
@@ -9,10 +9,13 @@ import './App.css';
 const App = () => {
   const [theme, setTheme] = useState(themes.light);
 
-  const toggleTheme = () =>
-    setTheme(prevTheme =>
-      prevTheme === themes.light ? themes.dark : themes.light,
-    );
+  const toggleTheme = useCallback(
+    () =>
+      setTheme(prevTheme =>
+        prevTheme === themes.light ? themes.dark : themes.light,
+      ),
+    [],
+  );
 
   return (
     <div className="main-container">
