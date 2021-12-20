@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import BigButton from 'components/common/BigButton/BigButton';
+import ErrorMsg from 'components/common/ErrorMsg/ErrorMsg';
+import Loader from 'components/common/Loader/Loader';
 import Paper from 'components/common/Paper/Paper';
 import { addTutor } from 'redux/tutors/tutorsActions';
 import * as api from 'services/api';
@@ -62,7 +64,6 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
   const handleSubmit = e => {
     e.preventDefault();
     setNewTutor({ ...formData });
-    // onSubmit({ ...formData });
     reset();
   };
 
@@ -81,7 +82,6 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
         const savedTutor = await api.saveItem(API_ENDPOINT, newTutor);
         if (isTutorsMounted) {
           onAddTutor(savedTutor);
-          // setTutors(prevTutors => [...prevTutors, savedTutor]);
         }
       } catch (error) {
         if (isTutorsMounted) {
@@ -110,6 +110,8 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
 
   return (
     <div className={s.container}>
+      {loading && <Loader />}
+
       <Paper>
         <div className={s.inner}>
           <h4 className={s.formName}>Добавление преподавателя</h4>
@@ -196,6 +198,8 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
           </form>
         </div>
       </Paper>
+
+      {error && <ErrorMsg message={error} />}
     </div>
   );
 };

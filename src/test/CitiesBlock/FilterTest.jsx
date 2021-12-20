@@ -3,7 +3,8 @@ import { useContext } from 'react';
 import { ThemeContext, themes } from 'context/themeContext';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { changeFilter } from 'redux/cities/citiesActions';
+// import { changeFilter } from 'redux/cities/citiesActions';
+import { changeFilter } from 'redux/cities';
 
 const Filter = ({ label = '' }) => {
   const { theme } = useContext(ThemeContext);

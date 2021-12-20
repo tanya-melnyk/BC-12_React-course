@@ -16,11 +16,8 @@ import plusImg from '../../images/add.svg';
 const API_ENDPOINT = 'tutors';
 
 const TutorsBlock = ({ tutors, onSetTutors }) => {
-  // const [tutors, setTutors] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  // const [newTutor, setNewTutor] = useState(null);
   // api request status
-  const [firstLoading, setFirstLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -30,19 +27,16 @@ const TutorsBlock = ({ tutors, onSetTutors }) => {
     const controller = new AbortController();
     const signal = controller.signal;
     const fetchTutors = async () => {
-      setFirstLoading(true);
       setLoading(true);
       try {
         const tutors = await api.getData(API_ENDPOINT, { signal });
         onSetTutors(tutors);
-        // setTutors(tutors);
       } catch (error) {
         if (!signal.aborted) {
           setError(error.message);
         }
       } finally {
         if (!signal.aborted) {
-          setFirstLoading(false);
           setLoading(false);
         }
       }
@@ -54,49 +48,16 @@ const TutorsBlock = ({ tutors, onSetTutors }) => {
     };
   }, [onSetTutors]);
 
-  // ADD TUTOR
-
-  // useEffect(() => {
-  //   if (!newTutor) return;
-
-  //   let isTutorsMounted = true;
-  //   const addTutor = async () => {
-  //     setLoading(true);
-  //     setError(null);
-  //     try {
-  //       const savedTutor = await api.saveItem(API_ENDPOINT, newTutor);
-  //       if (isTutorsMounted) {
-  //         setTutors(prevTutors => [...prevTutors, savedTutor]);
-  //       }
-  //     } catch (error) {
-  //       if (isTutorsMounted) {
-  //         setError(error.message);
-  //       }
-  //     } finally {
-  //       if (isTutorsMounted) {
-  //         setLoading(false);
-  //         setNewTutor(null);
-  //         setIsFormOpen(false);
-  //       }
-  //     }
-  //   };
-  //   addTutor();
-
-  //   return () => {
-  //     isTutorsMounted = false;
-  //   };
-  // }, [newTutor]);
-
   const toggleForm = useCallback(
     () => setIsFormOpen(prevIsFormOpen => !prevIsFormOpen),
     [],
   );
 
-  const noTutors = !firstLoading && !tutors.length;
+  const noTutors = !loading && !tutors.length;
 
   return (
     <>
-      {firstLoading && <Skeleton />}
+      {loading && <Skeleton />}
 
       {loading && <Loader />}
 
@@ -114,9 +75,9 @@ const TutorsBlock = ({ tutors, onSetTutors }) => {
 
       {noTutors && <h4 className="absence-msg">No tutors yet</h4>}
 
-      {isFormOpen && <TutorForm closeForm={toggleForm} />}
-
       {error && <ErrorMsg message={error} />}
+
+      {isFormOpen && <TutorForm closeForm={toggleForm} />}
 
       <BigButton
         onClick={toggleForm}

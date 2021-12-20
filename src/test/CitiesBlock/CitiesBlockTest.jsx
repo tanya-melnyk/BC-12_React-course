@@ -16,7 +16,8 @@ import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
 
 import { useSelector, useDispatch } from 'react-redux';
-import * as citiesActions from 'redux/cities/citiesActions';
+// import * as citiesActions from 'redux/cities/citiesActions';
+import { citiesActions } from 'redux/cities';
 
 const API_ENDPOINT = 'cities';
 

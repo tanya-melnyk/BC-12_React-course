@@ -17,7 +17,6 @@ const Filter = ({ label = '' }) => {
           type="text"
           value={filter}
           onChange={e => dispatch(changeFilter(e.target.value))}
-          // onChange={e => onFilterChange(e.target.value)}
         ></input>
       </label>
     </div>
@@ -25,9 +24,7 @@ const Filter = ({ label = '' }) => {
 };
 
 Filter.propTypes = {
-  // value: PropTypes.string.isRequired,
   label: PropTypes.string,
-  // onFilterChange: PropTypes.func.isRequired,
 };
 
 export default Filter;
