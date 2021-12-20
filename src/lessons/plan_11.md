@@ -145,7 +145,7 @@
   `tutorsReducer`, создаем файлик `tutorsTypes` и там создаем объект со всеми
   типами:
   ```
-  const types = {
+  const TYPES = {
     SET: 'tutors/set',
     ...
   };
@@ -219,7 +219,7 @@
 1. Добавим файл `citiesTypes` со всеми типами для городов:
 
 ```
-const types = {
+const TYPES = {
   SET: 'cities/set_items',
   ADD: 'cities/add_item',
   EDIT: 'cities/edit_item',
@@ -233,12 +233,12 @@ const types = {
 - импортируем туда типы и пишем функции:
   ```
   const setCities = cities => ({
-    type: types.SET,
+    type: TYPES.SET,
     payload: cities,
   });
   ...
   const changeFilter = value => ({
-    type: types.FILTER,
+    type: TYPES.FILTER,
     payload: value,
   });
   ```
@@ -246,23 +246,32 @@ const types = {
 3. Допишем редьюсер для работы с массивом городов:
 
 ```
-case types.ADD:
+case TYPES.ADD:
   return [...state, action.payload];
-case types.EDIT:
+case TYPES.EDIT:
   return state.map(city =>
     city.id === action.payload.id ? action.payload : city,
   );
-case types.REMOVE:
+case TYPES.REMOVE:
   return state.filter(city => city.id !== action.payload);
 ```
 
 - в `filterReducer` также заменим тип в `case` на переменную
 
-4. Свяжем `CitiesBlock` с `redux`
+4. Свяжем `Filter` с `redux`
 
 - импортируем хуки
   [useDispatch](https://react-redux.js.org/api/hooks#usedispatch) и
   [useSelector](https://react-redux.js.org/api/hooks#useselector)
+- импортируем `changeFilter` из `citiesActions`
+- получаем доступ к `filter` из редакс стейта с помощью `useSelector`
+- получаем функцию `dispatch` из `useDispatch`
+- заменяем логику `onChange` на `dispatch`
+- в `value` инпута передадим `filter` из стейта редакса
+
+5. Свяжем `CitiesBlock` с `redux`
+
+- импортируем хуки `useDispatch` и `useSelector`
 - импортируем все `actions` из `citiesActions` (`* as citiesActions`)
 - получаем доступ к `cities` и `filter` из редакс стейта с помощью `useSelector`
 - получаем функцию `dispatch` из `useDispatch`
@@ -270,15 +279,6 @@ case types.REMOVE:
 - логику по работе с фильтром, кроме фикса бага, переносим в сам `Filter`
   (фильтру будем передавать теперь только `label`)
 - в `useEffect` для сброса фильтра используем `dispatch`
-
-5. Свяжем `Filter` с `redux`
-
-- импортируем хуки `useDispatch` и `useSelector`
-- импортируем `changeFilter` из `citiesActions`
-- получаем доступ к `filter` из редакс стейта с помощью `useSelector`
-- получаем функцию `dispatch` из `useDispatch`
-- заменяем логику `onChange` на `dispatch`
-- в `value` инпута передадим `filter` из стейта редакса
 
 ### Задача № 4
 
