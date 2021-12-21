@@ -21,6 +21,7 @@
 [configureStore()](https://redux-toolkit.js.org/api/configureStore) из
 `Redux Toolkit`
 
+- скопируем папочку `redux`, и одну переименуем в `redux_base`
 - [устанавливаем библиотеку](https://redux-toolkit.js.org/introduction/getting-started#an-existing-app)
 - вместо `createStore` и `combineReducers` из `redux`, импортим
   [configureStore](https://redux-toolkit.js.org/api/configureStore) из
@@ -39,7 +40,14 @@
   - `devToolsEnhancer` нам больше не понадобится, а при создании `store` укажем,
     что `devTools` нам не нужны в `production`
   - также при создании `store` добавим `middleware` `logger` из пакета
-    `redux-logger`
+    `redux-logger` (импортим `createLogger`):
+    ```
+    const logger = createLogger({
+      collapsed: (getState, action, logEntry) => !logEntry.error, // collapse actions that don't have errors
+      timestamp: false, // print the timestamp with each action
+      diff: true,
+    });
+    ```
 
 ### Задача № 2
 
@@ -70,6 +78,7 @@
   `filter.actions`
 - а после - импортим по умолчанию объеденненные редьюсеры `items.reducer` и
   `filter.reducer`
+- теперь в `store` будем импортировать citiesReducer из `citiesSlice`
 - теперь в `CitiesBlock` и `Filter` будем импортировать `actions` из
   `citiesSlice`
 - чтобы было удобнее это делать можем в папочку `cities` добавить файл
@@ -80,16 +89,19 @@
 - теперь нам не нужны все остальные файлы в папке `cities`
 
 - используя `createReducer` или `createSlice` можем
-  [мутировать стейт](https://redux-toolkit.js.org/api/createReducer#direct-state-mutation)
+  [мутировать стейт](https://redux-toolkit.js.org/api/createReducer#direct-state-mutation):
+  - сделаем из двух слайсов один общий, используя объект как начальное состояние
+  - в функциях будем мутировать соответствующее поле стейта
 
 ### Задача № 4
 
 Реализовать сохранение фильтра в `Local Storage`, используя библиотеку
 [Redux Persist](https://github.com/rt2zz/redux-persist)
 
-- [устанавливаем библиотеку](https://github.com/rt2zz/redux-persist#quickstart)
+- [устанавливаем библиотеку](https://www.npmjs.com/package/redux-persist)
 - импортируем методы
   [persistStore, persistReducer](https://github.com/rt2zz/redux-persist#basic-usage)
+- импорттируем `storage` из `redux-persist/lib/storage`
 - создаем `persistConfig`:
 
   ```
@@ -126,7 +138,7 @@
   ```
   <PersistGate loading={null} persistor={persistor}>
   ```
-- чтобы эти настройки работали без ошибок, реализуем
+- чтобы не получать ошибки в консоли, реализуем
   [следующие шаги](https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist)
 - теперь финальный вид нашего хранилища такой:
   ```
@@ -172,6 +184,8 @@
 
 - здесь теперь только рендер компонетов, никакого стейта
 
-5. id в новый контакт можно добавлять при создании action, либо в редьюсере,
-   либо
+5. id в новый контакт можно добавлять в самой форме / при создании action / в
+   редьюсере /
    [в slice](https://redux-toolkit.js.org/api/createSlice#customizing-generated-action-creators)
+   и библиотеку `nanoid` теперь можно взять прямо из
+   [redux-toolkit](https://redux-toolkit.js.org/api/other-exports#nanoid)
