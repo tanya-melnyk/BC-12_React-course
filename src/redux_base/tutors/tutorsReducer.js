@@ -1,11 +1,11 @@
-import types from './tutorsTypes';
+import TYPES from './tutorsTypes';
 
 const tutorsReducer = (state = [], action) => {
   switch (action.type) {
-    case types.SET:
+    case TYPES.SET:
       return action.payload;
 
-    case types.ADD:
+    case TYPES.ADD:
       return [...state, action.payload];
 
     default:

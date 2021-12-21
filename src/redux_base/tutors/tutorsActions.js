@@ -1,12 +1,12 @@
-import types from './tutorsTypes';
+import TYPES from './tutorsTypes';
 
 const setTutors = tutors => ({
-  type: types.SET,
+  type: TYPES.SET,
   payload: tutors,
 });
 
 const addTutor = tutor => ({
-  type: types.ADD,
+  type: TYPES.ADD,
   payload: tutor,
 });
 
