@@ -12,3 +12,7 @@
   composes: main;
   background-color: #444;
 }
+
+.lanquagesWrapper {
+  position: absolute;
+}

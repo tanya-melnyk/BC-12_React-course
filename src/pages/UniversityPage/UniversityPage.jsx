@@ -10,14 +10,17 @@ import tutorsIcon from 'images/cat.png';
 import citiesIcon from 'images/pin.png';
 import departmentsIcon from 'images/robot.png';
 
+import { useTranslation } from 'react-i18next';
+
 const { name, description } = univerInfo;
 
 const UniversityPage = () => {
   const [showTutots, setShowTutots] = useState(true); // TEMPORARY
+  const { t } = useTranslation();
 
   return (
     <>
-      <Header title="Информация о университете" />
+      <Header title={t('university.info')} />
 
       <UniversityBlock name={name} descr={description} />
 
