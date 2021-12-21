@@ -79,15 +79,13 @@
 - а после - импортим по умолчанию объеденненные редьюсеры `items.reducer` и
   `filter.reducer`
 - теперь в `store` будем импортировать citiesReducer из `citiesSlice`
-- теперь в `CitiesBlock` и `Filter` будем импортировать `actions` из
-  `citiesSlice`
+- a в `CitiesBlock` и `Filter` будем импортировать `actions` из `citiesSlice`
 - чтобы было удобнее это делать можем в папочку `cities` добавить файл
   `index.js`, в котором будет реэкспорт всех `actions`:
   ```
   export * as citiesActions from './citiesSlice';
   ```
 - теперь нам не нужны все остальные файлы в папке `cities`
-
 - используя `createReducer` или `createSlice` можем
   [мутировать стейт](https://redux-toolkit.js.org/api/createReducer#direct-state-mutation):
   - сделаем из двух слайсов один общий, используя объект как начальное состояние
@@ -103,23 +101,18 @@
   [persistStore, persistReducer](https://github.com/rt2zz/redux-persist#basic-usage)
 - импорттируем `storage` из `redux-persist/lib/storage`
 - создаем `persistConfig`:
-
   ```
   const persistConfig = {
     key: 'filter',
     storage,
   };
-
   ```
-
 - чтобы не хранить весь стейт `cities` в сторидже, а только `filter`, добавляем
   поле [whitelist](https://github.com/rt2zz/redux-persist#basic-usage) в
   `persistConfig`:
-
   ```
   whitelist: ['filter'],
   ```
-
 - теперь в `configureStore` передаем `citiesReducer` в `persistReducer`:
   ```
   cities: persistReducer(persistConfig, citiesReducer),
