@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ThemeContext, themes } from 'context/themeContext';
-import { changeFilter } from 'redux/cities/citiesActions';
+import { citiesActions } from 'redux/cities';
 
 const Filter = ({ label = '' }) => {
   const filter = useSelector(state => state.cities.filter);
@@ -16,7 +16,7 @@ const Filter = ({ label = '' }) => {
         <input
           type="text"
           value={filter}
-          onChange={e => dispatch(changeFilter(e.target.value))}
+          onChange={e => dispatch(citiesActions.changeFilter(e.target.value))}
         ></input>
       </label>
     </div>

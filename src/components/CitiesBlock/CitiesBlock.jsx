@@ -10,7 +10,7 @@ import Filter from './Filter/Filter';
 import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
-import * as actions from 'redux/cities/citiesActions';
+import { citiesActions } from 'redux/cities';
 import * as api from 'services/api';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
@@ -48,7 +48,7 @@ const CitiesBlock = () => {
       setError(null);
       try {
         const apiCities = await api.getData(API_ENDPOINT);
-        dispatch(actions.setCities(apiCities));
+        dispatch(citiesActions.setCities(apiCities));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -83,7 +83,7 @@ const CitiesBlock = () => {
       setError(null);
       try {
         const newCity = await api.saveItem(API_ENDPOINT, activeCity);
-        dispatch(actions.addCity(newCity));
+        dispatch(citiesActions.addCity(newCity));
         toggleAddForm();
       } catch (error) {
         setError(error.message);
@@ -120,7 +120,7 @@ const CitiesBlock = () => {
       setError(null);
       try {
         const updatedCity = await api.editItem(API_ENDPOINT, activeCity);
-        dispatch(actions.editCity(updatedCity));
+        dispatch(citiesActions.editCity(updatedCity));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -150,7 +150,7 @@ const CitiesBlock = () => {
       setError(null);
       try {
         const deletedCity = await api.deleteItem(API_ENDPOINT, activeCity.id);
-        dispatch(actions.deleteCity(deletedCity.id));
+        dispatch(citiesActions.deleteCity(deletedCity.id));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -182,7 +182,7 @@ const CitiesBlock = () => {
   // FIX FILTER BUG
   useEffect(() => {
     if (cities.length === 1) {
-      dispatch(actions.changeFilter(''));
+      dispatch(citiesActions.changeFilter(''));
     }
   }, [cities.length, dispatch]);
 
