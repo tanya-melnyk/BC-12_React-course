@@ -9,8 +9,6 @@ import 'modern-normalize/modern-normalize.css';
 import './styles/index.css';
 import './styles/global.module.css';
 
-import './test/i18n';
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

@@ -9,32 +9,33 @@
 
 ### Задача № 1
 
-Переписать TutorForm на [React Hook Form](https://react-hook-form.com)
+Переписать `TutorForm` на [React Hook Form](https://react-hook-form.com)
 
 1. Удалим все ненужное:
 
-- удаляем из инпутов все пропы onChange, required, checked, value (если не
-  "radio")
-- удаляем нашу функцию handleChange, а также проверки на заполенные поля
-- удаляем локальный стейт formData, а также функцию reset
-- удаляем переменную INITIAL_STATE
+- удаляем из инпутов все пропы `onChange`, `required`, `checked`, `value` (если
+  не `"radio"`)
+- удаляем нашу функцию `handleChange`, а также проверки на заполенные поля
+- удаляем локальный стейт `formData`, а также функцию `reset`
+- удаляем переменную `INITIAL_STATE`
 
 2. Установим библиотеку и повешаем слушатель на форму:
 
 - [устанавливаем библиотеку](https://react-hook-form.com/get-started)
-- для начала импортируем хук useForm
-- деструктурируем из него handleSubmit
-- наш метод handleSubmit переименуем в onSubmit
-- форме передадим обработчик в onSubmit в таком виде:
+- импортируем хук `useForm`
+- деструктурируем из него `handleSubmit`
+- наш метод `handleSubmit` переименуем в `onSubmit`
+- форме передадим обработчик в `onSubmit` в таком виде:
   ```
   onSubmit={handleSubmit(onSubmit)}
   ```
-- теперь наш метод onSubmit будет получать не е, а data
-- для сброса формы после сабмита, деструктурируем из хука useForm метод reset
+- теперь наш метод `onSubmit` будет получать не `е`, а `data`
+- для сброса формы после сабмита, деструктурируем из хука `useForm` метод
+  `reset`
 
 3. [Зарегистрируем](https://react-hook-form.com/api/useform/register) инпуты:
 
-- деструктурируем из хука useForm метод register
+- деструктурируем из хука `useForm` метод `register`
 - регистрируем все инпуты, удаляя пропы name:
   ```
   <input {...register("firstName")} />
@@ -43,12 +44,12 @@
 4. Добавим [валидацию](https://react-hook-form.com/get-started#Applyvalidation)
 
 - простая индивидуальная валидация:
-  - во все обязательные инпуты добавляем валидацию required, а в имя и фамилию
-    minLength:
+  - во все обязательные инпуты добавляем валидацию `required`, а в имя и фамилию
+    `minLength`:
     ```
     <input {...register("firstName", { required: true, minLength: 2 })} />
     ```
-  - для отображения ошибок деструктурируем из хука useForm объект errors:
+  - для отображения ошибок деструктурируем из хука `useForm` объект `errors`:
     ```
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     ```
@@ -87,7 +88,7 @@
     ```
 - [Schema Validation](https://react-hook-form.com/get-started#SchemaValidation):
 
-  - устанавливаем [yup](https://github.com/jquense/yup) и @hookform/resolvers
+  - устанавливаем [yup](https://github.com/jquense/yup) и `@hookform/resolvers`
   - импортим нужные сущности и составляем схему:
 
     ```
@@ -117,11 +118,11 @@
       .required();
     ```
 
-  - передаем схему в хук useForm:
+  - передаем схему в хук `useForm`:
     ```
     useForm({ resolver: yupResolver(validationSchema) })
     ```
-  - убираем простые валидации из register
+  - убираем простые валидации из `register`
 
 - нам больше не нужно дизейблить кнопку, но если понадобится, то делаем это так:
   ```
@@ -137,27 +138,27 @@
 1. Базовые настройки
 
 - [установим все нужные пакеты](https://react.i18next.com/latest/using-with-hooks#install-needed-dependencies)
-- создаем файл i18n.js в папке src и переносим в него настройки из
+- создаем файл `i18n.js` в папке `src` и переносим в него настройки из
   [руководства](https://react.i18next.com/latest/using-with-hooks#configure-i18next)
-- импортируем файл в index.js
+- импортируем файл в `index.js`
 
-2. Компонент LanguageSwitcher
+2. Компонент `LanguageSwitcher`
 
-- в компонент LanguageSwitcher импортируем
+- в компонент `LanguageSwitcher` импортируем
   [useTranslation](https://react.i18next.com/latest/usetranslation-hook)
-- из него достаем объект i18n
-- на кнопку вешаем обработчик на onClick:
+- из него достаем объект `i18n`
+- на кнопку вешаем обработчик на `onClick`:
   [() => i18n.changeLanguage(lng)](https://react.i18next.com/legacy-v9/step-by-step-guide#d-let-the-user-toggle-the-language)
-- а в className кнопки добавляем проверку по полю
+- а в `className` кнопки добавляем проверку по полю
   [resolvedLanguage](https://www.i18next.com/overview/api#resolvedlanguage):
   ```
   i18n.resolvedLanguage === lng ? s.active : s.button
   ```
-- в Main подключим LanguageSwitcher
-- чтобы приложение не падало, обернем LanguageSwitcher в
+- в `Main` подключим `LanguageSwitcher`
+- чтобы приложение не падало, обернем `LanguageSwitcher` в
   [Suspense](https://react.i18next.com/latest/using-with-hooks#translate-your-content)
 - в дальнейшем все компонеты, в которых будет реализован перевод, должны быть
-  обернуты в Suspense
+  обернуты в `Suspense`
 
 3. Перевод текста
 
@@ -165,9 +166,8 @@
   [public/locales/<language_code>/translation.json](https://react.i18next.com/latest/using-with-hooks#translation-files)
 - переводим тексты, используя
   [useTranslation](https://react.i18next.com/latest/using-with-hooks#translate-your-content)
-  из react-i18next:
-  - в UniversityPage импортируем useTranslation
-  - получаем функцию: const { t } = useTranslation();
-  - переводим Header title: {t('university.info')}
-
-* почистить index.js, LanguageSwitcher, Main, UniversityPage
+  из `react-i18next`:
+  - в `UniversityPage` импортируем `useTranslation`
+  - получаем функцию: `const { t } = useTranslation();`
+  - переводим `Header` `title`: `{t('university.info')}`
+  - так же переводим ссылки в `Navigation`

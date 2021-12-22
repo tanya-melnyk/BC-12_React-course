@@ -1,6 +1,6 @@
 import { useContext, lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import LanguageSwitcher from 'components/common/LanguageSwitcher/LanguageSwitcher';
+// import LanguageSwitcher from 'components/common/LanguageSwitcher/LanguageSwitcher';
 import Loader from 'components/common/Loader/Loader';
 import { ThemeContext, themes } from 'context/themeContext';
 import styles from './Main.module.css';
@@ -35,11 +35,9 @@ const Main = () => {
     <main
       className={theme === themes.light ? styles.lightTheme : styles.darkTheme}
     >
-      <div className={styles.lanquagesWrapper}>
-        <Suspense fallback={<Loader />}>
+      {/* <div className={styles.lanquagesWrapper}>
           <LanguageSwitcher />
-        </Suspense>
-      </div>
+      </div> */}
 
       <Suspense fallback={<Loader />}>
         <Switch>

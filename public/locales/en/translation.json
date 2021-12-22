@@ -1,7 +1,7 @@
 {
   "sidebar": {
-    "Университет": "Univercity",
-    "Факультеты": "Departments"
+    "university": "Univercity",
+    "departments": "Departments"
   },
   "university": {
     "info": "University information",
