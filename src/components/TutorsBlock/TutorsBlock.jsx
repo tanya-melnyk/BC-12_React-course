@@ -8,7 +8,7 @@ import Loader from '../common/Loader/Loader';
 import Paper from '../common/Paper/Paper';
 import Skeleton from '../common/Skeleton/Skeleton';
 import Tutor from './Tutor/Tutor';
-import TutorForm from './TutorForm/TutorForm';
+import TutorForm from './TutorForm/TutorForm_Yup';
 import * as api from 'services/api';
 import { setTutors } from 'redux/tutors/tutorsActions';
 import plusImg from '../../images/add.svg';

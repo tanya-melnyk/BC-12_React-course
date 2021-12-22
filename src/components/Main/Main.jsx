@@ -1,9 +1,6 @@
 import { useContext, lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-// import DepartmentPage from 'pages/DepartmentPage/DepartmentPage';
-// import DepartmentsListPage from 'pages/DepartmentsListPage/DepartmentsListPage';
-// import NotFoundPage from 'pages/NotFoundPage/NotFoundPage';
-// import UniversityPage from 'pages/UniversityPage/UniversityPage';
+import LanguageSwitcher from 'components/common/LanguageSwitcher/LanguageSwitcher';
 import Loader from 'components/common/Loader/Loader';
 import { ThemeContext, themes } from 'context/themeContext';
 import styles from './Main.module.css';
@@ -38,6 +35,12 @@ const Main = () => {
     <main
       className={theme === themes.light ? styles.lightTheme : styles.darkTheme}
     >
+      <div className={styles.lanquagesWrapper}>
+        <Suspense fallback={<Loader />}>
+          <LanguageSwitcher />
+        </Suspense>
+      </div>
+
       <Suspense fallback={<Loader />}>
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/departments" />} />
