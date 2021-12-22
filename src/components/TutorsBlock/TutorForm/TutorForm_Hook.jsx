@@ -10,34 +10,6 @@ import { addTutor } from 'redux/tutors/tutorsActions';
 import * as api from 'services/api';
 import s from './TutorForm.module.css';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-const validationSchema = yup
-  .object({
-    firstName: yup
-      .string()
-      .min(2, 'В имени должно быть минимум 2 буквы')
-      .max(15, 'В имени должно быть максимум 15 букв')
-      .required('Обязательное поле'),
-    lastName: yup
-      .string()
-      .min(2, 'В фамилии должно быть минимум 2 буквы')
-      .max(20, 'В фамилии должно быть максимум 20 букв')
-      .required('Обязательное поле'),
-    phone: yup
-      .string()
-      .matches(phoneRegExp, 'Неверный номер телефона')
-      .required('Обязательное поле'),
-    email: yup.string().email('Неверный email').required('Обязательное поле'),
-    city: yup.string().required('Обязательное поле'),
-    gender: yup.string().nullable().required('Обязательное поле'),
-  })
-  .required();
-
 const citiesOptions = [
   {
     label: 'Выберите город*',
@@ -71,6 +43,7 @@ const textValidation = {
     message: 'Field should have more than 1 letter',
   },
 };
+
 const emailValidation = {
   required: 'Email is required',
   pattern: {
@@ -81,20 +54,18 @@ const emailValidation = {
 };
 
 const TutorForm = ({ closeForm, onAddTutor }) => {
+  const { register, handleSubmit, formState } = useForm();
+  const { errors } = formState;
+
   const [newTutor, setNewTutor] = useState(null);
+  // api request status
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(validationSchema) });
-
   const onSubmit = data => {
-    setNewTutor(data);
-    reset();
+    console.log(data);
+    // setNewTutor({ ...formData });
+    // reset();
   };
 
   // ADD TUTOR
@@ -138,90 +109,46 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
         <div className={s.inner}>
           <h4 className={s.formName}>Добавление преподавателя</h4>
           <form onSubmit={handleSubmit(onSubmit)}>
+            {/* ИНДИВИДУАЛЬНАЯ ВАЛИДАЦИЯ */}
             <input
-              {...register('lastName')}
               type="text"
               placeholder="Фамилия*"
+              {...register('lastName', { required: true, minLength: 2 })}
             />
-            {errors.lastName && <ErrorMsg message={errors.lastName.message} />}
-
-            <input {...register('firstName')} type="text" placeholder="Имя*" />
-            {errors.firstName && (
-              <ErrorMsg message={errors.firstName.message} />
+            {errors.lastName?.type === 'required' && (
+              <ErrorMsg message="Last name is required" />
+            )}
+            {errors.lastName?.type === 'minLength' && (
+              <ErrorMsg message="Last name should have more than 1 letter" />
             )}
 
-            <input {...register('phone')} type="tel" placeholder="Телефон*" />
-            {errors.phone && <ErrorMsg message={errors.phone.message} />}
-
-            <input {...register('email')} type="email" placeholder="Email*" />
-            {errors.email && <ErrorMsg message={errors.email.message} />}
-
-            <select {...register('city')} className={s.inner}>
-              {citiesOptions.map(({ value, label }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-            {errors.city && <ErrorMsg message={errors.city.message} />}
-
-            <section>
-              <h5 className={s.inner}>Пол*</h5>
-              <label className={s.inner}>Мужчина</label>
-              <input {...register('gender')} type="radio" value={GENDER.MALE} />
-              <label className={s.inner}>Женщина</label>
-              <input
-                {...register('gender')}
-                type="radio"
-                value={GENDER.FEMALE}
-              />
-            </section>
-            {errors.gender && <ErrorMsg message={errors.gender.message} />}
-
-            <label className={s.inner}>На постоянной основе</label>
-            <input {...register('isFullTime')} type="checkbox" />
-
-            <BigButton type="submit" text="Пригласить" />
-          </form>
-
-          {/* SIMPLE VALIDATION */}
-
-          {/* <form onSubmit={handleSubmit(onSubmit)}>
+            {/* ОБЩАЯ ВАЛИДАЦИЯ */}
             <input
-              {...register('lastName', textValidation)}
-              type="text"
-              placeholder="Фамилия*"
-            />
-            {errors.lastName && <ErrorMsg message={errors.lastName.message} />}
-
-            <input
-              {...register('firstName', textValidation)}
               type="text"
               placeholder="Имя*"
+              {...register('firstName', textValidation)}
             />
             {errors.firstName && (
               <ErrorMsg message={errors.firstName.message} />
             )}
 
             <input
-              {...register('phone', { required: true })}
               type="tel"
               placeholder="Телефон*"
+              {...register('phone', textValidation)}
             />
-            {errors.phone?.type === 'required' && (
-              <ErrorMsg message="Phone is required" />
-            )}
+            {errors.phone && <ErrorMsg message={errors.phone.message} />}
 
             <input
-              {...register('email', emailValidation)}
               type="email"
               placeholder="Email*"
+              {...register('email', emailValidation)}
             />
             {errors.email && <ErrorMsg message={errors.email.message} />}
 
             <select
-              {...register('city', { required: true })}
               className={s.inner}
+              {...register('city', { required: true })}
             >
               {citiesOptions.map(({ value, label }) => (
                 <option key={value} value={value}>
@@ -229,34 +156,28 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
                 </option>
               ))}
             </select>
-            {errors.city?.type === 'required' && (
-              <ErrorMsg message="City is required" />
-            )}
 
             <section>
               <h5 className={s.inner}>Пол*</h5>
               <label className={s.inner}>Мужчина</label>
               <input
-                {...register('gender', { required: true })}
                 type="radio"
                 value={GENDER.MALE}
+                {...register('gender', { required: true })}
               />
               <label className={s.inner}>Женщина</label>
               <input
-                {...register('gender', { required: true })}
                 type="radio"
                 value={GENDER.FEMALE}
+                {...register('gender', { required: true })}
               />
             </section>
-            {errors.gender?.type === 'required' && (
-              <ErrorMsg message="Gender is required" />
-            )}
 
             <label className={s.inner}>На постоянной основе</label>
-            <input {...register('isFullTime')} type="checkbox" />
+            <input type="checkbox" {...register('isFullTime')} />
 
             <BigButton type="submit" text="Пригласить" />
-          </form> */}
+          </form>
         </div>
       </Paper>
 

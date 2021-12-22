@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import s from './LanguageSwitcher.module.scss';
 import ukrFlagIcon from 'images/ukrainian.png';
 import rusFlagIcon from 'images/russian.png';
@@ -9,12 +10,18 @@ const languages = {
   ru: { icon: rusFlagIcon, nativeName: 'Русский' },
 };
 
-const LanguageSwitcher = props => {
+const LanguageSwitcher = () => {
+  const { i18n } = useTranslation();
+
   return (
     <div className={s.switcher}>
       {Object.keys(languages).map(lng => (
         <div key={lng} className={s.btnWrapper}>
-          <button className={s.button} type="submit" onClick={() => {}}>
+          <button
+            className={i18n.resolvedLanguage === lng ? s.active : s.button}
+            type="submit"
+            onClick={() => i18n.changeLanguage(lng)}
+          >
             <img
               src={languages[lng].icon}
               alt={languages[lng].nativeName}

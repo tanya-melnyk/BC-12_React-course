@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, Suspense } from 'react';
 import Navigation from '../Navigation/Navigation';
 import { ThemeContext, themes } from 'context/themeContext';
 import useToggle from 'hooks/useToggle';
@@ -26,7 +26,9 @@ const Sidebar = () => {
         onClick={toggleSidebar}
       ></button>
 
-      <Navigation />
+      <Suspense fallback="Loading...">
+        <Navigation />
+      </Suspense>
     </div>
   );
 };
