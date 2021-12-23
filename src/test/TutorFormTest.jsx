@@ -5,8 +5,11 @@ import BigButton from 'components/common/BigButton/BigButton';
 import ErrorMsg from 'components/common/ErrorMsg/ErrorMsg';
 import Loader from 'components/common/Loader/Loader';
 import Paper from 'components/common/Paper/Paper';
-import { addTutor } from 'redux/tutors/tutorsOperations';
+// import { addTutor } from 'redux/tutors/tutorsActions';
+import * as api from 'services/api';
 import s from './TutorForm.module.css';
+
+import { addTutor } from 'redux/tutors/tutorsOperations';
 
 const citiesOptions = [
   {
@@ -42,9 +45,14 @@ const INITIAL_STATE = {
   gender: '', // radio
 };
 
+const API_ENDPOINT = 'tutors';
+
 const TutorForm = ({ closeForm, onAddTutor, loading, error }) => {
   const [formData, setFormData] = useState({ ...INITIAL_STATE });
   const [newTutor, setNewTutor] = useState(null);
+  // api request status
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -68,13 +76,10 @@ const TutorForm = ({ closeForm, onAddTutor, loading, error }) => {
   useEffect(() => {
     if (!newTutor) return;
 
-    const addNewTutor = async () => {
-      await onAddTutor(newTutor);
+    onAddTutor(newTutor).then(() => {
       setNewTutor(null);
       closeForm();
-    };
-
-    addNewTutor();
+    });
 
     // let isTutorsMounted = true;
     // const addTutor = async () => {

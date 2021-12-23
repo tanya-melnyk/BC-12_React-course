@@ -1,12 +1,9 @@
-////////////////// ПИШЕМ СЛАЙС МУТИРУЯ СТЕЙТ (immer)
+// async
 
 import { createSlice } from '@reduxjs/toolkit';
-import { getCities, addCity, editCity, deleteCity } from './citiesOperations';
+import * as citiesOperations from './citiesOperations';
 
-// const initialState = {
-//   items: [],
-//   filter: '',
-// };
+const { getCities, addCity, editCity, removeCity } = citiesOperations;
 
 const initialState = {
   data: {
@@ -35,9 +32,9 @@ const citiesSlice = createSlice({
         state.data.loading = false;
         state.data.items = payload;
       })
-      .addCase(getCities.rejected, (state, { payload }) => {
+      .addCase(getCities.rejected, (state, { error }) => {
         state.data.loading = false;
-        state.data.error = payload;
+        state.data.error = error.message;
       })
 
       .addCase(addCity.pending, state => {
@@ -47,11 +44,10 @@ const citiesSlice = createSlice({
       .addCase(addCity.fulfilled, (state, { payload }) => {
         state.data.loading = false;
         state.data.items.push(payload);
-        // state.data.items = [...state.data.items, payload];
       })
-      .addCase(addCity.rejected, (state, { payload }) => {
+      .addCase(addCity.rejected, (state, { error }) => {
         state.data.loading = false;
-        state.data.error = payload;
+        state.data.error = error.message;
       })
 
       .addCase(editCity.pending, state => {
@@ -60,26 +56,26 @@ const citiesSlice = createSlice({
       })
       .addCase(editCity.fulfilled, (state, { payload }) => {
         state.data.loading = false;
-        const idx = state.data.items.findIndex(city => city.id === payload.id);
+        const idx = state.data.items.findIndex(({ id }) => id === payload.id);
         state.data.items[idx] = payload;
       })
-      .addCase(editCity.rejected, (state, { payload }) => {
+      .addCase(editCity.rejected, (state, { error }) => {
         state.data.loading = false;
-        state.data.error = payload;
+        state.data.error = error.message;
       })
 
-      .addCase(deleteCity.pending, state => {
+      .addCase(removeCity.pending, state => {
         state.data.loading = true;
         state.data.error = null;
       })
-      .addCase(deleteCity.fulfilled, (state, { payload }) => {
+      .addCase(removeCity.fulfilled, (state, { payload }) => {
         state.data.loading = false;
-        const idx = state.data.items.findIndex(city => city.id === payload.id);
+        const idx = state.data.items.findIndex(({ id }) => id === payload.id);
         state.data.items.splice(idx, 1);
       })
-      .addCase(deleteCity.rejected, (state, { payload }) => {
+      .addCase(removeCity.rejected, (state, { error }) => {
         state.data.loading = false;
-        state.data.error = payload;
+        state.data.error = error.message;
       });
   },
 });
@@ -88,7 +84,7 @@ export const { changeFilter } = citiesSlice.actions;
 
 export default citiesSlice.reducer;
 
-////////////////// ПИШЕМ СЛАЙС НЕ МУТИРУЯ СТЕЙТ
+////////////////// ПИШЕМ СЛАЙС МУТИРУЯ СТЕЙТ (immer)
 
 // import { createSlice } from '@reduxjs/toolkit';
 
@@ -101,24 +97,27 @@ export default citiesSlice.reducer;
 //   name: 'cities',
 //   initialState,
 //   reducers: {
-//     setCities: (state, { payload }) => ({ ...state, items: payload }),
+//     setCities: (state, { payload }) => {
+//       state.items = payload;
+//     },
 
-//     addCity: (state, { payload }) => ({
-//       ...state,
-//       items: [...state.items, payload],
-//     }),
+//     addCity: (state, { payload }) => {
+//       state.items.push(payload);
+//     },
 
-//     editCity: (state, { payload }) => ({
-//       ...state,
-//       items: state.items.map(city => (city.id === payload.id ? payload : city)),
-//     }),
+//     editCity: (state, { payload }) => {
+//       const idx = state.items.findIndex(city => city.id === payload.id);
+//       state.items[idx] = payload;
+//     },
 
-//     deleteCity: (state, { payload }) => ({
-//       ...state,
-//       items: state.items.filter(city => city.id !== payload),
-//     }),
+//     deleteCity: (state, { payload }) => {
+//       const idx = state.items.findIndex(city => city.id === payload.id);
+//       state.items.splice(idx, 1);
+//     },
 
-//     changeFilter: (state, { payload }) => ({ ...state, filter: payload }),
+//     changeFilter: (state, { payload }) => {
+//       state.filter = payload;
+//     },
 //   },
 // });
 

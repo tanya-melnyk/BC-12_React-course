@@ -1,13 +1,34 @@
 import TYPES from './tutorsTypes';
 
-const setTutors = tutors => ({
-  type: TYPES.SET,
+const getTutorsRequest = () => ({
+  type: TYPES.GET_REQUEST,
+});
+const getTutorsSuccess = tutors => ({
+  type: TYPES.GET_SUCCESS,
   payload: tutors,
 });
-
-const addTutor = tutor => ({
-  type: TYPES.ADD,
-  payload: tutor,
+const getTutorsError = error => ({
+  type: TYPES.GET_ERROR,
+  payload: error,
 });
 
-export { setTutors, addTutor };
+const addTutorRequest = () => ({
+  type: TYPES.ADD_REQUEST,
+});
+const addTutorSuccess = tutor => ({
+  type: TYPES.ADD_SUCCESS,
+  payload: tutor,
+});
+const addTutorError = error => ({
+  type: TYPES.ADD_ERROR,
+  payload: error,
+});
+
+export {
+  getTutorsRequest,
+  getTutorsSuccess,
+  getTutorsError,
+  addTutorRequest,
+  addTutorSuccess,
+  addTutorError,
+};

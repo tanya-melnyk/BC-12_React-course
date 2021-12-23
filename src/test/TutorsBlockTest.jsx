@@ -9,12 +9,19 @@ import Paper from '../common/Paper/Paper';
 import Skeleton from '../common/Skeleton/Skeleton';
 import Tutor from './Tutor/Tutor';
 import TutorForm from './TutorForm/TutorForm';
+import * as api from 'services/api';
+import { setTutors } from 'redux/tutors/tutorsActions';
 import plusImg from '../../images/add.svg';
 
 import { getTutors } from 'redux/tutors/tutorsOperations';
 
-const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
+const API_ENDPOINT = 'tutors';
+
+const TutorsBlock = ({ tutors, onSetTutors, onGetTutors, loading, error }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  // api request status
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
 
   // FETCH TUTORS
 
@@ -38,7 +45,6 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
     //   }
     // };
     // fetchTutors();
-
     // return () => {
     //   controller.abort();
     // };
@@ -49,7 +55,8 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
     [],
   );
 
-  const noTutors = !loading && !tutors.length;
+  const showTutors = !loading && !!tutors.length;
+  const showNoTutors = !loading && !tutors.length;
 
   return (
     <>
@@ -57,7 +64,7 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
 
       {loading && <Loader />}
 
-      {!!tutors.length && (
+      {showTutors && (
         <ul>
           {tutors.map(tutor => (
             <li key={tutor.id} css={{ marginBottom: 24 }}>
@@ -69,7 +76,7 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
         </ul>
       )}
 
-      {noTutors && <h4 className="absence-msg">No tutors yet</h4>}
+      {showNoTutors && <h4 className="absence-msg">No tutors yet</h4>}
 
       {error && <ErrorMsg message={error} />}
 
@@ -85,7 +92,7 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
   );
 };
 
-// УНИВЕРСАЛЬНЫЙ СПОСОБ СВЯЗАТЬ РЕДАКС С КОМПОНЕНЬЛМ (РАБОТАЕТ И ДЛЯ КДАССОВ, И ДЛЯ ФУНКЦИИ)
+// УНИВЕРСАЛЬНЫЙ СПОСОБ СВЯЗАТЬ РЕДАКС С КОМПОНЕНЬЛМ (РАБОТАЕТ И ДЛЯ КЛАССОВ, И ДЛЯ ФУНКЦИЙ)
 
 // ПОЛУЧАЕМ СОСТОЯНИЕ
 const mapStateToProps = state => ({
@@ -96,7 +103,11 @@ const mapStateToProps = state => ({
 
 // ПОЛУЧАЕМ МЕТОДЫ ДЛЯ ИЗМЕНЕНИЯ СОСТОЯНИЯ
 const mapDispatchToProps = dispatch => ({
+  onSetTutors: tutors => dispatch(setTutors(tutors)),
   onGetTutors: () => dispatch(getTutors()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TutorsBlock);
+
+// const connectTutors = connect(mapStateToProps, mapDispatchToProps);
+// export default connectTutors(TutorsBlock);

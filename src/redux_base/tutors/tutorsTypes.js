@@ -1,6 +1,11 @@
 const TYPES = {
-  SET: 'tutors/set',
-  ADD: 'tutors/tutor_add',
+  GET_REQUEST: 'tutors/getTutorsRequest',
+  GET_SUCCESS: 'tutors/getTutorsSuccess',
+  GET_ERROR: 'tutors/getTutorsError',
+
+  ADD_REQUEST: 'tutors/addTutorRequest',
+  ADD_SUCCESS: 'tutors/addTutorSuccess',
+  ADD_ERROR: 'tutors/addTutorError',
 };
 
 export default TYPES;

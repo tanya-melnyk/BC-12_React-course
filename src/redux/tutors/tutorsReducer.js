@@ -1,29 +1,45 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { setTutors, addTutor } from './tutorsActions';
+import { createReducer, combineReducers } from '@reduxjs/toolkit';
+import {
+  getTutorsRequest,
+  getTutorsSuccess,
+  getTutorsError,
+  addTutorRequest,
+  addTutorSuccess,
+  addTutorError,
+} from './tutorsActions';
 
-// console.dir(setTutors.type); // 'tutors/set'
-// console.dir(setTutors.toString()); // 'tutors/set'
-
-// ИСПОЛЬЗУЯ КОЛБЕК builder
-
-const tutorsReducer = createReducer([], builder => {
-  builder
-    .addCase(setTutors, (_, action) => action.payload)
-    .addCase(addTutor, (state, action) => [...state, action.payload]);
+const itemsReducer = createReducer([], builder => {
+  builder.addCase(getTutorsSuccess, (_, action) => action.payload);
+  builder.addCase(addTutorSuccess, (state, action) => [
+    ...state,
+    action.payload,
+  ]);
 });
 
-// ИСПОЛЬЗУЯ КОЛБЕК С ОТДЕЛЬНЫМИ builder
+const loadingReducer = createReducer(false, builder => {
+  builder
+    .addCase(getTutorsRequest, () => true)
+    .addCase(getTutorsSuccess, () => false)
+    .addCase(getTutorsError, () => false)
 
-// const tutorsReducer = createReducer([], builder => {
-//   builder.addCase(setTutors, (_, action) => action.payload);
-//   builder.addCase(addTutor, (state, action) => [...state, action.payload]);
-// });
+    .addCase(addTutorRequest, () => true)
+    .addCase(addTutorSuccess, () => false)
+    .addCase(addTutorError, () => false);
+});
 
-// ИСПОЛЬЗУЯ ОБЪЕКТ С ПОЛЯМИ-ТИПАМИ ACTIONS
+const errorReducer = createReducer(null, builder => {
+  builder
+    .addCase(getTutorsRequest, () => null)
+    .addCase(getTutorsError, (_, { payload }) => payload)
 
-// const tutorsReducer = createReducer([], {
-//   [setTutors]: (_, action) => action.payload,
-//   [addTutor]: (state, action) => [...state, action.payload],
-// });
+    .addCase(addTutorRequest, () => null)
+    .addCase(addTutorError, (_, { payload }) => payload);
+});
+
+const tutorsReducer = combineReducers({
+  items: itemsReducer,
+  loading: loadingReducer,
+  error: errorReducer,
+});
 
 export default tutorsReducer;

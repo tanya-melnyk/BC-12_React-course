@@ -10,10 +10,16 @@ import Filter from './Filter/Filter';
 import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
-import { citiesActions, citiesOperations } from 'redux/cities';
+import { citiesActions } from 'redux/cities';
+import * as api from 'services/api';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
+
+import { citiesOperations } from 'redux/cities';
+const { getCities, addCity, editCity, removeCity } = citiesOperations;
+
+const API_ENDPOINT = 'cities';
 
 const ACTION = {
   NONE: 'none',
@@ -21,8 +27,6 @@ const ACTION = {
   EDIT: 'edit',
   DELETE: 'delete',
 };
-
-const { getCities, addCity, editCity, deleteCity } = citiesOperations;
 
 const CitiesBlock = () => {
   const cities = useSelector(state => state.cities.data.items);
@@ -37,17 +41,24 @@ const CitiesBlock = () => {
   // actions
   const [action, setAction] = useState(ACTION.NONE);
   const [activeCity, setActiveCity] = useState(null);
+  // api request status
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
 
   // GET CITIES
 
   useEffect(() => {
     dispatch(getCities());
     // const fetchCities = async () => {
+    //   setLoading(true);
+    //   setError(null);
     //   try {
     //     const apiCities = await api.getData(API_ENDPOINT);
     //     dispatch(citiesActions.setCities(apiCities));
     //   } catch (error) {
+    //     setError(error.message);
     //   } finally {
+    //     setLoading(false);
     //   }
     // };
     // fetchCities();
@@ -80,14 +91,18 @@ const CitiesBlock = () => {
     });
 
     // const addCity = async () => {
+    //   setLoading(true);
+    //   setError(null);
     //   try {
     //     const newCity = await api.saveItem(API_ENDPOINT, activeCity);
     //     dispatch(citiesActions.addCity(newCity));
     //     toggleAddForm();
     //   } catch (error) {
+    //     setError(error.message);
     //   } finally {
     //     setAction(ACTION.NONE);
     //     setActiveCity(null);
+    //     setLoading(false);
     //   }
     // };
     // addCity();
@@ -119,13 +134,17 @@ const CitiesBlock = () => {
     });
 
     // const editCity = async () => {
+    //   setLoading(true);
+    //   setError(null);
     //   try {
     //     const updatedCity = await api.editItem(API_ENDPOINT, activeCity);
     //     dispatch(citiesActions.editCity(updatedCity));
     //   } catch (error) {
+    //     setError(error.message);
     //   } finally {
     //     setAction(ACTION.NONE);
     //     closeModal();
+    //     setLoading(false);
     //     setActiveCity(null);
     //   }
     // };
@@ -144,21 +163,24 @@ const CitiesBlock = () => {
   useEffect(() => {
     if (action !== ACTION.DELETE) return;
 
-    dispatch(deleteCity(activeCity.id)).then(() => {
+    dispatch(removeCity(activeCity.id)).then(() => {
       setAction(ACTION.NONE);
       closeModal();
       setActiveCity(null);
     });
 
     // const deleteCity = async () => {
+    //   setLoading(true);
+    //   setError(null);
     //   try {
     //     const deletedCity = await api.deleteItem(API_ENDPOINT, activeCity.id);
     //     dispatch(citiesActions.deleteCity(deletedCity.id));
     //   } catch (error) {
+    //     setError(error.message);
     //   } finally {
     //     setAction(ACTION.NONE);
     //     closeModal();
-
+    //     setLoading(false);
     //     setActiveCity(null);
     //   }
     // };
