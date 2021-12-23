@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { createLogger } from 'redux-logger';
+// import { createLogger } from 'redux-logger';
 import {
   persistStore,
   persistReducer,
@@ -11,9 +11,10 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+// import citiesReducer from './cities/citiesReducer';
 import citiesReducer from './cities/citiesSlice';
 import tutorsReducer from './tutors/tutorsReducer';
-// import { customMiddlewareLogger, myMiddleware } from './middlewear/logger';
+import { customMiddlewareLogger } from './middlewear/logger';
 
 ///////  BEFORE ASYNC REDUX
 
@@ -51,10 +52,10 @@ const persistCitiesConfig = {
   whitelist: ['filter'],
 };
 
-const logger = createLogger({
-  collapsed: (getState, action, logEntry) => !logEntry.error,
-  timestamp: false,
-});
+// const logger = createLogger({
+//   collapsed: (getState, action, logEntry) => !logEntry.error,
+//   timestamp: false,
+// });
 
 const store = configureStore({
   reducer: {
@@ -68,9 +69,9 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     })
-      // .concat(myMiddleware)
-      // .concat(customMiddlewareLogger)
-      .concat(logger),
+      //   .concat(myMiddleware)
+      // .concat(logger)
+      .concat(customMiddlewareLogger),
   devTools: process.env.NODE_ENV !== 'production',
 });
 

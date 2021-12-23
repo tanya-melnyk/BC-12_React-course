@@ -5,8 +5,7 @@ import BigButton from 'components/common/BigButton/BigButton';
 import ErrorMsg from 'components/common/ErrorMsg/ErrorMsg';
 import Loader from 'components/common/Loader/Loader';
 import Paper from 'components/common/Paper/Paper';
-import { addTutor } from 'redux/tutors/tutorsActions';
-import * as api from 'services/api';
+import { addTutor } from 'redux/tutors/tutorsOperations';
 import s from './TutorForm.module.css';
 
 const citiesOptions = [
@@ -43,14 +42,9 @@ const INITIAL_STATE = {
   gender: '', // radio
 };
 
-const API_ENDPOINT = 'tutors';
-
-const TutorForm = ({ closeForm, onAddTutor }) => {
+const TutorForm = ({ closeForm, onAddTutor, loading, error }) => {
   const [formData, setFormData] = useState({ ...INITIAL_STATE });
   const [newTutor, setNewTutor] = useState(null);
-  // api request status
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -74,32 +68,40 @@ const TutorForm = ({ closeForm, onAddTutor }) => {
   useEffect(() => {
     if (!newTutor) return;
 
-    let isTutorsMounted = true;
-    const addTutor = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const savedTutor = await api.saveItem(API_ENDPOINT, newTutor);
-        if (isTutorsMounted) {
-          onAddTutor(savedTutor);
-        }
-      } catch (error) {
-        if (isTutorsMounted) {
-          setError(error.message);
-        }
-      } finally {
-        if (isTutorsMounted) {
-          setLoading(false);
-          setNewTutor(null);
-          closeForm();
-        }
-      }
+    const addNewTutor = async () => {
+      await onAddTutor(newTutor);
+      setNewTutor(null);
+      closeForm();
     };
-    addTutor();
 
-    return () => {
-      isTutorsMounted = false;
-    };
+    addNewTutor();
+
+    // let isTutorsMounted = true;
+    // const addTutor = async () => {
+    //   setLoading(true);
+    //   setError(null);
+    //   try {
+    //     const savedTutor = await api.saveItem(API_ENDPOINT, newTutor);
+    //     if (isTutorsMounted) {
+    //       onAddTutor(savedTutor);
+    //     }
+    //   } catch (error) {
+    //     if (isTutorsMounted) {
+    //       setError(error.message);
+    //     }
+    //   } finally {
+    //     if (isTutorsMounted) {
+    //       setLoading(false);
+    //       setNewTutor(null);
+    //       closeForm();
+    //     }
+    //   }
+    // };
+    // addTutor();
+
+    // return () => {
+    //   isTutorsMounted = false;
+    // };
   }, [closeForm, newTutor, onAddTutor]);
 
   const { lastName, firstName, phone, email, city, gender, isFullTime } =
@@ -208,8 +210,13 @@ TutorForm.propTypes = {
   closeForm: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = state => ({
+  loading: state.tutors.loading,
+  error: state.tutors.error,
+});
+
 const mapDispatchToProps = dispatch => ({
   onAddTutor: tutor => dispatch(addTutor(tutor)),
 });
 
-export default connect(null, mapDispatchToProps)(TutorForm);
+export default connect(mapStateToProps, mapDispatchToProps)(TutorForm);

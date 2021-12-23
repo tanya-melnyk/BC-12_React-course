@@ -10,13 +10,10 @@ import Filter from './Filter/Filter';
 import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
-import { citiesActions } from 'redux/cities';
-import * as api from 'services/api';
+import { citiesActions, citiesOperations } from 'redux/cities';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
-
-const API_ENDPOINT = 'cities';
 
 const ACTION = {
   NONE: 'none',
@@ -25,9 +22,13 @@ const ACTION = {
   DELETE: 'delete',
 };
 
+const { getCities, addCity, editCity, deleteCity } = citiesOperations;
+
 const CitiesBlock = () => {
-  const cities = useSelector(state => state.cities.items);
+  const cities = useSelector(state => state.cities.data.items);
   const filter = useSelector(state => state.cities.filter);
+  const loading = useSelector(state => state.cities.data.loading);
+  const error = useSelector(state => state.cities.data.error);
   const dispatch = useDispatch();
 
   // form / modal
@@ -36,26 +37,20 @@ const CitiesBlock = () => {
   // actions
   const [action, setAction] = useState(ACTION.NONE);
   const [activeCity, setActiveCity] = useState(null);
-  // api request status
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   // GET CITIES
 
   useEffect(() => {
-    const fetchCities = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const apiCities = await api.getData(API_ENDPOINT);
-        dispatch(citiesActions.setCities(apiCities));
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCities();
+    dispatch(getCities());
+    // const fetchCities = async () => {
+    //   try {
+    //     const apiCities = await api.getData(API_ENDPOINT);
+    //     dispatch(citiesActions.setCities(apiCities));
+    //   } catch (error) {
+    //   } finally {
+    //   }
+    // };
+    // fetchCities();
   }, [dispatch]);
 
   // ADD CITY
@@ -78,22 +73,24 @@ const CitiesBlock = () => {
   useEffect(() => {
     if (action !== ACTION.ADD || !activeCity) return;
 
-    const addCity = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const newCity = await api.saveItem(API_ENDPOINT, activeCity);
-        dispatch(citiesActions.addCity(newCity));
-        toggleAddForm();
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setAction(ACTION.NONE);
-        setActiveCity(null);
-        setLoading(false);
-      }
-    };
-    addCity();
+    dispatch(addCity(activeCity)).then(() => {
+      toggleAddForm();
+      setAction(ACTION.NONE);
+      setActiveCity(null);
+    });
+
+    // const addCity = async () => {
+    //   try {
+    //     const newCity = await api.saveItem(API_ENDPOINT, activeCity);
+    //     dispatch(citiesActions.addCity(newCity));
+    //     toggleAddForm();
+    //   } catch (error) {
+    //   } finally {
+    //     setAction(ACTION.NONE);
+    //     setActiveCity(null);
+    //   }
+    // };
+    // addCity();
   }, [action, activeCity, dispatch]);
 
   // EDIT CITY
@@ -115,22 +112,24 @@ const CitiesBlock = () => {
   useEffect(() => {
     if (action !== ACTION.EDIT) return;
 
-    const editCity = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const updatedCity = await api.editItem(API_ENDPOINT, activeCity);
-        dispatch(citiesActions.editCity(updatedCity));
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setAction(ACTION.NONE);
-        closeModal();
-        setLoading(false);
-        setActiveCity(null);
-      }
-    };
-    editCity();
+    dispatch(editCity(activeCity)).then(() => {
+      setAction(ACTION.NONE);
+      closeModal();
+      setActiveCity(null);
+    });
+
+    // const editCity = async () => {
+    //   try {
+    //     const updatedCity = await api.editItem(API_ENDPOINT, activeCity);
+    //     dispatch(citiesActions.editCity(updatedCity));
+    //   } catch (error) {
+    //   } finally {
+    //     setAction(ACTION.NONE);
+    //     closeModal();
+    //     setActiveCity(null);
+    //   }
+    // };
+    // editCity();
   }, [action, activeCity, dispatch]);
 
   // DELETE CITY
@@ -145,22 +144,25 @@ const CitiesBlock = () => {
   useEffect(() => {
     if (action !== ACTION.DELETE) return;
 
-    const deleteCity = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const deletedCity = await api.deleteItem(API_ENDPOINT, activeCity.id);
-        dispatch(citiesActions.deleteCity(deletedCity.id));
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setAction(ACTION.NONE);
-        closeModal();
-        setLoading(false);
-        setActiveCity(null);
-      }
-    };
-    deleteCity();
+    dispatch(deleteCity(activeCity.id)).then(() => {
+      setAction(ACTION.NONE);
+      closeModal();
+      setActiveCity(null);
+    });
+
+    // const deleteCity = async () => {
+    //   try {
+    //     const deletedCity = await api.deleteItem(API_ENDPOINT, activeCity.id);
+    //     dispatch(citiesActions.deleteCity(deletedCity.id));
+    //   } catch (error) {
+    //   } finally {
+    //     setAction(ACTION.NONE);
+    //     closeModal();
+
+    //     setActiveCity(null);
+    //   }
+    // };
+    // deleteCity();
   }, [action, activeCity, dispatch]);
 
   const closeModal = () => {
