@@ -10,11 +10,14 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import storage from 'redux-persist/lib/storage';
 import citiesReducer from './cities/citiesSlice';
 import tutorsReducer from './tutors/tutorsReducer';
+// import { customMiddlewareLogger, myMiddleware } from './middlewear/logger';
 
-// {
+///////  BEFORE ASYNC REDUX
+
+// const state = {
 //   tutors: [],
 //   cities: {
 //     items: [],
@@ -22,6 +25,25 @@ import tutorsReducer from './tutors/tutorsReducer';
 //   },
 //   departments: [],
 // }
+
+///////  BEFORE ASYNC REDUX
+
+// const state = {
+//   tutors: {
+//     items: [],
+//     loading: false,
+//     error: null,
+//   },
+//   cities: {
+//     data: {
+//       items: [],
+//       loading: false,
+//       error: null
+//     },
+//     filter: '',
+//   },
+//   departments: [],
+// };
 
 const persistCitiesConfig = {
   key: 'filter',
@@ -45,7 +67,10 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(logger),
+    })
+      // .concat(myMiddleware)
+      // .concat(customMiddlewareLogger)
+      .concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
 });
 

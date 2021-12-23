@@ -19,16 +19,6 @@ const citiesSlice = createSlice({
       state.items.push(payload);
     },
 
-    // addCity:  {
-    //   reducer: (state, action) => {
-    //     state.push(action.payload)
-    //   },
-    //   prepare: (text) => {
-    //     const id = nanoid()
-    //     return { payload: { id, text } }
-    //   },
-    // },
-
     editCity: (state, { payload }) => {
       const idx = state.items.findIndex(city => city.id === payload.id);
       state.items[idx] = payload;
