@@ -9,9 +9,8 @@ import Paper from '../common/Paper/Paper';
 import Skeleton from '../common/Skeleton/Skeleton';
 import Tutor from './Tutor/Tutor';
 import TutorForm from './TutorForm/TutorForm';
+import { tutorsSelectors, tutorsOperations } from 'redux/tutors';
 import plusImg from '../../images/add.svg';
-
-import { getTutors } from 'redux/tutors/tutorsOperations';
 
 const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -49,7 +48,11 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
     [],
   );
 
-  const noTutors = !loading && !tutors.length;
+  // const noTutors = !loading && !tutors.length;
+  const noTutors = !loading && tutors.length === 0;
+
+  // const showTutors = !loading && !!tutors.length;
+  const showTutors = !loading && tutors.length > 0;
 
   return (
     <>
@@ -57,7 +60,7 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
 
       {loading && <Loader />}
 
-      {!!tutors.length && (
+      {showTutors && (
         <ul>
           {tutors.map(tutor => (
             <li key={tutor.id} css={{ marginBottom: 24 }}>
@@ -89,14 +92,14 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
 
 // ПОЛУЧАЕМ СОСТОЯНИЕ
 const mapStateToProps = state => ({
-  tutors: state.tutors.items,
-  loading: state.tutors.loading,
-  error: state.tutors.error,
+  tutors: tutorsSelectors.getTutors(state),
+  loading: tutorsSelectors.getFirstLoading(state),
+  error: tutorsSelectors.getError(state),
 });
 
 // ПОЛУЧАЕМ МЕТОДЫ ДЛЯ ИЗМЕНЕНИЯ СОСТОЯНИЯ
 const mapDispatchToProps = dispatch => ({
-  onGetTutors: () => dispatch(getTutors()),
+  onGetTutors: () => dispatch(tutorsOperations.getTutors()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TutorsBlock);

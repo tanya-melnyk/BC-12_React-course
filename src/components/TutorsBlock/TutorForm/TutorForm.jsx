@@ -5,7 +5,7 @@ import BigButton from 'components/common/BigButton/BigButton';
 import ErrorMsg from 'components/common/ErrorMsg/ErrorMsg';
 import Loader from 'components/common/Loader/Loader';
 import Paper from 'components/common/Paper/Paper';
-import { addTutor } from 'redux/tutors/tutorsOperations';
+import { tutorsOperations, tutorsSelectors } from 'redux/tutors';
 import s from './TutorForm.module.css';
 
 const citiesOptions = [
@@ -211,12 +211,12 @@ TutorForm.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  loading: state.tutors.loading,
-  error: state.tutors.error,
+  loading: tutorsSelectors.getLoading(state),
+  error: tutorsSelectors.getError(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddTutor: tutor => dispatch(addTutor(tutor)),
+  onAddTutor: tutor => dispatch(tutorsOperations.addTutor(tutor)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TutorForm);

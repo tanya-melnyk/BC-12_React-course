@@ -10,7 +10,7 @@ import Filter from './Filter/Filter';
 import Loader from '../common/Loader/Loader';
 import Modal from '../common/Modal/Modal';
 import ItemsList from '../ItemsList/ItemsList';
-import { citiesActions, citiesOperations } from 'redux/cities';
+import { citiesActions, citiesOperations, citiesSelectors } from 'redux/cities';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
@@ -25,10 +25,10 @@ const ACTION = {
 const { getCities, addCity, editCity, deleteCity } = citiesOperations;
 
 const CitiesBlock = () => {
-  const cities = useSelector(state => state.cities.data.items);
-  const filter = useSelector(state => state.cities.filter);
-  const loading = useSelector(state => state.cities.data.loading);
-  const error = useSelector(state => state.cities.data.error);
+  const cities = useSelector(citiesSelectors.getCities);
+  const filteredCities = useSelector(citiesSelectors.getMemoizedFilteredCities);
+  const loading = useSelector(citiesSelectors.getLoading);
+  const error = useSelector(citiesSelectors.getError);
   const dispatch = useDispatch();
 
   // form / modal
@@ -172,12 +172,12 @@ const CitiesBlock = () => {
 
   // FILTER CITIES
 
-  const filteredCities = useMemo(() => {
-    const normalizedFilter = filter.toLowerCase();
-    return cities.filter(city =>
-      city.name.toLowerCase().includes(normalizedFilter),
-    );
-  }, [cities, filter]);
+  // const filteredCities = useMemo(() => {
+  //   const normalizedFilter = filter.toLowerCase();
+  //   return cities.filter(city =>
+  //     city.name.toLowerCase().includes(normalizedFilter),
+  //   );
+  // }, [cities, filter]);
 
   const noCities = !loading && !cities.length;
 
