@@ -1,6 +1,8 @@
 // import { createStore, combineReducers } from 'redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { composeWithDevTools } from 'redux-devtools-extension';
 // import { devToolsEnhancer } from 'redux-devtools-extension';
 import citiesReducer from './cities/citiesReducer';
@@ -17,10 +19,16 @@ import { customMiddlewareLogger, myMiddleware } from './middlewear/logger';
 //   departments: [],
 // }
 
+const persistCitiesConfig = {
+  key: 'filter',
+  storage,
+  whitelist: ['filter'],
+};
+
 const rootReducer = combineReducers({
   tutors: tutorsReducer,
   departments: () => [],
-  cities: citiesReducer,
+  cities: persistReducer(persistCitiesConfig, citiesReducer),
 });
 
 const middleware = [thunk, customMiddlewareLogger, myMiddleware];
@@ -32,4 +40,6 @@ const store = createStore(
 
 // const store = createStore(rootReducer, devToolsEnhancer());
 
-export default store;
+let persistor = persistStore(store);
+
+export { store, persistor };
