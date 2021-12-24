@@ -16,12 +16,15 @@ const itemsReducer = createReducer([], builder => {
   ]);
 });
 
-const loadingReducer = createReducer(false, builder => {
+const firstLoadingReducer = createReducer(false, builder => {
   builder
     .addCase(getTutorsRequest, () => true)
     .addCase(getTutorsSuccess, () => false)
-    .addCase(getTutorsError, () => false)
+    .addCase(getTutorsError, () => false);
+});
 
+const loadingReducer = createReducer(false, builder => {
+  builder
     .addCase(addTutorRequest, () => true)
     .addCase(addTutorSuccess, () => false)
     .addCase(addTutorError, () => false);
@@ -39,6 +42,7 @@ const errorReducer = createReducer(null, builder => {
 const tutorsReducer = combineReducers({
   items: itemsReducer,
   loading: loadingReducer,
+  firstLoading: firstLoadingReducer,
   error: errorReducer,
 });
 

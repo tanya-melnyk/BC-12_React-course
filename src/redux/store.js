@@ -13,6 +13,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 // import citiesReducer from './cities/citiesReducer';
 import citiesReducer from './cities/citiesSlice';
+import departmentsReducer from './departments/departmentsReducer';
 import tutorsReducer from './tutors/tutorsReducer';
 import { customMiddlewareLogger } from './middlewear/logger';
 
@@ -39,11 +40,15 @@ import { customMiddlewareLogger } from './middlewear/logger';
 //     data: {
 //       items: [],
 //       loading: false,
-//       error: null
+//       error: null,
 //     },
 //     filter: '',
 //   },
-//   departments: [],
+//   departments: {
+//     items: [],
+//     loading: false,
+//     error: null,
+//   },
 // };
 
 const persistCitiesConfig = {
@@ -61,7 +66,7 @@ const store = configureStore({
   reducer: {
     tutors: tutorsReducer,
     cities: persistReducer(persistCitiesConfig, citiesReducer),
-    departments: () => [],
+    departments: departmentsReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
