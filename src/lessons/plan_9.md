@@ -18,6 +18,7 @@
   - [Хуки](https://v5.reactrouter.com/web/api/Hooks) useParams, useLocation,
     useHistory, useRouteMatch
   - Вложенные маршруты и навигация
+    ([API error handling](https://itnext.io/centralizing-api-error-handling-in-react-apps-810b2be1d39d))
   - Динамические URL-параметры
   - Параметры адресной строки c useLocation
   - Программная навигация с useHistory
@@ -194,6 +195,7 @@
 - при запросе на АПИ за факультетом по `id`, можно в `catch` переводить на
   страничку всех факультетов с помощью `history.replace('/departments')`
 - тут же можно добавить тост с сообщением `'Факультет не найден'`
+- [API error handling](https://itnext.io/centralizing-api-error-handling-in-react-apps-810b2be1d39d)
 
 3. Неверный вложенный путь:
 

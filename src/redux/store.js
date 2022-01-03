@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-// import { createLogger } from 'redux-logger';
 import {
   persistStore,
   persistReducer,
@@ -11,24 +10,10 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-// import citiesReducer from './cities/citiesReducer';
 import citiesReducer from './cities/citiesSlice';
 import departmentsReducer from './departments/departmentsReducer';
 import tutorsReducer from './tutors/tutorsReducer';
 import { customMiddlewareLogger } from './middlewear/logger';
-
-///////  BEFORE ASYNC REDUX
-
-// const state = {
-//   tutors: [],
-//   cities: {
-//     items: [],
-//     filter: '',
-//   },
-//   departments: [],
-// }
-
-///////  BEFORE ASYNC REDUX
 
 // const state = {
 //   tutors: {
@@ -57,11 +42,6 @@ const persistCitiesConfig = {
   whitelist: ['filter'],
 };
 
-// const logger = createLogger({
-//   collapsed: (getState, action, logEntry) => !logEntry.error,
-//   timestamp: false,
-// });
-
 const store = configureStore({
   reducer: {
     tutors: tutorsReducer,
@@ -73,13 +53,62 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    })
-      //   .concat(myMiddleware)
-      // .concat(logger)
-      .concat(customMiddlewareLogger),
+    }).concat(customMiddlewareLogger),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
 const persistor = persistStore(store);
 
 export { store, persistor };
+
+////////////////////////////////////////////////////////////////////////
+
+// import { configureStore } from '@reduxjs/toolkit';
+// import {
+//   persistStore,
+//   persistReducer,
+//   FLUSH,
+//   REHYDRATE,
+//   PAUSE,
+//   PERSIST,
+//   PURGE,
+//   REGISTER,
+// } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage';
+// import authReducer from './auth/authSlice';
+// import citiesReducer from './cities/citiesSlice';
+// import departmentsReducer from './departments/departmentsReducer';
+// import tutorsReducer from './tutors/tutorsReducer';
+// import { customMiddlewareLogger } from './middlewear/logger';
+
+// const persistCitiesConfig = {
+//   key: 'filter',
+//   storage,
+//   whitelist: ['filter'],
+// };
+
+// const authPersistConfig = {
+//   key: 'token',
+//   storage,
+//   whitelist: ['token', 'refreshToken'],
+// };
+
+// const store = configureStore({
+//   reducer: {
+//     auth: persistReducer(authPersistConfig, authReducer),
+//     tutors: tutorsReducer,
+//     cities: persistReducer(persistCitiesConfig, citiesReducer),
+//     departments: departmentsReducer,
+//   },
+//   middleware: getDefaultMiddleware =>
+//     getDefaultMiddleware({
+//       serializableCheck: {
+//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+//       },
+//     }).concat(customMiddlewareLogger),
+//   devTools: process.env.NODE_ENV !== 'production',
+// });
+
+// const persistor = persistStore(store);
+
+// export { store, persistor };

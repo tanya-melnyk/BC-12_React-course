@@ -6,6 +6,11 @@ const API_ENDPOINT = 'departments';
 const getDepartments = () => async dispatch => {
   dispatch(actions.getDepartmentsPending());
   try {
+    // const data = await api.getData(API_ENDPOINT);
+    // const departments = Object.keys(data || {}).map(id => ({
+    //   id,
+    //   ...data[id],
+    // }));
     const departments = await api.getData(API_ENDPOINT);
     dispatch(actions.getDepartmentsFulfilled(departments));
   } catch (error) {
@@ -16,6 +21,8 @@ const getDepartments = () => async dispatch => {
 const addDepartment = newDepartment => async dispatch => {
   dispatch(actions.addDepartmentPending());
   try {
+    // const data = await api.saveItem(API_ENDPOINT, newDepartment);
+    // const savedDepartment = { id: data.name, ...newDepartment };
     const savedDepartment = await api.saveItem(API_ENDPOINT, newDepartment);
     dispatch(actions.addDepartmentFulfilled(savedDepartment));
   } catch (error) {
@@ -36,6 +43,8 @@ const editDepartment = updatedDepartment => async dispatch => {
 const deleteDepartment = idToDelete => async dispatch => {
   dispatch(actions.deleteDepartmentPending());
   try {
+    // await api.deleteItem(API_ENDPOINT, idToDelete);
+    // dispatch(actions.deleteDepartmentFulfilled(idToDelete));
     const deletedDepartment = await api.deleteItem(API_ENDPOINT, idToDelete);
     dispatch(actions.deleteDepartmentFulfilled(deletedDepartment.id));
   } catch (error) {

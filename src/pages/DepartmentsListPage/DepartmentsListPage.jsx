@@ -1,31 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useRouteMatch, useLocation } from 'react-router-dom';
 import Paper from 'components/common/Paper/Paper';
 import Header from 'components/common/Header/Header';
-import * as api from 'services/api';
+import AbsenceMsg from 'components/common/AbsenceMsg/AbsenceMsg';
+import { departmentsOperations, departmentsSelectors } from 'redux/departments';
 import s from './DepartmentsListPage.module.css';
 
-const API_ENDPOINT = 'departments';
-
 const DepartmentsListPage = () => {
-  const [departments, setDepartments] = useState([]);
+  const departments = useSelector(departmentsSelectors.getDepartments);
+  const loading = useSelector(departmentsSelectors.getLoading);
+
+  const dispatch = useDispatch();
+
   const match = useRouteMatch();
   const location = useLocation();
-  // console.log(location);
 
-  useEffect(() => {
-    const fetchDepartments = () => {
-      api
-        .getData(API_ENDPOINT)
-        .then(setDepartments)
-        .catch(err => console.log(err.message));
-    };
-    fetchDepartments();
-  }, []);
+  useEffect(() => dispatch(departmentsOperations.getDepartments()), [dispatch]);
+
+  const noDepartments = !loading && !departments.length;
 
   return (
     <>
       <Header title="Факультеты" />
+
+      {noDepartments && <AbsenceMsg absentEntity="departments" />}
 
       {!!departments.length && (
         <ul>
