@@ -1,10 +1,10 @@
-const BASE_URL = process.env.REACT_APP_API_URL;
-// const BASE_URL =
-//   'https://test-9dd1d-default-rtdb.europe-west1.firebasedatabase.app';
+// const BASE_URL = process.env.REACT_APP_API_URL;
+const BASE_URL =
+  'https://test-9dd1d-default-rtdb.europe-west1.firebasedatabase.app';
 
 const fetchData = async (path, options = {}) => {
-  const res = await fetch(`${BASE_URL}/${path}`, options);
-  // const res = await fetch(`${BASE_URL}/${path}.json`, options);
+  // const res = await fetch(`${BASE_URL}/${path}`, options);
+  const res = await fetch(`${BASE_URL}/${path}.json`, options);
   return res.ok ? res.json() : Promise.reject(new Error(res.statusText));
 };
 

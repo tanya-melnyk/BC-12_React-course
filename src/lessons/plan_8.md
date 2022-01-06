@@ -17,6 +17,8 @@
   - [Кастомные хуки](https://reactjs.org/docs/hooks-custom.html) и
     [useDebugValue](https://reactjs.org/docs/hooks-reference.html#usedebugvalue)
   - Библиотека [react-use](https://github.com/streamich/react-use)
+  - [15 Custom Hooks to Make your React Component Lightweight](https://javascript.plainenglish.io/15-custom-hooks-to-make-your-react-component-lightweight-8b59b122d83a)
+- [Use Context and Custom Hooks to share user state](https://fatmali.medium.com/use-context-and-custom-hooks-to-share-user-state-across-your-react-app-ad7476baaf32)
 
 ### Задача № 1
 

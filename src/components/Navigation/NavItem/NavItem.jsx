@@ -25,7 +25,7 @@ const NavItem = ({ name, icon, path }) => {
 NavItem.propTypes = {
   name: PropTypes.string.isRequired,
   icon: PropTypes.object.isRequired,
-  path: PropTypes.string.isRequired,
+  path: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
 };
 
 export default NavItem;
