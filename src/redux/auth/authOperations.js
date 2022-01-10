@@ -1,8 +1,9 @@
-// import axios from 'axios';
+import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 // const SIGN_UP_URL =
 //   'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]';
+
 // const SIGN_IN_URL =
 //   'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]';
 // const GET_USER_URL =
@@ -11,7 +12,22 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 // const BASE_URL = 'https://identitytoolkit.googleapis.com/v1/accounts';
 // const API_KEY = '';
 
-const signUp = createAsyncThunk('auth/signUp', async credentials => {});
+const BASE_URL = process.env.REACT_APP_FIREBASE_URL;
+const API_KEY = process.env.REACT_APP_FIREBASE_KEY;
+
+const signUp = createAsyncThunk('auth/signUp', async credentials => {
+  const body = { ...credentials, returnSecureToken: true };
+  try {
+    const { data } = await axios.post(
+      `${BASE_URL}:signUp?key=${API_KEY}`,
+      body,
+    );
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 const signIn = createAsyncThunk('auth/signIn', async credentials => {});
 

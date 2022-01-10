@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import {
-//   signUp,
-//   signIn,
-//   // signOut,
-//   getUser,
-//   refreshToken,
-// } from './authOperations';
+import {
+  signUp,
+  signIn,
+  signOut,
+  getUser,
+  refreshToken,
+} from './authOperations';
 
 // idToken - string	A Firebase Auth ID token for the newly created user.
 // email - string	The email for the newly created user.
@@ -17,8 +17,8 @@ const initialState = {
   user: { name: null, email: null },
 
   token: null,
-  refreshToken: null,
   localId: null,
+  refreshToken: null,
 
   loading: false,
   loadingUser: false,
@@ -31,7 +31,23 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase();
+    builder
+      .addCase(signUp.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signUp.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user.email = payload.email;
+        state.user.name = payload.displayName;
+        state.token = payload.idToken;
+        state.refreshToken = payload.refreshToken;
+        state.localId = payload.localId;
+      })
+      .addCase(signUp.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      });
   },
 });
 

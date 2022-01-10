@@ -1,6 +1,9 @@
 import { useContext, Suspense } from 'react';
+// import { useSelector } from 'react-redux';
 import Navigation from '../Navigation/Navigation';
+// import { authSelectors } from 'redux/auth';
 import { ThemeContext, themes } from 'context/themeContext';
+import UserInfo from 'components/common/UserInfo/UserInfo';
 import useToggle from 'hooks/useToggle';
 import './Sidebar.css';
 
@@ -29,6 +32,8 @@ const Sidebar = () => {
       <Suspense fallback="Loading...">
         <Navigation />
       </Suspense>
+
+      <UserInfo />
     </div>
   );
 };

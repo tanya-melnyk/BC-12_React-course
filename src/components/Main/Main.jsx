@@ -1,7 +1,9 @@
 import { useContext, lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+// import { useDispatch, useSelector } from 'react-redux';
 import LanguageSwitcher from 'components/common/LanguageSwitcher/LanguageSwitcher';
 import Loader from 'components/common/Loader/Loader';
+// import { authOperations, authSelectors } from 'redux/auth';
 import { ThemeContext, themes } from 'context/themeContext';
 import styles from './Main.module.css';
 
@@ -26,6 +28,13 @@ const UniversityPage = lazy(() =>
   import(
     '../../pages/UniversityPage/UniversityPage' /* webpackChunkName: "University___page" */
   ),
+);
+
+const SignUpPage = lazy(() =>
+  import('../../pages/Auth/SignUpPage' /* webpackChunkName: "SignUp___page" */),
+);
+const SignInPage = lazy(() =>
+  import('../../pages/Auth/SignInPage' /* webpackChunkName: "SignIn___page" */),
 );
 
 const Main = () => {
@@ -55,6 +64,14 @@ const Main = () => {
 
           <Route path="/university">
             <UniversityPage />
+          </Route>
+
+          <Route path="/sign-up">
+            <SignUpPage />
+          </Route>
+
+          <Route path="/sign-in">
+            <SignInPage />
           </Route>
 
           <Route>

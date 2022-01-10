@@ -10,6 +10,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import authReducer from './auth/authSlice';
 import citiesReducer from './cities/citiesSlice';
 import departmentsReducer from './departments/departmentsReducer';
 import tutorsReducer from './tutors/tutorsReducer';
@@ -42,8 +43,15 @@ const persistCitiesConfig = {
   whitelist: ['filter'],
 };
 
+const persistAuthConfig = {
+  key: 'token',
+  storage,
+  whitelist: ['token'],
+};
+
 const store = configureStore({
   reducer: {
+    auth: persistReducer(persistAuthConfig, authReducer),
     tutors: tutorsReducer,
     cities: persistReducer(persistCitiesConfig, citiesReducer),
     departments: departmentsReducer,

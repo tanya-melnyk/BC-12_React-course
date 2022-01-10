@@ -1,34 +1,38 @@
 import { useTranslation } from 'react-i18next';
+// import { useSelector, useDispatch } from 'react-redux';
 import {
   HiBookOpen,
   HiAcademicCap,
-  // HiOutlineUserAdd,
-  // HiOutlineLogin,
-  // HiOutlineLogout,
+  HiOutlineUserAdd,
+  HiOutlineLogin,
+  HiOutlineLogout,
 } from 'react-icons/hi';
 import NavItem from './NavItem/NavItem';
-// import s from './Navigation.module.scss';
+// import { authSelectors, signOut } from 'redux/auth';
+import s from './Navigation.module.scss';
 
 const Navigation = () => {
   const { t } = useTranslation();
+
+  const handleSignOut = () => {};
 
   return (
     <nav style={{ paddingTop: 12 }}>
       <NavItem
         name={t('sidebar.departments')}
-        icon={<HiBookOpen color="#ff6b0a" size="24" />}
+        icon={<HiAcademicCap color="#ff6b0a" size="24" />}
         path="/departments"
       />
 
       <NavItem
         name={t('sidebar.university')}
-        icon={<HiAcademicCap color="#ff6b0a" size="24" />}
+        icon={<HiBookOpen color="#ff6b0a" size="24" />}
         path="/university"
       />
 
-      {/* <hr /> */}
+      <hr />
 
-      {/* <NavItem
+      <NavItem
         name="Sign Up"
         path="/sign-up"
         icon={<HiOutlineUserAdd color="#ff6b0a" size="24px" />}
@@ -39,12 +43,12 @@ const Navigation = () => {
         icon={<HiOutlineLogin color="#ff6b0a" size="24px" />}
       />
 
-      <p className={s.logOutBtn} onClick={() => {}}>
+      <p className={s.logOutBtn} onClick={handleSignOut}>
         <span className={s.iconWrapper}>
           <HiOutlineLogout color="#ff6b0a" size="24px" />
         </span>
         <span className={s.itemName}>Sign Out</span>
-      </p> */}
+      </p>
     </nav>
   );
 };
