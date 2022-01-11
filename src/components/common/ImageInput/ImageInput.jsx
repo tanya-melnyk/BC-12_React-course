@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 const ImageInput = ({ onUpload, savedImage }) => {
   const handleUpload = e => {
-    var file = e.target.files[0];
+    const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
@@ -10,6 +10,9 @@ const ImageInput = ({ onUpload, savedImage }) => {
     reader.onloadend = () => {
       onUpload(reader.result);
     };
+
+    // const image = URL.createObjectURL(file);
+    // onUpload(file);
   };
 
   return (

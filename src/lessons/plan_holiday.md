@@ -1,5 +1,5 @@
 1. Переписать 5 ДЗ на
-   [6-ю версию react-router-dom](<(https://reactrouter.com/docs/en/v6/upgrading/v5)>)
+   [6-ю версию react-router-dom](https://reactrouter.com/docs/en/v6/upgrading/v5)
 2. Переписать 7 ДЗ на чистый редакс (если не делали это сразу)
 3. Переписать 7 ДЗ на [RTK](https://redux-toolkit.js.org/rtk-query/overview)
    ([good example](https://redux-toolkit.js.org/rtk-query/usage/mutations#revalidation-example))

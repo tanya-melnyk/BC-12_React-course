@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImageInput from 'components/common/ImageInput/ImageInput';
-import { fetchImage, addImage } from 'redux/univer/univer-slice';
+import { getImage, addImage } from 'redux/univer/univer-slice';
 import univerBuildingImg from 'images/building.png';
 import { ReactComponent as EditIcon } from 'images/edit.svg';
 import { ReactComponent as DeleteIcon } from 'images/delete.svg';
@@ -15,7 +15,7 @@ const Card = ({ name }) => {
   const { image, loading } = useSelector(state => state.univer);
 
   useEffect(() => {
-    dispatch(fetchImage());
+    dispatch(getImage());
   }, [dispatch]);
 
   const saveImage = image => dispatch(addImage(image));

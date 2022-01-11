@@ -3,7 +3,7 @@ import * as api from 'services/api';
 
 const API_ENDPOINT = 'univer';
 
-const fetchImage = createAsyncThunk('univer/getImage', async () => {
+const getImage = createAsyncThunk('univer/getImage', async () => {
   const data = await api.getData(API_ENDPOINT);
   if (data) {
     const images = Object.values(data);
@@ -15,6 +15,10 @@ const fetchImage = createAsyncThunk('univer/getImage', async () => {
 const addImage = createAsyncThunk('univer/addImage', async image => {
   await api.saveItem(API_ENDPOINT, image);
   return image;
+
+  // const formData = new FormData();
+  // formData.append('file', image);
+  // api.saveItem(API_ENDPOINT, formData);
 });
 
 const univer = createSlice({
@@ -26,15 +30,15 @@ const univer = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(fetchImage.pending, state => {
+      .addCase(getImage.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchImage.fulfilled, (state, { payload }) => {
+      .addCase(getImage.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.image = payload;
       })
-      .addCase(fetchImage.rejected, (state, { error }) => {
+      .addCase(getImage.rejected, (state, { error }) => {
         state.loading = false;
         state.error = error.message;
       })
@@ -54,6 +58,6 @@ const univer = createSlice({
   },
 });
 
-export { fetchImage, addImage };
+export { getImage, addImage };
 
 export default univer.reducer;
