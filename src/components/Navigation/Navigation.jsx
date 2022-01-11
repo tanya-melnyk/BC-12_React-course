@@ -27,11 +27,13 @@ const Navigation = () => {
         path="/departments"
       />
 
-      <NavItem
-        name={t('sidebar.university')}
-        icon={<HiBookOpen color="#ff6b0a" size="24" />}
-        path="/university"
-      />
+      {isLoggedIn && (
+        <NavItem
+          name={t('sidebar.university')}
+          icon={<HiBookOpen color="#ff6b0a" size="24" />}
+          path="/university"
+        />
+      )}
 
       <hr />
 
