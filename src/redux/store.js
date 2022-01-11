@@ -10,11 +10,12 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { customMiddlewareLogger } from './middlewear/logger';
 import authReducer from './auth/authSlice';
 import citiesReducer from './cities/citiesSlice';
 import departmentsReducer from './departments/departmentsReducer';
 import tutorsReducer from './tutors/tutorsReducer';
-import { customMiddlewareLogger } from './middlewear/logger';
+import univerReducer from './univer/univer-slice';
 
 // const state = {
 //   tutors: {
@@ -46,7 +47,7 @@ const persistCitiesConfig = {
 const persistAuthConfig = {
   key: 'token',
   storage,
-  whitelist: ['token'],
+  whitelist: ['token', 'refreshToken'],
 };
 
 const store = configureStore({
@@ -55,6 +56,7 @@ const store = configureStore({
     tutors: tutorsReducer,
     cities: persistReducer(persistCitiesConfig, citiesReducer),
     departments: departmentsReducer,
+    univer: univerReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

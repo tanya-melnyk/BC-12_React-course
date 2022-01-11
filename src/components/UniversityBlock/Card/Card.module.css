@@ -13,10 +13,16 @@
 
 .imgWrapper img {
   border-radius: 50%;
+  cursor: pointer;
+  transition: all 200ms;
 }
 
 .wrapper {
   margin-bottom: 6px;
+}
+
+.wrapper img:hover {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .text {

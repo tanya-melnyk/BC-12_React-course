@@ -1,17 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import BigButton from 'components/common/BigButton/BigButton';
 import Paper from 'components/common/Paper/Paper';
 import Header from 'components/common/Header/Header';
-import { authOperations } from 'redux/auth';
+import { authOperations, authSelectors } from 'redux/auth';
 
 export const SignUpPage = () => {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const loading = useSelector(authSelectors.getLoading);
+  const error = useSelector(authSelectors.getError);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!error) return;
+    toast.error(error);
+  }, [error]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -19,7 +26,7 @@ export const SignUpPage = () => {
     dispatch(authOperations.signUp(credentials));
   };
 
-  const isBtnDisabled = !displayName || !email || !password;
+  const isBtnDisabled = loading || !displayName || !email || !password;
 
   return (
     <div>

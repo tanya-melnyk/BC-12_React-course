@@ -10,11 +10,11 @@ import {
 
 const API_ENDPOINT = 'tutors';
 
-const getTutors = () => async dispatch => {
+const getTutors = () => async (dispatch, getState) => {
   dispatch(getTutorsRequest());
   try {
-    // const tutors = await getData(API_ENDPOINT);
-    const data = await getData(API_ENDPOINT);
+    const { localId } = getState().auth;
+    const data = await getData(`${localId}/${API_ENDPOINT}`);
     const tutors = Object.keys(data || {}).map(id => ({ id, ...data[id] }));
     dispatch(getTutorsSuccess(tutors));
   } catch (error) {
@@ -22,11 +22,11 @@ const getTutors = () => async dispatch => {
   }
 };
 
-const addTutor = newTutor => async dispatch => {
+const addTutor = newTutor => async (dispatch, getState) => {
   dispatch(addTutorRequest());
   try {
-    // const savedTutor = await saveItem(API_ENDPOINT, newTutor);
-    const data = await saveItem(API_ENDPOINT, newTutor);
+    const { localId } = getState().auth;
+    const data = await saveItem(`${localId}/${API_ENDPOINT}`, newTutor);
     const savedTutor = { id: data.name, ...newTutor };
     dispatch(addTutorSuccess(savedTutor));
   } catch (error) {

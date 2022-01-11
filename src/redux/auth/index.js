@@ -1,3 +1,3 @@
 export * as authOperations from './authOperations';
 export * as authSelectors from './authSelectors';
-// export { signOut } from './authSlice';
+export { signOut } from './authSlice';

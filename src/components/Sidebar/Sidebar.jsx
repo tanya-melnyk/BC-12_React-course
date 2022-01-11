@@ -1,7 +1,7 @@
 import { useContext, Suspense } from 'react';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Navigation from '../Navigation/Navigation';
-// import { authSelectors } from 'redux/auth';
+import { authSelectors } from 'redux/auth';
 import { ThemeContext, themes } from 'context/themeContext';
 import UserInfo from 'components/common/UserInfo/UserInfo';
 import useToggle from 'hooks/useToggle';
@@ -18,6 +18,9 @@ const Sidebar = () => {
   const { theme } = useContext(ThemeContext);
   const [isOpen, toggleSidebar] = useToggle(true);
 
+  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
+  const userName = useSelector(authSelectors.getUserName);
+
   return (
     <div className={defineStyles(isOpen, theme)}>
       <div className="Sidebar-decor"></div>
@@ -33,7 +36,7 @@ const Sidebar = () => {
         <Navigation />
       </Suspense>
 
-      <UserInfo />
+      {isLoggedIn && <UserInfo username={userName ?? ''} />}
     </div>
   );
 };

@@ -215,18 +215,6 @@
 
 ### Задача № 5
 
-Реализуем отображение залогиненого юзера
-
-- в `Sidebar` будем показывать `UserInfo` только, если юзер залогинен
-- для этого из редакса берем состояние `getIsLoggedIn`
-- в `UserInfo` из редакса берем состояние `getUserName` и выводим его
-- в `Navigation` будем показывать линки `Sign Up` и `Sign In` только если юзер
-  не залогинен
-- и наоборот - кнопку `Sign Out` будем показывать только залогиненым
-  пользователям
-
-### Задача № 6
-
 Реализовать `redux`-логику для запроса информации о юзере
 
 - в доках `Firebase` возьмем
@@ -248,14 +236,44 @@
         );
         return data.users[0];
       } catch (error) {
-        return rejectWithValue(error.response.data.error.status);
+        return rejectWithValue(error.response.data.error.message);
       }
     },
   );
   ```
+- в `authSlice` добавим 3 кейса для этой операции:
+  ```
+  .addCase(getUser.pending, state => {
+    state.error = null;
+    state.isFetchingUser = true;
+  })
+  .addCase(getUser.fulfilled, (state, { payload }) => {
+    state.loadingUser = false;
+    state.user.email = payload.email;
+    state.user.name = payload.displayName;
+    state.localId = payload.localId;
+  })
+  .addCase(getUser.rejected, (state, { payload }) => {
+    state.error = payload;
+    state.loadingUser = false;
+    state.token = null;
+  })
+  ```
 - где-то на верхнем уровне, например, в `Main` будем делать запрос за юзером
 - для этого в `useEffect` будем диспатчить `authOperations.getUser()`
-- там же получим состояние `isLoadingUser` из редакса, и будем показывать
+
+### Задача № 6
+
+Реализуем отображение залогиненого юзера
+
+- в `Sidebar` будем показывать `UserInfo` только, если юзер залогинен
+- для этого из редакса берем состояние `getIsLoggedIn`
+- в `UserInfo` из редакса берем состояние `getUserName` и выводим его
+- в `Navigation` будем показывать линки `Sign Up` и `Sign In` только если юзер
+  не залогинен
+- и наоборот - кнопку `Sign Out` будем показывать только залогиненым
+  пользователям
+- в `Main` получим состояние `isLoadingUser` из редакса, и будем показывать
   лоадер, пока идет запрос за юзером:
   ```
   if (isLoadingUser) {
@@ -271,7 +289,7 @@
 
 - идем в документацию `Firebase`
   [Sign in with email / password](https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password)
-- копируем апи-линк для запросов на апи для регистрации:
+- копируем апи-линк для запросов на апи для логина:
   ```
   https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]
   ```
@@ -445,6 +463,24 @@
     },
   );
   ```
+- в authSlice добавим еще 3 кейса:
+  ```
+  .addCase(refreshToken.pending, state => {
+    state.error = null;
+    state.isFetchingUser = true;
+  })
+  .addCase(refreshToken.fulfilled, (state, { payload }) => {
+    state.loadingUser = false;
+    state.token = payload.id_token;
+    state.refreshToken = payload.refresh_token;
+  })
+  .addCase(refreshToken.rejected, (state, { payload }) => {
+    state.error = payload;
+    state.loadingUser = false;
+    state.token = null;
+    state.refreshToken = null;
+  });
+  ```
 
 ### Отличия в ДЗ
 
@@ -475,3 +511,33 @@ Redux Auth Operations
   token.set(persistedToken);
   ```
 - `signOut` будет обычной асинхронной операцией
+
+### Загрузка картинок
+
+- добавляем компонент ImageInput c инпутом с типом файл:
+  ```
+  <label className="tutorFormAvatarLabel">
+    <img src={savedImage} alt="University building" width="80" height="80" />
+    <input
+      style={{ display: 'none' }}
+      type="file"
+      name="file"
+      onChange={handleUpload}
+    />
+  </label>
+  ```
+- добавим обработчик загрузки используя
+  [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL):
+  ```
+  const handleUpload = e => {
+    var file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      onUpload(reader.result);
+    };
+  };
+  ```
+- подключаем компонент в Card вместо обычной картинки
+- добавляем редакс-логику для универа
