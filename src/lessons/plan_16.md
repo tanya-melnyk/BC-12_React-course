@@ -182,3 +182,95 @@
   dispatch(authOperations.signIn({ email, password }))
     .then(() => history.push(location.state?.from ?? '/university'));
   ```
+
+### Задача № 6
+
+Переходим на реакт-роутер 6
+
+- обновляем библиотеку
+- меняем Switch на Routes
+- прописываем в путях, где может быть продолжение `/*`:
+  ```
+  path="departments/:id/*"
+  ```
+- все exact удаляем
+- во вложенных маршрутах все относительные пути прописываем без определения
+  начала и в Links, и в Routes:
+  ```
+  // to={`${match.url}/history`}
+  to='history'
+  // path={`${match.path}/history`}
+  path="history"
+  // path={[match.path, `${match.path}/description`]}
+  path="description"
+  ```
+- комментируем все useRouteMatch, useHistory, Redirect и activeClassName на
+  линках
+- заменить импорт useRouteMatch на useMatch
+- заменяем все Redirect на Navigate:
+  ```
+  // <Route path="/" render={() => <Redirect to="/departments" />} />
+  <Route path="/" element={<Navigate replace to="departments" />} />
+  // <Route render={() => <Redirect to={match.url} />} />
+  <Route path=":unknown" element={<Navigate replace to=".." />} />
+  ```
+- универсальному руту разадаем путь:
+  ```
+  // <Route render={() => <NotFoundPage />} />
+  <Route path="*" element={<NotFoundPage />} />
+  ```
+- заменяем activeClassName на className с функцией:
+  ```
+  // className={navItenStyles.join(' ')}
+  // activeClassName="NavItemActive"
+  className={({ isActive }) =>
+    navItenStyles.join(' ') + (isActive ? ' NavItemActive' : '')
+  }
+  // className={s.link}
+  // activeClassName={s.activeLink}
+  className={({ isActive }) =>
+    s.link + (isActive ? ` ${s.activeLink}` : '')
+  }
+  ```
+- вместо useHistory используем useNavigate:
+  ```
+  // const history = useHistory();
+  const navigate = useNavigate();
+  // history.replace('/departments');
+  navigate('/departments', { replace: true });
+  // history.push(location.state?.from ?? '/departments');
+  navigate(location.state?.from ?? '/departments');
+  // history.goBack();
+  navigate(-1);
+  ```
+- все render пропы в Route меняем на element
+- переносим все вложенные маршруты в один файл:
+  ```
+  <Route path="departments/:id" element={<DepartmentPage />}>
+    <Route index element={<Paper><p>Description</p></Paper>}/>
+    <Route path="description" element={<Paper><p>Description</p></Paper>}/>
+    <Route path="history" element={<Paper><p>History</p></Paper>}/>
+  </Route>
+  ```
+- а в компоненте, где до этого были вложенные роуты, рендерим `<Outlet />`
+- заменим объекты в Link в пропе to на два пропа:
+  ```
+  // to={{
+  //   pathname: id,
+  //   state: {
+  //     from: location,
+  //     label: 'Назад ко всем факультетам',
+  //   },
+  // }}
+  to={id}
+  state={{ from: location, label: 'Назад ко всем факультетам' }}
+  ```
+- для определения активного стиле на линке:
+  ```
+  className={({ isActive }) =>
+    s.link +
+    (isActive || location.pathname === `/departments/${params.id}`
+      ? ` ${s.activeLink}`
+      : '')
+  }
+  ```

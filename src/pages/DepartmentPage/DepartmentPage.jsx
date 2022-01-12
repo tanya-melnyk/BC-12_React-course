@@ -2,13 +2,17 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import {
   useParams,
-  Switch,
+  Routes,
   Route,
   NavLink,
-  useRouteMatch,
-  useHistory,
+  // useRouteMatch,
+  useMatch,
+  // useHistory,
+  useNavigate,
   useLocation,
-  Redirect,
+  // Redirect,
+  Navigate,
+  Outlet,
 } from 'react-router-dom';
 import BigButton from 'components/common/BigButton/BigButton';
 import Paper from 'components/common/Paper/Paper';
@@ -20,28 +24,39 @@ const API_ENDPOINT = 'departments';
 
 const DepartmentPage = () => {
   const [department, setDepartment] = useState({});
-  const match = useRouteMatch();
+  // const match = useRouteMatch();
+  // const match = useMatch();
   const params = useParams();
-  const history = useHistory();
+  // const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const fetchDepartment = () => {
       api
         .getData(`${API_ENDPOINT}/${params.id}`)
-        .then(setDepartment)
-        .catch(err => {
+        .then(department => {
+          if (department) {
+            return setDepartment(department);
+          }
           toast.error('Факультет не найден');
-          history.replace('/departments');
+          navigate('/departments', { replace: true });
+        })
+        .catch(err => {
+          // toast.error('Факультет не найден');
+          // history.replace('/departments');
         });
     };
     fetchDepartment();
-  }, [history, params.id]);
+  }, [navigate, params.id]);
 
   const handleGoBack = () => {
     // history.goBack();
-    history.push(location.state?.from ?? '/departments');
+    // navigate(-1)
+    // history.push(location.state?.from ?? '/departments');
+    navigate(location.state?.from ?? '/departments');
   };
+  console.log(location);
 
   return (
     <>
@@ -58,17 +73,25 @@ const DepartmentPage = () => {
         <div className={s.linkWrapper}>
           <NavLink
             // to={`${match.url}/description`}
-            to={{
-              pathname: `${match.url}/description`,
-              state: {
-                from: location.state?.from,
-                label: location.state?.label,
-              },
-            }}
-            className={s.link}
-            activeClassName={s.activeLink}
-            isActive={(matchRoute, location) =>
-              matchRoute?.isExact || location.pathname === match.url
+            to="description"
+            // to={{
+            //   pathname: 'description',
+            //   state: {
+            //     from: location.state?.from,
+            //     label: location.state?.label,
+            //   },
+            // }}
+            state={{ from: location.state?.from, label: location.state?.label }}
+            // className={s.link}
+            // activeClassName={s.activeLink}
+            // isActive={(matchRoute, location) =>
+            //   matchRoute?.isExact || location.pathname === match.url
+            // }
+            className={({ isActive }) =>
+              s.link +
+              (isActive || location.pathname === `/departments/${params.id}`
+                ? ` ${s.activeLink}`
+                : '')
             }
           >
             Описание
@@ -76,50 +99,64 @@ const DepartmentPage = () => {
         </div>
         <div>
           <NavLink
+            to="history"
+            state={{ from: location.state?.from, label: location.state?.label }}
             // to={`${match.url}/history`}
-            to={{
-              pathname: `${match.url}/history`,
-              state: {
-                from: location.state?.from,
-                label: location.state?.label,
-              },
-            }}
-            className={s.link}
-            activeClassName={s.activeLink}
+            // to={{
+            //   pathname: 'history',
+            //   state: {
+            //     from: location.state?.from,
+            //     label: location.state?.label,
+            //   },
+            // }}
+            // className={s.link}
+            // activeClassName={s.activeLink}
+            className={({ isActive }) =>
+              s.link + (isActive ? ` ${s.activeLink}` : '')
+            }
           >
             История
           </NavLink>
         </div>
       </nav>
 
-      <Switch>
-        <Route exact path={[match.path, `${match.path}/description`]}>
-          <Paper>
-            <p className={s.text}>
-              Description Lorem ipsum dolor sit amet consectetur adipisicing
-              elit. Accusamus assumenda explicabo, delectus doloribus eligendi
-              incidunt consequuntur eveniet id? Atque facilis unde adipisci
-              quibusdam officiis vero architecto modi, consequatur aut quaerat
-              blanditiis perspiciatis. Consectetur veniam molestias atque omnis!
-              Cumque at a impedit rem quod. Debitis beatae sunt officia. Omnis,
-              molestias dicta!
-            </p>
-          </Paper>
-        </Route>
+      <Outlet />
 
-        <Route exact path={`${match.path}/history`}>
-          <Paper>
-            <p className={s.text}>
-              History Lorem ipsum dolor sit amet consectetur adipisicing elit. A
-              quod nisi voluptatum unde obcaecati autem voluptates natus quaerat
-              quibusdam suscipit iure ipsum quam, et libero nemo aspernatur quas
-              nihil fuga!
-            </p>
-          </Paper>
-        </Route>
+      {/* <Routes>
+        <Route
+          path="description"
+          element={
+            <Paper>
+              <p className={s.text}>
+                Description Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Accusamus assumenda explicabo, delectus doloribus eligendi
+                incidunt consequuntur eveniet id? Atque facilis unde adipisci
+                quibusdam officiis vero architecto modi, consequatur aut quaerat
+                blanditiis perspiciatis. Consectetur veniam molestias atque
+                omnis! Cumque at a impedit rem quod. Debitis beatae sunt
+                officia. Omnis, molestias dicta!
+              </p>
+            </Paper>
+          }
+        />
 
+        <Route
+          path="history"
+          element={
+            <Paper>
+              <p className={s.text}>
+                History Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                A quod nisi voluptatum unde obcaecati autem voluptates natus
+                quaerat quibusdam suscipit iure ipsum quam, et libero nemo
+                aspernatur quas nihil fuga!
+              </p>
+            </Paper>
+          }
+        />
+
+        <Route path=":unk" element={<Navigate replace to=".." />} />
         <Route render={() => <Redirect to={match.url} />} />
-      </Switch>
+      </Routes> */}
     </>
   );
 };
