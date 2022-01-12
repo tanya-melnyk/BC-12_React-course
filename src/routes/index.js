@@ -28,13 +28,11 @@ const SignInPage = lazy(() =>
 const departmentsListRoute = {
   path: '/departments',
   component: DepartmentsListPage,
-  exact: true,
 };
 
 const departmentRoute = {
-  path: '/departments/:id',
+  path: '/departments/:id/*',
   component: DepartmentPage,
-  exact: false,
 };
 
 // ONLY AUTH
@@ -42,7 +40,6 @@ const departmentRoute = {
 const universityRoute = {
   path: '/university',
   component: UniversityPage,
-  exact: true,
   redirectTo: '/sign-in',
 };
 
@@ -51,18 +48,16 @@ const universityRoute = {
 const signUpRoute = {
   path: '/sign-up',
   component: SignUpPage,
-  exact: true,
   redirectTo: '/university',
 };
 
 const signInRoute = {
   path: '/sign-in',
   component: SignInPage,
-  exact: true,
   redirectTo: '/university',
 };
 
-export const publicRoutes = [departmentsListRoute, departmentRoute];
+export const publicRoutes = [departmentsListRoute];
 export const onlyAuthRoutes = [universityRoute];
 export const onlyNotAuthRoutes = [signUpRoute, signInRoute];
 

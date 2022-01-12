@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import BigButton from 'components/common/BigButton/BigButton';
 import Paper from 'components/common/Paper/Paper';
@@ -12,7 +12,8 @@ export const SignInPage = () => {
   const [password, setPassword] = useState('');
 
   const location = useLocation();
-  const history = useHistory();
+  // const history = useHistory();
+  const navigation = useNavigate();
 
   const error = useSelector(authSelectors.getError);
   const loading = useSelector(authSelectors.getLoading);
@@ -25,9 +26,10 @@ export const SignInPage = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(authOperations.signIn({ email, password })).then(() =>
-      history.replace(location.state?.from ?? '/university'),
-    );
+    dispatch(authOperations.signIn({ email, password })).then(() => {
+      navigation(location.state?.from ?? '/university', { replace: true });
+      // history.replace(location.state?.from ?? '/university'),
+    });
   };
 
   const isBtnDisabled = loading || !email || !password;

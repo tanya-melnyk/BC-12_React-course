@@ -13,8 +13,11 @@ const NavItem = ({ name, icon, path }) => {
   return (
     <NavLink
       to={path}
-      className={navItenStyles.join(' ')}
-      activeClassName="NavItemActive"
+      // className={navItenStyles.join(' ')}
+      // activeClassName="NavItemActive"
+      className={({ isActive }) =>
+        navItenStyles.join(' ') + (isActive ? ' NavItemActive' : '')
+      }
     >
       <span className="iconWrapper">{icon}</span>
       <span className="itemName">{name}</span>

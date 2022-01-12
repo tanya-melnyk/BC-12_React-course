@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useRouteMatch, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Paper from 'components/common/Paper/Paper';
 import Header from 'components/common/Header/Header';
 import AbsenceMsg from 'components/common/AbsenceMsg/AbsenceMsg';
@@ -13,7 +13,7 @@ const DepartmentsListPage = () => {
 
   const dispatch = useDispatch();
 
-  const match = useRouteMatch();
+  // const match = useRouteMatch();
   const location = useLocation();
 
   useEffect(() => dispatch(departmentsOperations.getDepartments()), [dispatch]);
@@ -32,13 +32,18 @@ const DepartmentsListPage = () => {
             <li key={id} className={s.listElem}>
               {/* <Link to={`/departments/${id}`}> */}
               <Link
-                to={{
-                  pathname: `${match.url}/${id}`,
-                  state: {
-                    from: location,
-                    label: 'Назад ко всем факультетам',
-                  },
+                to={id}
+                state={{
+                  from: location,
+                  label: 'Назад ко всем факультетам',
                 }}
+                // to={{
+                //   pathname: `${match.url}/${id}`,
+                //   state: {
+                //     from: location,
+                //     label: 'Назад ко всем факультетам',
+                //   },
+                // }}
               >
                 <Paper>
                   <p className={s.text}>{name}</p>

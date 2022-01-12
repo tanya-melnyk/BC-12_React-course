@@ -31,13 +31,18 @@ const CardWithMenu = ({ item, onEdit, onDelete, link }) => {
     <div ref={cardRef} css={cardStyles}>
       {link && (
         <Link
-          to={{
-            pathname: `/${link}/${item.id}`,
-            state: {
-              from: location,
-              label: 'Назад к университету',
-            },
+          to={`/${link}/${item.id}`}
+          state={{
+            from: location,
+            label: 'Назад к университету',
           }}
+          // to={{
+          //   pathname: `/${link}/${item.id}`,
+          //   state: {
+          //     from: location,
+          //     label: 'Назад к университету',
+          //   },
+          // }}
         >
           <p>{item.name}</p>
         </Link>
