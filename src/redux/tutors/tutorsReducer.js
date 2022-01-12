@@ -9,7 +9,7 @@ import {
 } from './tutorsActions';
 
 const itemsReducer = createReducer([], builder => {
-  builder.addCase(getTutorsSuccess, (_, action) => action.payload);
+  builder.addCase(getTutorsSuccess, (_, action) => action.payload || []);
   builder.addCase(addTutorSuccess, (state, action) => [
     ...state,
     action.payload,

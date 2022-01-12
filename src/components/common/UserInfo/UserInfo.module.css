@@ -1,0 +1,13 @@
+.container {
+  margin-top: auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.name {
+  margin-left: 24px;
+  line-height: 24px;
+}

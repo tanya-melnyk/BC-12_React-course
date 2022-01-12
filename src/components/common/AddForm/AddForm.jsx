@@ -41,6 +41,14 @@ const AddForm = ({ formName, placeholder, onSubmit }) => {
   );
 };
 
+AddForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  formName: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+};
+
+export default AddForm;
+
 ////////// CLASS
 
 // class AddForm extends Component {
@@ -80,11 +88,3 @@ const AddForm = ({ formName, placeholder, onSubmit }) => {
 //     );
 //   }
 // }
-
-AddForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  formName: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-};
-
-export default AddForm;

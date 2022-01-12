@@ -17,31 +17,7 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
 
   // FETCH TUTORS
 
-  useEffect(() => {
-    onGetTutors();
-    // const controller = new AbortController();
-    // const signal = controller.signal;
-    // const fetchTutors = async () => {
-    //   setLoading(true);
-    //   try {
-    //     const tutors = await api.getData(API_ENDPOINT, { signal });
-    //     onSetTutors(tutors);
-    //   } catch (error) {
-    //     if (!signal.aborted) {
-    //       setError(error.message);
-    //     }
-    //   } finally {
-    //     if (!signal.aborted) {
-    //       setLoading(false);
-    //     }
-    //   }
-    // };
-    // fetchTutors();
-
-    // return () => {
-    //   controller.abort();
-    // };
-  }, [onGetTutors]);
+  useEffect(() => onGetTutors(), [onGetTutors]);
 
   const toggleForm = useCallback(
     () => setIsFormOpen(prevIsFormOpen => !prevIsFormOpen),
@@ -88,7 +64,7 @@ const TutorsBlock = ({ tutors, onGetTutors, error, loading }) => {
   );
 };
 
-// УНИВЕРСАЛЬНЫЙ СПОСОБ СВЯЗАТЬ РЕДАКС С КОМПОНЕНЬЛМ (РАБОТАЕТ И ДЛЯ КДАССОВ, И ДЛЯ ФУНКЦИИ)
+// УНИВЕРСАЛЬНЫЙ СПОСОБ СВЯЗАТЬ РЕДАКС С КОМПОНЕНТОМ (РАБОТАЕТ И ДЛЯ КЛАССОВ, И ДЛЯ ФУНКЦИЙ)
 
 // ПОЛУЧАЕМ СОСТОЯНИЕ
 const mapStateToProps = state => ({

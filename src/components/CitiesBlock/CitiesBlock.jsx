@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import AddForm from '../common/AddForm/AddForm';
@@ -40,18 +40,7 @@ const CitiesBlock = () => {
 
   // GET CITIES
 
-  useEffect(() => {
-    dispatch(getCities());
-    // const fetchCities = async () => {
-    //   try {
-    //     const apiCities = await api.getData(API_ENDPOINT);
-    //     dispatch(citiesActions.setCities(apiCities));
-    //   } catch (error) {
-    //   } finally {
-    //   }
-    // };
-    // fetchCities();
-  }, [dispatch]);
+  useEffect(() => dispatch(getCities()), [dispatch]);
 
   // ADD CITY
 
@@ -78,19 +67,6 @@ const CitiesBlock = () => {
       setAction(ACTION.NONE);
       setActiveCity(null);
     });
-
-    // const addCity = async () => {
-    //   try {
-    //     const newCity = await api.saveItem(API_ENDPOINT, activeCity);
-    //     dispatch(citiesActions.addCity(newCity));
-    //     toggleAddForm();
-    //   } catch (error) {
-    //   } finally {
-    //     setAction(ACTION.NONE);
-    //     setActiveCity(null);
-    //   }
-    // };
-    // addCity();
   }, [action, activeCity, dispatch]);
 
   // EDIT CITY
@@ -117,19 +93,6 @@ const CitiesBlock = () => {
       closeModal();
       setActiveCity(null);
     });
-
-    // const editCity = async () => {
-    //   try {
-    //     const updatedCity = await api.editItem(API_ENDPOINT, activeCity);
-    //     dispatch(citiesActions.editCity(updatedCity));
-    //   } catch (error) {
-    //   } finally {
-    //     setAction(ACTION.NONE);
-    //     closeModal();
-    //     setActiveCity(null);
-    //   }
-    // };
-    // editCity();
   }, [action, activeCity, dispatch]);
 
   // DELETE CITY
@@ -149,20 +112,6 @@ const CitiesBlock = () => {
       closeModal();
       setActiveCity(null);
     });
-
-    // const deleteCity = async () => {
-    //   try {
-    //     const deletedCity = await api.deleteItem(API_ENDPOINT, activeCity.id);
-    //     dispatch(citiesActions.deleteCity(deletedCity.id));
-    //   } catch (error) {
-    //   } finally {
-    //     setAction(ACTION.NONE);
-    //     closeModal();
-
-    //     setActiveCity(null);
-    //   }
-    // };
-    // deleteCity();
   }, [action, activeCity, dispatch]);
 
   const closeModal = () => {
@@ -170,23 +119,14 @@ const CitiesBlock = () => {
     setActiveCity(null);
   };
 
-  // FILTER CITIES
-
-  // const filteredCities = useMemo(() => {
-  //   const normalizedFilter = filter.toLowerCase();
-  //   return cities.filter(city =>
-  //     city.name.toLowerCase().includes(normalizedFilter),
-  //   );
-  // }, [cities, filter]);
-
-  const noCities = !loading && !cities.length;
-
   // FIX FILTER BUG
   useEffect(() => {
     if (cities.length === 1) {
       dispatch(citiesActions.changeFilter(''));
     }
   }, [cities.length, dispatch]);
+
+  const noCities = !loading && !cities.length;
 
   return (
     <>

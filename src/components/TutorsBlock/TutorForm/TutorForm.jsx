@@ -73,35 +73,7 @@ const TutorForm = ({ closeForm, onAddTutor, loading, error }) => {
       setNewTutor(null);
       closeForm();
     };
-
     addNewTutor();
-
-    // let isTutorsMounted = true;
-    // const addTutor = async () => {
-    //   setLoading(true);
-    //   setError(null);
-    //   try {
-    //     const savedTutor = await api.saveItem(API_ENDPOINT, newTutor);
-    //     if (isTutorsMounted) {
-    //       onAddTutor(savedTutor);
-    //     }
-    //   } catch (error) {
-    //     if (isTutorsMounted) {
-    //       setError(error.message);
-    //     }
-    //   } finally {
-    //     if (isTutorsMounted) {
-    //       setLoading(false);
-    //       setNewTutor(null);
-    //       closeForm();
-    //     }
-    //   }
-    // };
-    // addTutor();
-
-    // return () => {
-    //   isTutorsMounted = false;
-    // };
   }, [closeForm, newTutor, onAddTutor]);
 
   const { lastName, firstName, phone, email, city, gender, isFullTime } =

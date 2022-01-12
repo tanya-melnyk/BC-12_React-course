@@ -5,7 +5,7 @@ const changeFilter = createAction('cities/changeFilter');
 
 const itemsReducer = createReducer([], builder => {
   builder
-    .addCase(getCities.fulfilled, (_, { payload }) => payload)
+    .addCase(getCities.fulfilled, (_, { payload }) => payload || [])
     .addCase(addCity.fulfilled, (state, { payload }) => [...state, payload])
     .addCase(editCity.fulfilled, (state, { payload }) =>
       state.map(city => (city.id === payload.id ? payload : city)),

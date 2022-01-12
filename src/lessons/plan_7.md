@@ -10,6 +10,7 @@
   - [useState](https://reactjs.org/docs/hooks-state.html)
   - [useEffect](https://reactjs.org/docs/hooks-effect.html)
   - [Рефы и useRef](https://reactjs.org/docs/hooks-reference.html#useref)
+  - [Article about hooks](https://k-atwhite.medium.com/react-hook-before-you-leap-9c546e70716c)
 
 ### Задача № 1
 

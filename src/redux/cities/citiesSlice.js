@@ -33,7 +33,7 @@ const citiesSlice = createSlice({
       })
       .addCase(getCities.fulfilled, (state, { payload }) => {
         state.data.loading = false;
-        state.data.items = payload;
+        state.data.items = payload || [];
       })
       .addCase(getCities.rejected, (state, { payload }) => {
         state.data.loading = false;

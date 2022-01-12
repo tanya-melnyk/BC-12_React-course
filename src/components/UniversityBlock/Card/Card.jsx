@@ -1,23 +1,36 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import ImageInput from 'components/common/ImageInput/ImageInput';
+import { addImage } from 'redux/univer/univer-slice';
+// import { getImage, addImage } from 'redux/univer/univer-slice';
 import univerBuildingImg from 'images/building.png';
 import { ReactComponent as EditIcon } from 'images/edit.svg';
 import { ReactComponent as DeleteIcon } from 'images/delete.svg';
 import s from './Card.module.css';
 
-/**
- * Используя временную переменную isAdmin определим классы кнопочек
- * Если isAdmin true, то кнопочки могут быть активны,
- * а если false - неактивны
- */
-
 const Card = ({ name }) => {
   const isAdmin = true;
+
+  const dispatch = useDispatch();
+  const { image, loading } = useSelector(state => state.univer);
+
+  useEffect(() => {
+    // dispatch(getImage());
+  }, [dispatch]);
+
+  const saveImage = image => dispatch(addImage(image));
 
   return (
     <div className={s.card}>
       <div className={s.imgWrapper}>
-        <img src={univerBuildingImg} alt="University" />
+        {!loading && (
+          <ImageInput
+            onUpload={saveImage}
+            savedImage={image ?? univerBuildingImg}
+          />
+        )}
+        {/* <img src={univerBuildingImg} alt="University" /> */}
       </div>
       <p className={s.text}>университет</p>
       <h3 className={`heading ${s.wrapper}`}>{name}</h3>
