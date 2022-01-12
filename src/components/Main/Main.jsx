@@ -2,7 +2,7 @@ import { useContext, Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LanguageSwitcher from 'components/common/LanguageSwitcher/LanguageSwitcher';
 import Loader from 'components/common/Loader/Loader';
-import Routes from 'routes/Routes';
+import AllRoutes from 'routes/AllRoutes';
 import { authOperations, authSelectors } from 'redux/auth';
 import { ThemeContext, themes } from 'context/themeContext';
 import styles from './Main.module.css';
@@ -32,7 +32,7 @@ const Main = () => {
         </Suspense>
       </div>
 
-      <Routes />
+      <AllRoutes />
     </main>
   );
 };

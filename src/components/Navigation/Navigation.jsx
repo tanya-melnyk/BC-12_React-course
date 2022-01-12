@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import {
   HiBookOpen,
   HiAcademicCap,
@@ -13,6 +14,8 @@ import s from './Navigation.module.scss';
 
 const Navigation = () => {
   const { t } = useTranslation();
+
+  const location = useLocation();
 
   const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
   const dispatch = useDispatch();
@@ -41,12 +44,20 @@ const Navigation = () => {
         <>
           <NavItem
             name="Sign Up"
-            path="/sign-up"
+            path={{
+              pathname: '/sign-up',
+              state: { from: location },
+            }}
+            // path="/sign-up"
             icon={<HiOutlineUserAdd color="#ff6b0a" size="24px" />}
           />
           <NavItem
             name="Sign In"
-            path="/sign-in"
+            path={{
+              pathname: '/sign-in',
+              state: { from: location },
+            }}
+            // path="/sign-in"
             icon={<HiOutlineLogin color="#ff6b0a" size="24px" />}
           />
         </>

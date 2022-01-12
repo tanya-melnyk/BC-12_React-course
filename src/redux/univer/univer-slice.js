@@ -25,7 +25,7 @@ const univer = createSlice({
   name: 'univer',
   initialState: {
     image: null,
-    loading: true,
+    loading: false,
     error: null,
   },
   extraReducers: builder => {
