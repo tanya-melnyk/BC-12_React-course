@@ -23,9 +23,12 @@ const addCity = createAsyncThunk(
 
 const editCity = createAsyncThunk(
   'cities/editCity',
-  async (updatedCity, { getState }) => {
+  async ({ id, name }, { getState }) => {
     const { localId } = getState().auth;
-    return api.editItem(`${localId}/${API_ENDPOINT}`, updatedCity);
+    const updatedCity = await api.editItem(`${localId}/${API_ENDPOINT}/${id}`, {
+      name,
+    });
+    return { id, name: updatedCity.name };
   },
 );
 

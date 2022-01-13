@@ -1,5 +1,6 @@
 import { useContext, Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// import { useLocation } from 'react-router-dom';
 import LanguageSwitcher from 'components/common/LanguageSwitcher/LanguageSwitcher';
 import Loader from 'components/common/Loader/Loader';
 import AllRoutes from 'routes/AllRoutes';
@@ -10,9 +11,15 @@ import styles from './Main.module.css';
 const Main = () => {
   const { theme } = useContext(ThemeContext);
 
-  const dispatch = useDispatch();
+  // const location = useLocation();
+  // const token = new URLSearchParams(location.search).get('accessToken');
+  // useEffect(() => {
+  //   if (!token) return;
+  //   dispatch(authOperations.getUser(token));
+  // }, [dispatch, token]);
 
   const isLoadingUser = useSelector(authSelectors.getLoadingUser);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(authOperations.getUser());
