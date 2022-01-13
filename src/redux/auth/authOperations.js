@@ -59,7 +59,12 @@ const signIn = createAsyncThunk(
 );
 
 // const signOut = createAsyncThunk('auth/signOut', async () => {
-//   // token.unset();
+//   try {
+//     // await axios.post('/signout');
+//     // token.unset();
+//   } catch (error) {
+//     // return error;
+//   }
 // });
 
 const getUser = createAsyncThunk('auth/getUser', async (token, thunkApi) => {
@@ -116,146 +121,3 @@ const refreshToken = createAsyncThunk(
 );
 
 export { signUp, signIn, getUser, refreshToken };
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-// // const token = {
-// //   set(token) {
-// //     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-// //   },
-// //   unset() {
-// //     axios.defaults.headers.common.Authorization = '';
-// //   },
-// // };
-
-// // example SIGN_UP
-
-// // url: :signUp
-// // method: POST
-// // headers: 'Content-Type: application/json';
-// // body: '{"displayName":"[username]","email":"[user@example.com]","password":"[PASSWORD]","returnSecureToken":true}';
-
-// const signUp = createAsyncThunk(
-//   'auth/signUp',
-//   async (credentials, thunkApi) => {
-//     try {
-//       const body = { ...credentials, returnSecureToken: true };
-//       const { data } = await axios.post(
-//         `${BASE_URL}:signUp?key=${API_KEY}`,
-//         body,
-//       );
-//       // token.set(data.idToken);
-//       return data;
-//     } catch (error) {
-//       console.dir(error.response.data.error.message);
-//       return thunkApi.rejectWithValue(error.response.data.error.message);
-//     }
-//   },
-// );
-
-// // example SIGN_IN
-
-// // url: :signInWithPassword
-// // method: POST
-// // headers: 'Content-Type: application/json';
-// // body: '{"email":"[user@example.com]","password":"[PASSWORD]","returnSecureToken":true}';
-
-// const signIn = createAsyncThunk(
-//   'auth/signIn',
-//   async (credentials, { rejectWithValue }) => {
-//     try {
-//       const body = { ...credentials, returnSecureToken: true };
-//       const { data } = await axios.post(
-//         `${BASE_URL}:signInWithPassword?key=${API_KEY}`,
-//         body,
-//       );
-//       // token.set(data.idToken);
-//       return data;
-//     } catch (error) {
-//       return rejectWithValue(error.response.data.error.message);
-//     }
-//   },
-// );
-
-// const signOut = createAsyncThunk('auth/signOut', async () => {
-//   try {
-//     // await axios.post('/signout');
-//     // token.unset();
-//   } catch (error) {
-//     // return error;
-//   }
-// });
-
-// const getUser = createAsyncThunk(
-//   'auth/getUser',
-//   async (token, { rejectWithValue, getState, dispatch }) => {
-//     const persistedToken = token ?? getState().auth.token;
-
-//     if (!persistedToken) {
-//       return rejectWithValue();
-//     }
-//     // token.set(persistedToken);
-//     try {
-//       const body = { idToken: persistedToken };
-//       const { data } = await axios.post(
-//         `${BASE_URL}:lookup?key=${API_KEY}`,
-//         body,
-//       );
-//       return data.users[0];
-//     } catch (error) {
-//       const errMsg = error.response.data.error.message;
-//       if (errMsg === 'INVALID_ID_TOKEN') {
-//         dispatch(refreshToken());
-//       }
-//       return rejectWithValue(errMsg);
-//     }
-//   },
-// );
-
-// const refreshToken = createAsyncThunk(
-//   'auth/refreshToken',
-//   async (_, { rejectWithValue, getState, dispatch }) => {
-//     const persistedRefreshToken = getState().auth.refreshToken;
-
-//     if (!persistedRefreshToken) {
-//       return rejectWithValue();
-//     }
-
-//     try {
-//       const body = {
-//         grant_type: 'refresh_token',
-//         refresh_token: persistedRefreshToken,
-//       };
-//       const { data } = await axios.post(
-//         `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
-//         body,
-//       );
-//       dispatch(getUser(data.id_token));
-//       return data;
-//     } catch (error) {
-//       const errMsg = error.response.data.error.message;
-//       return rejectWithValue(errMsg);
-//     }
-//   },
-// );
-
-// export { signUp, signIn, signOut, getUser, refreshToken };
