@@ -31,7 +31,7 @@ const Modal = ({ onClose, icon, title, children }) => {
 
   return createPortal(
     <div className={styles.backdrop} onClick={handleBackdropClick}>
-      <div className={styles.modal}>
+      <div className={`modalContent ${styles.modal}`}>
         <header className={styles.header}>
           <button
             type="button"

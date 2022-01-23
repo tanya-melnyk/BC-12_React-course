@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { CSSTransition } from 'react-transition-group';
 import AddForm from '../common/AddForm/AddForm';
 import BigButton from '../common/BigButton/BigButton';
 import DeleteCard from '../common/DeleteCard/DeleteCard';
@@ -14,6 +15,7 @@ import { citiesActions, citiesOperations, citiesSelectors } from 'redux/cities';
 import addIcon from 'images/add.svg';
 import pencilIcon from 'images/pencil.png';
 import fingerIcon from 'images/finger.png';
+import './Modal.css';
 
 const ACTION = {
   NONE: 'none',
@@ -161,7 +163,27 @@ const CitiesBlock = () => {
         disabled={loading}
       />
 
-      {openedModal === ACTION.EDIT && (
+      <CSSTransition
+        in={openedModal === ACTION.EDIT}
+        timeout={300}
+        classNames="modal"
+        unmountOnExit
+        mountOnEnter
+      >
+        <Modal
+          title="Редактировать информацию о городе"
+          onClose={closeModal}
+          icon={pencilIcon}
+        >
+          <EditCard
+            label="Город"
+            inputValue={activeCity?.name}
+            onSave={confirmEdit}
+          />
+        </Modal>
+      </CSSTransition>
+
+      {/* {openedModal === ACTION.EDIT && (
         <Modal
           title="Редактировать информацию о городе"
           onClose={closeModal}
@@ -173,7 +195,7 @@ const CitiesBlock = () => {
             onSave={confirmEdit}
           />
         </Modal>
-      )}
+      )} */}
 
       {openedModal === ACTION.DELETE && (
         <Modal title="Удаление города" onClose={closeModal} icon={fingerIcon}>
